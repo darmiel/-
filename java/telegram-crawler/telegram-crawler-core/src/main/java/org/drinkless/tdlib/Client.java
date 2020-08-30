@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020.
  *
- * E-Mail: d5a@pm.me
+ * E-Mail: hi@d2a.io
  */
 package org.drinkless.tdlib;
 
