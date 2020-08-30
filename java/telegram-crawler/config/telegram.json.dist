@@ -1,0 +1,18 @@
+{
+  "systemInfo": {
+    "systemLanguageCode": "en",
+    "systemVersion": "Unknown",
+    "deviceModel": "Desktop",
+    "applicationVersion": "1.0"
+  },
+  "databaseDirectory": null,
+  "accounts": [
+      "use_case": ["ChatLog", "Deletions"],
+      "credentials": {
+        "apiId": 999999,
+        "apiHash": "ffffffffffffffffffffffffffffffff",
+        "phoneNumber": "+49151242333213"
+      }
+    }
+  ]
+}
