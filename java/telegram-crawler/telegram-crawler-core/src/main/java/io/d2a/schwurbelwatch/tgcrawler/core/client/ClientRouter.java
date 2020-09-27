@@ -10,8 +10,8 @@ import static io.d2a.schwurbelwatch.tgcrawler.core.BotMain.GSON;
 
 import com.google.common.collect.Maps;
 import com.google.gson.JsonSyntaxException;
-import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.ApiCredentials;
+import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
 import io.d2a.schwurbelwatch.tgcrawler.core.config.Configs;
 import java.io.File;
 import java.io.FileReader;
@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.tinylog.Logger;
 
 public class ClientRouter {
 
@@ -37,11 +38,14 @@ public class ClientRouter {
         throw new NullPointerException("SystemInfo (info) was null");
       }
     } catch (JsonSyntaxException e) {
-      System.out.println("[TelegramConfig] Invalid JSON syntax");
+      Logger.error("[TelegramConfig] Invalid JSON syntax");
+      Logger.error(e);
+
       System.exit(1);
     } catch (Exception e) {
-      System.out.println("[TelegramConfig] Exception:");
-      System.out.println(e.getMessage());
+      Logger.error("[TelegramConfig] Exception:");
+      Logger.error(e);
+
       e.printStackTrace();
       System.exit(1);
     }
@@ -56,9 +60,13 @@ public class ClientRouter {
           .map(ApiCredentials::getPhoneNumber)
           .anyMatch(ph -> ph.equalsIgnoreCase(config.getCredentials().getPhoneNumber()))) {
 
-        System.out.println("[ClientRouter] Warning: Duplicate TelegramClient in Router");
+        Logger.error("[ClientRouter] Warning: Duplicate TelegramClient in Router");
         continue;
       }
+
+      Logger.info("  creating: " + config.getCredentials().getPhoneNumber() +
+          " for " +
+          config.getUseCases());
 
       final String databaseDirectory = config.getDatabaseDirectory() != null
           ? config.getDatabaseDirectory()

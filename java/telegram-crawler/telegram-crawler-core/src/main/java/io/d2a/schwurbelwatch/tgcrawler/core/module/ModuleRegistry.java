@@ -14,12 +14,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import lombok.Getter;
 import org.reflections.Reflections;
+import org.tinylog.Logger;
 
 public class ModuleRegistry {
 
   private static final Map<String, BotModule> moduleMap = new HashMap<>();
   private static final Reflections reflections = new Reflections("");
+
+  @Getter
   private static final Set<BotModule> enablabledModules = new HashSet<>();
 
   public static Set<BotModule> findModules() throws IllegalAccessException,
@@ -27,27 +31,28 @@ public class ModuleRegistry {
       NoSuchMethodException,
       InvocationTargetException {
 
-    System.out.println("  >>> Finding modules");
+    Logger.info("9");
+    Logger.debug("findModules");
 
     final Set<BotModule> modules = new HashSet<>();
     final Set<Class<?>> classesAnnotation = reflections.getTypesAnnotatedWith(Module.class);
 
     for (final Class<?> clazz : classesAnnotation) {
       final String name = clazz.getName();
-      System.out.println("  >>> + " + name);
+      Logger.debug("  >>> + " + name);
 
       if (!BotModule.class.isAssignableFrom(clazz)) {
-        System.out.println("[MOD] Warning: Module " + name
+        Logger.error("[MOD] Warning: Module " + name
             + " annotated with @Module, but it does not extend BotModule");
         continue;
       }
 
-      System.out.println("[MOD] Found " + name);
+      Logger.debug("[MOD] Found " + name);
 
       // check if already initiated
       if (moduleMap.containsKey(name)) {
         modules.add(moduleMap.get(name));
-        System.out.println("[MOD]  -> from cache");
+        Logger.debug("[MOD]  -> from cache");
         continue;
       }
 
@@ -63,7 +68,7 @@ public class ModuleRegistry {
       // add to module map
       ModuleRegistry.moduleMap.put(name, instance);
 
-      System.out.println("[MOD]  -> from instance");
+      Logger.debug("[MOD]  -> from instance");
     }
 
     return modules;
@@ -77,7 +82,7 @@ public class ModuleRegistry {
   public static void loadModule(BotModule module) {
     // get info
     if (!module.getClass().isAnnotationPresent(Module.class)) {
-      System.out.println("[MOD] Invalid module while registering.");
+      Logger.debug("[MOD] Invalid module while registering.");
       return;
     }
 
@@ -86,7 +91,7 @@ public class ModuleRegistry {
     final Module info = module.getClass().getAnnotation(Module.class);
 
     long timerStart = System.currentTimeMillis();
-    System.out.println("» Enabling and loading module '" + info.name() + " v." + info.version() + "' by " + info.author());
+    Logger.debug("» Enabling and loading module '" + info.name() + " v." + info.version() + "' by " + info.author());
 
     // load and enable
     try {
@@ -103,20 +108,20 @@ public class ModuleRegistry {
       // 4. Send enable
       module.onEnable();
 
-      System.out.println("  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.info("  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
 
       // successfully enabled
       enablabledModules.add(module);
     } catch (Throwable throwable) {
-      System.out.println("  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
-      throwable.printStackTrace();
+      Logger.error("  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.error(throwable);
     }
   }
 
   public static void unloadModule(BotModule module) {
     // get info
     if (!module.getClass().isAnnotationPresent(Module.class)) {
-      System.out.println("[MOD] Invalid module while registering.");
+      Logger.error("[MOD] Invalid module while registering.");
       return;
     }
 
@@ -125,15 +130,15 @@ public class ModuleRegistry {
     final Module info = module.getClass().getAnnotation(Module.class);
 
     long timerStart = System.currentTimeMillis();
-    System.out.println("» Disabling module '" + info.name() + " v." + info.version() + "' by " + info.author());
+    Logger.info("» Disabling module '" + info.name() + " v." + info.version() + "' by " + info.author());
 
     // load and enable
     try {
       module.onDisable();
-      System.out.println("  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.info("  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
     } catch (Throwable throwable) {
-      System.out.println("  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
-      throwable.printStackTrace();
+      Logger.error("  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.error(throwable);
     }
   }
 
@@ -141,6 +146,9 @@ public class ModuleRegistry {
       NoSuchMethodException,
       InstantiationException,
       IllegalAccessException {
+
+    Logger.info("6");
+    Logger.error("loadModules");
 
     findModules().forEach(ModuleRegistry::loadModule);
   }

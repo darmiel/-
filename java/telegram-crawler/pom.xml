@@ -34,7 +34,10 @@
   </modules>
 
   <repositories>
-
+    <repository>
+      <id>maven2</id>
+      <url>https://repo1.maven.org/maven2/</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -89,6 +92,19 @@
       <artifactId>reflections</artifactId>
       <version>0.9.12</version>
       <scope>compile</scope>
+    </dependency>
+
+    <!-- Tiny Log -->
+    <dependency>
+      <groupId>org.tinylog</groupId>
+      <artifactId>tinylog-api</artifactId>
+      <version>2.1.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.tinylog</groupId>
+      <artifactId>tinylog-impl</artifactId>
+      <version>2.1.2</version>
     </dependency>
   </dependencies>
 

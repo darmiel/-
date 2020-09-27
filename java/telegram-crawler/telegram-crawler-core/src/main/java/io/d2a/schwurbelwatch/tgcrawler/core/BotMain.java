@@ -9,18 +9,17 @@ package io.d2a.schwurbelwatch.tgcrawler.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.ClientRouter;
-import io.d2a.schwurbelwatch.tgcrawler.core.config.Configs;
-import io.d2a.schwurbelwatch.tgcrawler.core.database.MySqlDatabase;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.ModuleRegistry;
 import java.io.IOError;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
 import org.drinkless.tdlib.TdApi.LogStreamFile;
 import org.drinkless.tdlib.TdApi.Object;
 import org.drinkless.tdlib.TdApi.SetLogStream;
+import org.tinylog.Logger;
 
 public class BotMain {
 
@@ -41,12 +40,6 @@ public class BotMain {
   @Getter
   private static ClientRouter clientRouter;
 
-  /**
-   * MySQL Client for chatlogs, etc.
-   */
-  @Getter
-  private MySqlDatabase database;
-
   // Load native for telegram
   static {
     try {
@@ -56,37 +49,14 @@ public class BotMain {
     }
   }
 
-  @SneakyThrows
-  public BotMain() {
-    BotMain.instance = this;
-
-    // Config Kram
-    System.out.println("> Config Kram");
-    {
-      Configs.databaseConfig = Configs.loadAndSaveDefault(
-          Configs.DB_FILE,
-          Configs.databaseConfig
-      );
-    }
-
-    // Database Kram
-    // ignore for testing purposes
-    System.out.println("> Database Kram");
-    {
-      /* MySQL */
-      // Open database
-      database = new MySqlDatabase(Configs.databaseConfig.getHikariConfig());
-      
-      // Check if connection is open
-      if (!database.getDataSource().isRunning()) {
-        System.out.println("MySQL Database not connected.");
-        System.exit(1);
-        return;
-      }
-    }
+  private void start() throws
+      NoSuchMethodException,
+      InstantiationException,
+      IllegalAccessException,
+      InvocationTargetException {
 
     // Telegram Client Kram
-    System.out.println("> TG Client Kram");
+    Logger.info("Initializing Telegram Client ...");
     {
       // Set verbosity to 3
       Client.execute(new TdApi.SetLogVerbosityLevel(3));
@@ -102,15 +72,32 @@ public class BotMain {
     }
 
     // Load telegram clients
-    System.out.println("> Router");
+    Logger.info("Creating clients ...");
     clientRouter = new ClientRouter();
     clientRouter.createClients();
 
-    System.out.println("> Loading modules");
     // load modules
+    Logger.info("Loading modules ...");
     ModuleRegistry.loadModules();
+    if (ModuleRegistry.getEnablabledModules().size() == 0) {
+      Logger.error("No modules enabled.");
+    }
+  }
 
-    System.out.println("> Done");
+  public BotMain() {
+    final long stopwatchStart = System.currentTimeMillis();
+
+    BotMain.instance = this;
+
+    try {
+      start();
+    } catch (Throwable throwable) {
+      // for now, we only want to log errors.
+      Logger.error(throwable);
+      System.out.println("catched throwable");
+    }
+
+    Logger.info("Done! Took " + (System.currentTimeMillis() - stopwatchStart) + " ms.");
     Runtime.getRuntime().addShutdownHook(new Thread(ModuleRegistry::unloadModulesUnsafe));
   }
 

@@ -25,21 +25,7 @@ public class Configs {
    */
   public static final File TELEGRAM_CONFIG_FILE = new File(CONFIG_DIR, "telegram.json");
 
-  /**
-   * Config for databases
-   * (MySQL, Redis, Mongo, ...)
-   */
-  public static final File DB_FILE = new File(CONFIG_DIR, "dbs.json");
-
-  /**
-   * Config for modules
-   * (Forwarder, ...)
-   */
-  public static final File MOD_FILE = new File(CONFIG_DIR, "modules.json");
-
-
   public static TelegramConfig telegramConfig = new TelegramConfig() /* <- Default config */;
-  public static DatabaseConfig databaseConfig = new DatabaseConfig() /* <- Default config */;
 
   // Create directory if not exists
   static {

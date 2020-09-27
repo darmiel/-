@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
+import org.tinylog.Logger;
 
 public class TelegramClient implements Client.ResultHandler {
 
@@ -211,9 +212,9 @@ public class TelegramClient implements Client.ResultHandler {
         parameters.useSecretChats = true;
         parameters.enableStorageOptimizer = true;
 
-        System.out.println("Sending auth request:");
-        System.out.println(this.credentials);
-        System.out.println(this.systemInfo);
+        Logger.debug("Sending auth request:");
+        Logger.debug(this.credentials);
+        Logger.debug(this.systemInfo);
 
         client.send(new TdApi.SetTdlibParameters(parameters), this);
         break;
@@ -236,7 +237,7 @@ public class TelegramClient implements Client.ResultHandler {
       // Login Link
       case TdApi.AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR: {
         final String link = ((TdApi.AuthorizationStateWaitOtherDeviceConfirmation) authorizationState).link;
-        System.out.println("Please confirm this login link on another device: " + link);
+        Logger.info("Please confirm this login link on another device: " + link);
         break;
       }
 
@@ -268,18 +269,18 @@ public class TelegramClient implements Client.ResultHandler {
       // Log out
       case TdApi.AuthorizationStateLoggingOut.CONSTRUCTOR:
         loggedIn = false;
-        System.out.println("Logging out");
+        Logger.info("Logging out");
         break;
 
       // Closing
       case TdApi.AuthorizationStateClosing.CONSTRUCTOR:
         loggedIn = false;
-        System.out.println("Closing");
+        Logger.info("Closing");
         break;
 
       // Auth closed
       case TdApi.AuthorizationStateClosed.CONSTRUCTOR:
-        System.out.println("Closed");
+        Logger.info("Closed");
         if (this.isReconnectOnError()) {
           this.recreateClient(); // recreate client after previous has closed
         }
