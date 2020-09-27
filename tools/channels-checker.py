@@ -51,6 +51,8 @@ if __name__ == "__main__":
         'channels': []
     }
 
+    checked: list = []
+
     # read and parse
     with open(os.path.join(*IN_FILE.split("/")), "r+") as input_file:
         # read lines
@@ -76,10 +78,19 @@ if __name__ == "__main__":
             if '//' in line:
                 line = line[:line.index('//')].strip()
 
+            # skip already checked
+            if line in checked:
+                print()
+                print(f" ! Duplicated line {index+1}:")
+                print(orig_line)
+                print()
+                continue
+
             try:
 
                 # make request to telegram
                 line_type, line_title = get_type(line)
+                checked.append(line)
 
                 print(line_type, line, line_title)
 
