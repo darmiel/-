@@ -1,5 +1,5 @@
 # Schwurbelwatch (school project)
-Due: `31.01.2020`  
+Due: `31.01.2021`  
   
 Schwurbelwatch is a telegram channel monitoring system for known german telegram conspiracy theory channels.
 It analyzes the channels in terms of deletion behavior (which messages are deleted when) and on user behavior (different bubbles / bots).  
