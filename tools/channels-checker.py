@@ -79,7 +79,7 @@ if __name__ == "__main__":
                 line = line[:line.index('//')].strip()
 
             # skip already checked
-            if line in checked:
+            if line.lower() in checked:
                 print()
                 print(f" ! Duplicated line {index+1}:")
                 print(orig_line)
@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
                 # make request to telegram
                 line_type, line_title = get_type(line)
-                checked.append(line)
+                checked.append(line.lower())
 
                 print(line_type, line, line_title)
 
