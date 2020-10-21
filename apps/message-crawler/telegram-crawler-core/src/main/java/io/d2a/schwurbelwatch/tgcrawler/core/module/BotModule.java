@@ -7,8 +7,8 @@
 package io.d2a.schwurbelwatch.tgcrawler.core.module;
 
 import com.google.common.collect.Sets;
-import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
 import io.d2a.schwurbelwatch.tgcrawler.core.BotMain;
+import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;

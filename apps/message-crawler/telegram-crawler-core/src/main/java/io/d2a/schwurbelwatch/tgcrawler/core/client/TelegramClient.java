@@ -9,6 +9,7 @@ package io.d2a.schwurbelwatch.tgcrawler.core.client;
 import com.google.common.eventbus.EventBus;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.ApiCredentials;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.SystemInfo;
+import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,7 +22,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
-import org.tinylog.Logger;
 
 public class TelegramClient implements Client.ResultHandler {
 

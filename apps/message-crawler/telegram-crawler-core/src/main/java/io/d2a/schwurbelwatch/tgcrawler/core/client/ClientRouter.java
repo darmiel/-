@@ -13,13 +13,13 @@ import com.google.gson.JsonSyntaxException;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.ApiCredentials;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
 import io.d2a.schwurbelwatch.tgcrawler.core.config.Configs;
+import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.tinylog.Logger;
 
 public class ClientRouter {
 

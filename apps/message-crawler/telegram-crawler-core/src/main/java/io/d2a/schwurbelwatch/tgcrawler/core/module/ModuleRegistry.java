@@ -6,8 +6,9 @@
 
 package io.d2a.schwurbelwatch.tgcrawler.core.module;
 
-import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
 import io.d2a.schwurbelwatch.tgcrawler.core.BotMain;
+import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
+import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -16,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import org.reflections.Reflections;
-import org.tinylog.Logger;
 
 public class ModuleRegistry {
 
@@ -91,7 +91,9 @@ public class ModuleRegistry {
     final Module info = module.getClass().getAnnotation(Module.class);
 
     long timerStart = System.currentTimeMillis();
-    Logger.debug("» Enabling and loading module '" + info.name() + " v." + info.version() + "' by " + info.author());
+    Logger.debug(
+        "» Enabling and loading module '" + info.name() + " v." + info.version() + "' by " + info
+            .author());
 
     // load and enable
     try {
@@ -108,12 +110,15 @@ public class ModuleRegistry {
       // 4. Send enable
       module.onEnable();
 
-      Logger.info("  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.info(
+          "  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
 
       // successfully enabled
       enablabledModules.add(module);
     } catch (Throwable throwable) {
-      Logger.error("  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.error(
+          "  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart)
+              + " ms)");
       Logger.error(throwable);
     }
   }
@@ -130,14 +135,18 @@ public class ModuleRegistry {
     final Module info = module.getClass().getAnnotation(Module.class);
 
     long timerStart = System.currentTimeMillis();
-    Logger.info("» Disabling module '" + info.name() + " v." + info.version() + "' by " + info.author());
+    Logger.info(
+        "» Disabling module '" + info.name() + " v." + info.version() + "' by " + info.author());
 
     // load and enable
     try {
       module.onDisable();
-      Logger.info("  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.info(
+          "  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
     } catch (Throwable throwable) {
-      Logger.error("  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.error(
+          "  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart)
+              + " ms)");
       Logger.error(throwable);
     }
   }

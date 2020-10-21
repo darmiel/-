@@ -13,8 +13,11 @@ import java.lang.annotation.RetentionPolicy;
 public @interface Module {
 
   String name();
+
   String description();
+
   String version();
+
   String author();
 
 }
