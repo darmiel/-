@@ -31,8 +31,7 @@ public class ModuleRegistry {
       NoSuchMethodException,
       InvocationTargetException {
 
-    Logger.info("9");
-    Logger.debug("findModules");
+    Logger.debug("  -> findModules");
 
     final Set<BotModule> modules = new HashSet<>();
     final Set<Class<?>> classesAnnotation = reflections.getTypesAnnotatedWith(Module.class);
@@ -40,6 +39,7 @@ public class ModuleRegistry {
     for (final Class<?> clazz : classesAnnotation) {
       final String name = clazz.getName();
       Logger.debug("  >>> + " + name);
+      System.out.println("Got name " + name);
 
       if (!BotModule.class.isAssignableFrom(clazz)) {
         Logger.error("[MOD] Warning: Module " + name
@@ -147,8 +147,7 @@ public class ModuleRegistry {
       InstantiationException,
       IllegalAccessException {
 
-    Logger.info("6");
-    Logger.error("loadModules");
+    Logger.debug("loadModules");
 
     findModules().forEach(ModuleRegistry::loadModule);
   }

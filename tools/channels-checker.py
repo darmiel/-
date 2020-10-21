@@ -121,4 +121,10 @@ if __name__ == "__main__":
     with open (os.path.join(*OUT_FILE.split("/")), "w+") as output_file:
         output_file.write(json.dumps(res, indent=2, sort_keys=True))
 
+    
+    with open (os.path.join(*IN_FILE.split("/")), "w+") as output_file:
+        for channels in sorted(res['channels']):
+            output_file.write(channels + "\n")
+        # output_file.write(json.dumps(res, indent=2, sort_keys=True))
+
     print (res)

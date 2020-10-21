@@ -56,7 +56,7 @@ public class BotMain {
       InvocationTargetException {
 
     // Telegram Client Kram
-    Logger.info("Initializing Telegram Client ...");
+    Logger.info("Initializing TdApi ...");
     {
       // Set verbosity to 3
       Client.execute(new TdApi.SetLogVerbosityLevel(3));
@@ -79,6 +79,7 @@ public class BotMain {
     // load modules
     Logger.info("Loading modules ...");
     ModuleRegistry.loadModules();
+
     if (ModuleRegistry.getEnablabledModules().size() == 0) {
       Logger.error("No modules enabled.");
     }
@@ -107,6 +108,7 @@ public class BotMain {
    * @param args Args to pass
    */
   public static void main(String[] args) {
+
     new BotMain();
   }
 
