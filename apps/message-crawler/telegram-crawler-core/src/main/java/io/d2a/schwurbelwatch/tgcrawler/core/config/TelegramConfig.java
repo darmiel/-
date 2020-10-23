@@ -4,7 +4,7 @@
  * E-Mail: hi@d2a.io
  */
 
-package io.d2a.schwurbelwatch.tgcrawler.core.client;
+package io.d2a.schwurbelwatch.tgcrawler.core.config;
 
 import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.SystemInfo;

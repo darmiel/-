@@ -11,9 +11,12 @@ import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.ApiCredentials;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.SystemInfo;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class ClientConfig {
 
   @SerializedName("use_cases")
@@ -39,6 +42,14 @@ public class ClientConfig {
     }
     return useCases.stream()
         .anyMatch(useCase::equalsIgnoreCase);
+  }
+
+  @Nonnull
+  public String getDatabaseDirectory() {
+    if (this.databaseDirectory == null) {
+      return "tdlibdata";
+    }
+    return this.databaseDirectory;
   }
 
 }

@@ -6,48 +6,16 @@
 
 package io.d2a.schwurbelwatch.tgcrawler.core.module;
 
-import com.google.common.collect.Sets;
 import io.d2a.schwurbelwatch.tgcrawler.core.BotMain;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
+import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
 import java.util.Optional;
-import java.util.Set;
-import lombok.Getter;
+import javax.annotation.Nonnull;
 
 public abstract class BotModule {
 
-  @Getter
-  private final Set<TelegramClient> clients = Sets.newHashSet();
-
-  /**
-   * Returns the first client in the clients-set
-   *
-   * @return TelegramClient
-   */
-  private Optional<TelegramClient> getFirstClient() {
-    TelegramClient client = null;
-    for (final TelegramClient telegramClient : clients) {
-      client = telegramClient;
-      break;
-    }
-    return Optional.ofNullable(client);
-  }
-
-  /**
-   * Loads all clients for the module
-   *
-   * @param clients Set of TelegramClients to override current set
-   */
-  public void loadClients(Set<TelegramClient> clients) {
-    this.clients.removeIf(a -> true);
-    this.clients.addAll(clients);
-  }
-
   public BotMain getParent() {
     return BotMain.getInstance();
-  }
-
-  public void registerListeners(Object... objects) {
-    clients.forEach(c -> c.registerListeners(objects));
   }
 
   /**
@@ -66,15 +34,27 @@ public abstract class BotModule {
    * Called when shutting down tgwtf
    */
   public void onDisable() {
+
   }
 
   /**
-   * Called when the clients are load for the module
+   * Alias to {@link io.d2a.schwurbelwatch.tgcrawler.core.client.ClientRouter#findConfiguration(String)}
    *
-   * @param clients The clients accepted for the module
+   * @param clientName Account name
+   * @return Client configuration if found
    */
-  public void onClientLoad(final Set<TelegramClient> clients) {
+  public Optional<ClientConfig> findConfiguration(@Nonnull final String clientName) {
+    return BotMain.getClientRouter().findConfiguration(clientName);
+  }
 
+  /**
+   * Alias to {@link io.d2a.schwurbelwatch.tgcrawler.core.client.ClientRouter#findTelegramClient(String)}
+   *
+   * @param clientName Account name
+   * @return Telegram client if found
+   */
+  public Optional<TelegramClient> findTelegramClient(@Nonnull final String clientName) {
+    return BotMain.getClientRouter().findTelegramClient(clientName);
   }
 
 }

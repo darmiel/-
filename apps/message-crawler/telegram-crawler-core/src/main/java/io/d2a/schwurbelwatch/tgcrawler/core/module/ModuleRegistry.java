@@ -6,53 +6,44 @@
 
 package io.d2a.schwurbelwatch.tgcrawler.core.module;
 
-import io.d2a.schwurbelwatch.tgcrawler.core.BotMain;
-import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
+import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import org.reflections.Reflections;
 
 public class ModuleRegistry {
 
-  private static final Map<String, BotModule> moduleMap = new HashMap<>();
-  private static final Reflections reflections = new Reflections("");
+  private static final String packagePrefix = "";
+  private static final Reflections reflections = new Reflections(packagePrefix);
 
   @Getter
   private static final Set<BotModule> enablabledModules = new HashSet<>();
+
+  public static final String CONSOLE_PREFIX = AnsiColor.ANSI_CYAN_BACKGROUND +
+      AnsiColor.ANSI_WHITE + "(MOD)" +
+      AnsiColor.ANSI_RESET + " ";
 
   public static Set<BotModule> findModules() throws IllegalAccessException,
       InstantiationException,
       NoSuchMethodException,
       InvocationTargetException {
 
-    Logger.debug("  -> findModules");
+    Logger.debug(CONSOLE_PREFIX + "Looking for modules in packages "
+        + "prefixed by '" + packagePrefix + "' ...");
 
-    final Set<BotModule> modules = new HashSet<>();
+    final Set<BotModule> modules = new HashSet<>(); // result
+
     final Set<Class<?>> classesAnnotation = reflections.getTypesAnnotatedWith(Module.class);
-
     for (final Class<?> clazz : classesAnnotation) {
       final String name = clazz.getName();
-      Logger.debug("  >>> + " + name);
-      System.out.println("Got name " + name);
 
       if (!BotModule.class.isAssignableFrom(clazz)) {
-        Logger.error("[MOD] Warning: Module " + name
-            + " annotated with @Module, but it does not extend BotModule");
-        continue;
-      }
-
-      Logger.debug("[MOD] Found " + name);
-
-      // check if already initiated
-      if (moduleMap.containsKey(name)) {
-        modules.add(moduleMap.get(name));
-        Logger.debug("[MOD]  -> from cache");
+        Logger.warn(CONSOLE_PREFIX + name + " annotated with @Module, "
+            + "but it does not extend BotModule");
         continue;
       }
 
@@ -64,61 +55,40 @@ public class ModuleRegistry {
 
       // add to result
       modules.add(instance);
-
-      // add to module map
-      ModuleRegistry.moduleMap.put(name, instance);
-
-      Logger.debug("[MOD]  -> from instance");
     }
 
     return modules;
   }
 
-  private static void removeFromLoaded(BotModule module) {
-    enablabledModules.remove(module);
-    enablabledModules.removeIf(mod -> mod.getClass().getName().equals(module.getClass().getName()));
-  }
-
   public static void loadModule(BotModule module) {
     // get info
     if (!module.getClass().isAnnotationPresent(Module.class)) {
-      Logger.debug("[MOD] Invalid module while registering.");
+      Logger.warn(CONSOLE_PREFIX + "Annotation not present.");
       return;
     }
 
-    removeFromLoaded(module);
-
     final Module info = module.getClass().getAnnotation(Module.class);
 
-    long timerStart = System.currentTimeMillis();
-    Logger.debug(
-        "» Enabling and loading module '" + info.name() + " v." + info.version() + "' by " + info
-            .author());
+    final long timerStart = System.currentTimeMillis();
+
+    Logger.info(CONSOLE_PREFIX + "Loading & enabling '" +
+        info.name() + " (v." + info.version() + ")' by " + info.author());
 
     // load and enable
     try {
       // 1. Send load
       module.onLoad();
 
-      // 2. Find clients
-      final Set<TelegramClient> clients = BotMain.getClientRouter().findClients(info.name());
-      module.onClientLoad(clients);
-
-      // 3. Update clients
-      module.loadClients(clients);
-
       // 4. Send enable
       module.onEnable();
 
-      Logger.info(
-          "  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      // print success message
+      Logger.success(CONSOLE_PREFIX + "Took " + (System.currentTimeMillis() - timerStart) + " ms");
 
       // successfully enabled
       enablabledModules.add(module);
     } catch (Throwable throwable) {
-      Logger.error(
-          "  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart)
-              + " ms)");
+      Logger.error(CONSOLE_PREFIX + "Took " + (System.currentTimeMillis() - timerStart) + " ms)");
       Logger.error(throwable);
     }
   }
@@ -126,27 +96,21 @@ public class ModuleRegistry {
   public static void unloadModule(BotModule module) {
     // get info
     if (!module.getClass().isAnnotationPresent(Module.class)) {
-      Logger.error("[MOD] Invalid module while registering.");
+      Logger.error(CONSOLE_PREFIX + "Invalid module while registering.");
       return;
     }
 
-    removeFromLoaded(module);
-
     final Module info = module.getClass().getAnnotation(Module.class);
 
-    long timerStart = System.currentTimeMillis();
-    Logger.info(
-        "» Disabling module '" + info.name() + " v." + info.version() + "' by " + info.author());
+    final long timerStart = System.currentTimeMillis();
+    Logger.info(CONSOLE_PREFIX + "Disabling '" + info.name() + " (v." + info.version() + ")' by " + info.author());
 
     // load and enable
     try {
       module.onDisable();
-      Logger.info(
-          "  » Done [successful]. (Took " + (System.currentTimeMillis() - timerStart) + " ms)");
+      Logger.success(CONSOLE_PREFIX + "Took " + (System.currentTimeMillis() - timerStart) + " ms");
     } catch (Throwable throwable) {
-      Logger.error(
-          "  » Done [error, see stacktrace]. (Took " + (System.currentTimeMillis() - timerStart)
-              + " ms)");
+      Logger.error(CONSOLE_PREFIX + "Took " + (System.currentTimeMillis() - timerStart) + " ms)");
       Logger.error(throwable);
     }
   }
@@ -155,8 +119,6 @@ public class ModuleRegistry {
       NoSuchMethodException,
       InstantiationException,
       IllegalAccessException {
-
-    Logger.debug("loadModules");
 
     findModules().forEach(ModuleRegistry::loadModule);
   }

@@ -1,14 +1,12 @@
 package io.d2a.schwurbelwatch.mods;
 
 import com.google.common.eventbus.Subscribe;
-import io.d2a.schwurbelwatch.tgcrawler.core.BotMain;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.DefaultChatMessage;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
-import org.drinkless.tdlib.Client;
-import org.drinkless.tdlib.TdApi;
+import java.util.Optional;
 import org.drinkless.tdlib.TdApi.Message;
 import org.drinkless.tdlib.TdApi.UpdateNewMessage;
 
@@ -20,11 +18,18 @@ import org.drinkless.tdlib.TdApi.UpdateNewMessage;
 )
 public class ConsoleMessageModule extends BotModule {
 
+  public static final String CLIENT_NAME = "walterheldcorona";
+
   @Override
   public void onEnable() {
-    for (final TelegramClient client : BotMain.getClientRouter().findClients(null)) {
-      Logger.debug("Registering listener for client: " + client);
+    // Main account for listening for messages: walterheldcorona
+    final Optional<TelegramClient> clientOptional = findTelegramClient(CLIENT_NAME);
+    if (clientOptional.isPresent()) {
+      final TelegramClient client = clientOptional.get();
       client.registerListeners(this);
+      Logger.success("Registered listener for client: " + client);
+    } else {
+      Logger.warn("Client '" + CLIENT_NAME + "' not found");
     }
   }
 

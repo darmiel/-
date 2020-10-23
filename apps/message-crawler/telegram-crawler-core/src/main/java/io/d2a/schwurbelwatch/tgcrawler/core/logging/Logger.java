@@ -54,7 +54,13 @@ public class Logger {
 
   public static void warn(final Object object) {
     if (object != null) {
-      warn(object.toString());
+      if (object instanceof Throwable) {
+        final Throwable throwable = (Throwable) object;
+        warn(throwable.getClass().getName() + ": " + throwable.getMessage());
+        throwable.printStackTrace();
+      } else {
+        warn(object.toString());
+      }
     } else {
       warn("null");
     }
@@ -66,7 +72,13 @@ public class Logger {
 
   public static void error(final Object object) {
     if (object != null) {
-      error(object.toString());
+      if (object instanceof Throwable) {
+        final Throwable throwable = (Throwable) object;
+        error(throwable.getClass().getName() + ": " + throwable.getMessage());
+        throwable.printStackTrace();
+      } else {
+        error(object.toString());
+      }
     } else {
       error("null");
     }
@@ -81,6 +93,18 @@ public class Logger {
       value(object.toString());
     } else {
       value("null");
+    }
+  }
+
+  public static void success(final String message) {
+    broadcast(LogLevel.SUCCESS, message);
+  }
+
+  public static void success(final Object object) {
+    if (object != null) {
+      success(object.toString());
+    } else {
+      success("null");
     }
   }
 

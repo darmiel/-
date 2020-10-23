@@ -47,6 +47,11 @@ public class TelegramClient implements Client.ResultHandler {
   private final EventBus eventBus;
 
   /**
+   * Directory to store tdlib database files
+   */
+  private final String databaseDirectory;
+
+  /**
    * Should the client try to reconnect if the connection was lost or the authentication failed
    */
   @Getter
@@ -64,11 +69,6 @@ public class TelegramClient implements Client.ResultHandler {
    */
   @Getter
   private Client client;
-
-  /**
-   * Directory to store tdlib database files
-   */
-  private String databaseDirectory;
 
   /**
    * Current telegram authorization state

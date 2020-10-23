@@ -25,6 +25,11 @@ public class ConsoleLogProvider implements LoggerProvider {
       builder.append(level.getConsolePrefix());
     }
 
+    // make the prefixes a little bit more even
+    for (int i = level.name().length(); i < 8; i++) {
+      builder.append(" ");
+    }
+
     builder.append(level.name());
     builder.append(AnsiColor.ANSI_RESET);
 

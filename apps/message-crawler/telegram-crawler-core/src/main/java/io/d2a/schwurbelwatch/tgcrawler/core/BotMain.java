@@ -62,7 +62,7 @@ public class BotMain {
       System.out.println("catched throwable");
     }
 
-    Logger.info("Done! Took " + (System.currentTimeMillis() - stopwatchStart) + " ms.");
+    Logger.success("Done! Took " + (System.currentTimeMillis() - stopwatchStart) + " ms.");
     Runtime.getRuntime().addShutdownHook(new Thread(ModuleRegistry::unloadModulesUnsafe));
   }
 
@@ -100,7 +100,7 @@ public class BotMain {
     // Load telegram clients
     Logger.info("Creating clients ...");
     clientRouter = new ClientRouter();
-    clientRouter.createClients();
+    clientRouter.updateConfiguration(true);
 
     // load modules
     Logger.info("Loading modules ...");
