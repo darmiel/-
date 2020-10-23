@@ -9,6 +9,7 @@ package io.d2a.schwurbelwatch.tgcrawler.core.client;
 import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.SystemInfo;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
+import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,6 @@ public class TelegramConfig {
 
   @Setter
   @SerializedName("accounts")
-  private Set<ClientConfig> clientConfigs;
+  private Map<String, ClientConfig> clientConfigs;
 
 }

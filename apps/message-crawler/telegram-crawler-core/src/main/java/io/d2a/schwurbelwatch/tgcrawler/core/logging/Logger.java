@@ -72,5 +72,17 @@ public class Logger {
     }
   }
 
+  public static void value(final String message) {
+    broadcast(LogLevel.VALUE, message);
+  }
+
+  public static void value(final Object object) {
+    if (object != null) {
+      value(object.toString());
+    } else {
+      value("null");
+    }
+  }
+
 
 }

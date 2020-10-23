@@ -7,6 +7,7 @@
 package io.d2a.schwurbelwatch.tgcrawler.core.client;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.ApiCredentials;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.SystemInfo;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
@@ -18,11 +19,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.annotation.Nullable;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
+import org.drinkless.tdlib.TdApi.AuthorizationState;
+import org.drinkless.tdlib.TdApi.UpdateAuthorizationState;
 
+@ToString
 public class TelegramClient implements Client.ResultHandler {
 
   // Lock
@@ -81,6 +85,7 @@ public class TelegramClient implements Client.ResultHandler {
     this.databaseDirectory = databaseDirectory;
 
     this.eventBus = new EventBus(String.format("EB/%s", credentials.getPhoneNumber()));
+    this.eventBus.register(this);
 
     // create client
     recreateClient();
@@ -175,12 +180,14 @@ public class TelegramClient implements Client.ResultHandler {
     }
   }
 
+  // ######
+
   /**
-   * Call this when the authorization state changes
-   *
-   * @param authorizationState Auth-State
+   * Called when the authorization state changes
    */
-  public void onAuthorizationStateUpdated(@NonNull TdApi.AuthorizationState authorizationState) {
+  @Subscribe
+  public void onAuthorizationStateUpdated(final UpdateAuthorizationState state) {
+    final AuthorizationState authorizationState = state.authorizationState;
 
     // update cached auth state?
     if (this.authorizationState != null) {

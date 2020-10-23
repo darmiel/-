@@ -7,7 +7,7 @@
 package io.d2a.schwurbelwatch.tgcrawler.modules.chatlog.repo;
 
 import com.google.common.annotations.Beta;
-import io.d2a.schwurbelwatch.tgcrawler.modules.chatlog.message.DefaultChatMessage;
+import io.d2a.schwurbelwatch.tgcrawler.core.message.DefaultChatMessage;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 

@@ -34,6 +34,9 @@ public class ClientConfig {
   private String databaseDirectory;
 
   public boolean accepts(String useCase) {
+    if (useCase == null) {
+      return true;
+    }
     return useCases.stream()
         .anyMatch(useCase::equalsIgnoreCase);
   }

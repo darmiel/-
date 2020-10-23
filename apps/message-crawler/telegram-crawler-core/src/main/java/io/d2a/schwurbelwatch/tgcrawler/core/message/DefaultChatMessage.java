@@ -4,11 +4,12 @@
  * E-Mail: hi@d2a.io
  */
 
-package io.d2a.schwurbelwatch.tgcrawler.modules.chatlog.message;
+package io.d2a.schwurbelwatch.tgcrawler.core.message;
 
 import static io.d2a.schwurbelwatch.tgcrawler.core.BotMain.GSON;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.drinkless.tdlib.TdApi.Message;
 import org.drinkless.tdlib.TdApi.MessageAudio;
 import org.drinkless.tdlib.TdApi.MessageContent;
@@ -18,6 +19,7 @@ import org.drinkless.tdlib.TdApi.MessageText;
 import org.drinkless.tdlib.TdApi.MessageVideo;
 
 @Getter
+@ToString
 public class DefaultChatMessage {
 
   /* Meta */

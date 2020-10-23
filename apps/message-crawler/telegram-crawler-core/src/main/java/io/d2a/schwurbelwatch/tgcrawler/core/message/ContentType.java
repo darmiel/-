@@ -4,7 +4,7 @@
  * E-Mail: hi@d2a.io
  */
 
-package io.d2a.schwurbelwatch.tgcrawler.modules.chatlog.message;
+package io.d2a.schwurbelwatch.tgcrawler.core.message;
 
 import org.drinkless.tdlib.TdApi.MessageAudio;
 import org.drinkless.tdlib.TdApi.MessageContact;

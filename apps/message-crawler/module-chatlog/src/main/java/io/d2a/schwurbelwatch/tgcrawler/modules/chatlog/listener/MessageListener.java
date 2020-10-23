@@ -7,7 +7,7 @@
 package io.d2a.schwurbelwatch.tgcrawler.modules.chatlog.listener;
 
 import com.google.common.eventbus.Subscribe;
-import io.d2a.schwurbelwatch.tgcrawler.modules.chatlog.message.DefaultChatMessage;
+import io.d2a.schwurbelwatch.tgcrawler.core.message.DefaultChatMessage;
 import io.d2a.schwurbelwatch.tgcrawler.modules.chatlog.repo.MessageRepository;
 import org.drinkless.tdlib.TdApi.Message;
 import org.drinkless.tdlib.TdApi.UpdateNewMessage;

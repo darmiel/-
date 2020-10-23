@@ -5,6 +5,7 @@ import lombok.Getter;
 public enum LogLevel {
 
   DEBUG(1, AnsiColor.ANSI_CYAN),
+  VALUE(3, AnsiColor.ANSI_PURPLE),
   INFO(5, AnsiColor.ANSI_WHITE),
   WARN(50, AnsiColor.ANSI_YELLOW),
   ERROR(100, AnsiColor.ANSI_RED_BACKGROUND);

@@ -12,7 +12,6 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonSyntaxException;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.ApiCredentials;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
-import io.d2a.schwurbelwatch.tgcrawler.core.config.Configs;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.File;
 import java.io.FileReader;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 public class ClientRouter {
 
   // file to load clients from
-  public static final File CONFIG_FILE = new File(Configs.CONFIG_DIR, "telegram.json");
+  public static final File CONFIG_FILE = new File("config", "telegram.json");
 
   private Map<TelegramClient, ClientConfig> clients = Maps.newHashMap();
   private TelegramConfig config;
@@ -53,7 +52,7 @@ public class ClientRouter {
   }
 
   public void createClients() {
-    for (final ClientConfig config : config.getClientConfigs()) {
+    for (final ClientConfig config : config.getClientConfigs().values()) {
 
       if (this.clients.values().stream()
           .map(ClientConfig::getCredentials)
