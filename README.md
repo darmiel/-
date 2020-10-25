@@ -12,3 +12,6 @@ It looks whether a pattern is recognizable, or whether there are similarities be
 * Angular (Frontend)
 * MariaDB (Database)
 * Redis (Caching)
+
+### DB
+![img](https://i.imgur.com/IAA9vE1.png)
