@@ -1,0 +1,204 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Schwurbelwatch",
+    "version": "1.0.0-oas3",
+    "description": "Schwurbelwatch main REST api",
+    "termsOfService": "",
+    "contact": {
+      "email": "hi@d2a.io"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/messages": {
+      "get": {
+        "parameters": [
+          {
+            "name": "offset",
+            "description": "Skips {offset} messages",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned the messages"
+          }
+        },
+        "summary": "Returns the last 200 messages from all chats"
+      },
+      "post": {
+        "summary": "Add a new message to the database",
+        "parameters": [
+          {
+            "name": "body",
+            "$ref": "#/components/schemas/Message"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The message was successfully added to the database"
+          },
+          "409": {
+            "description": "There's already a message with the same messageId"
+          }
+        }
+      }
+    },
+    "/messages/:messageId": {
+      "get": {
+        "summary": "Returns the message by id",
+        "responses": {
+          "200": {
+            "description": "The message was found",
+            "$ref": "#/components/schemas/Message"
+          },
+          "404": {
+            "description": "The message was not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates a message in the database",
+        "parameters": [
+          {
+            "name": "body",
+            "$ref": "#/components/schemas/Message"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/schemas/Message"
+          },
+          "404": {
+            "description": "Message not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a message from the database",
+        "responses": {
+          "200": {
+            "description": "Message successfully deleted"
+          },
+          "404": {
+            "description": "Message not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Message": {
+        "type": "object",
+        "required": [
+          "messageId",
+          "chatId",
+          "userId",
+          "content_type",
+          "content",
+          "date"
+        ],
+        "properties": {
+          "messageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "chatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content_type": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted_on": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "is_channel_post": {
+            "type": "boolean"
+          }
+        },
+        "x-last-modified": 1603642259290
+      },
+      "Chat": {
+        "type": "object",
+        "required": ["chatId"],
+        "properties": {
+          "chatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "member_count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "is_channel": {
+            "type": "boolean"
+          },
+          "is_verified": {
+            "type": "boolean"
+          },
+          "is_scam": {
+            "type": "boolean"
+          },
+          "monitoring_restricted_reason": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "x-last-modified": 1603642321854
+      }
+    },
+    "responses": {},
+    "parameters": {}
+  },
+  "tags": [
+    {
+      "name": "message"
+    },
+    {
+      "name": "chat"
+    },
+    {
+      "name": "user"
+    }
+  ]
+}
