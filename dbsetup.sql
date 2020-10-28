@@ -70,15 +70,15 @@ CREATE TABLE users
 
 CREATE TABLE messages
 (
-    messageId       int        NOT NULL
+    messageId       int                  NOT NULL
         PRIMARY KEY,
-    chatId          int        NOT NULL,
-    userId          int        NOT NULL,
-    content_type    int        NULL,
-    content         text       NULL,
-    date            int        NULL,
-    deleted_on      int        NULL,
-    is_channel_post tinyint(1) NULL,
+    chatId          int                  NOT NULL,
+    userId          int                  NOT NULL,
+    content_type    int                  NOT NULL,
+    content         text                 NULL,
+    date            int                  NOT NULL,
+    deleted_on      int                  NULL,
+    is_channel_post tinyint(1) DEFAULT 0 NULL,
     CONSTRAINT messages_chats_chatId_fk
         FOREIGN KEY (chatId) REFERENCES chats (chatId),
     CONSTRAINT messages_content_types_typeId_fk
