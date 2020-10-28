@@ -1,0 +1,100 @@
+Table chats {
+  chatId int [pk]
+  username varchar
+  date int
+  title text
+  description text
+  
+  // other rather unimportant info:
+  member_count int
+  is_channel bool
+  is_verified bool
+  is_scam bool
+  monitoring_restricted_reason text
+  
+  // update info
+  last_updated datetime
+}
+
+Table chats_monitoring {
+  chatId int [pk]
+  invite varchar
+  enabled bool
+}
+Ref: chats_monitoring.chatId - chats.chatId
+
+Table chats_updates {
+  updateId int [pk, increment]
+  chatId int
+  key varchar
+  old_value text
+  new_value text
+}
+Ref: chats_updates.chatId > chats.chatId
+
+// > many-to-one; < one-to-many; - one-to-one
+
+Table users {
+  userId int [pk]
+  username varchar
+  first_name varchar
+  last_name varchar
+  phonr_nr varchar
+  is_verified bool
+  is_support bool
+  is_scam bool
+}
+
+Table user_group_memberships {
+  userId int [pk]
+  groupId int [pk]
+}
+Ref: user_group_memberships.userId > users.userId
+Ref: user_group_memberships.groupId > chats.chatId
+
+Table users_updates {
+  updateId int [pk, increment]
+  userId int
+  key varchar
+  old_value text
+  new_value text
+}
+
+Ref: users_updates.userId > users.userId
+
+Table content_types {
+  typeId int [pk]
+  type varchar
+}
+
+Table messages {
+  messageId int [pk]
+  chatId int
+  userId int
+  content_type int
+  content text
+  date datetime
+  deleted_on datetime [default: null]
+  is_channel_post bool
+}
+Ref: messages.chatId > chats.chatId
+Ref: messages.userId > users.userId
+Ref: messages.content_type > content_types.typeId
+
+Table messages_urls {
+  urlId int [pk, increment]
+  messageId int
+  url text
+  domain text
+  path text
+}
+Ref: messages_urls.messageId > messages.messageId
+
+Table messages_edits {
+  editId int [pk, increment]
+  messageId int
+  old_content text
+  new_content text
+  date datetime
+}
+Ref: messages_edits.messageId > messages.messageId
