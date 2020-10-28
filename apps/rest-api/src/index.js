@@ -26,15 +26,8 @@ app.use(
 
 const port = process.env.PORT || 3420;
 
-
-// swagger
-const swaggerJsdoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
-
-const specs = swaggerJsdoc(require("../swagger.json"));
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
-//
-
+// database connection
+const dbController = require("./controller/databaseController");
 
 // Some test routes
 app.get("/", (req, res) => {
