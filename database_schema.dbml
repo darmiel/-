@@ -1,100 +1,103 @@
 Table chats {
-  chatId int [pk]
+  chatId int [pk, not null]
   username varchar
-  date int
+  date bigint
   title text
   description text
   
   // other rather unimportant info:
   member_count int
-  is_channel bool
-  is_verified bool
-  is_scam bool
-  monitoring_restricted_reason text
+  
+  is_channel tinyint [not null, default: 0]
+  is_verified tinyint [not null, default: 0]
+  is_scam tinyint [not null, default: 0]
+  
   
   // update info
-  last_updated datetime
+  last_updated bigint [not null]
+  
+  // should we monitor this channel?
+  monitor tinyint [not null, default: 0]
 }
-
-Table chats_monitoring {
-  chatId int [pk]
-  invite varchar
-  enabled bool
-}
-Ref: chats_monitoring.chatId - chats.chatId
 
 Table chats_updates {
-  updateId int [pk, increment]
-  chatId int
-  key varchar
+  updateId int [pk, increment, not null]
+  chatId int [not null]
+  
+  key varchar [not null]
   old_value text
   new_value text
+  
+  date bigint [not null, note: "Date of update"]
 }
 Ref: chats_updates.chatId > chats.chatId
 
 // > many-to-one; < one-to-many; - one-to-one
 
 Table users {
-  userId int [pk]
+  userId int [pk, not null]
   username varchar
+  
   first_name varchar
   last_name varchar
   phonr_nr varchar
-  is_verified bool
-  is_support bool
-  is_scam bool
+  
+  is_verified tinyint [not null, default: 0]
+  is_support tinyint [not null, default: 0]
+  is_scam tinyint [not null, default: 0]
 }
 
-Table user_group_memberships {
-  userId int [pk]
-  groupId int [pk]
+Table users_group_memberships {
+  userId int [pk, not null]
+  groupId int [pk, not null]
 }
-Ref: user_group_memberships.userId > users.userId
-Ref: user_group_memberships.groupId > chats.chatId
+Ref: users_group_memberships.userId > users.userId
+Ref: users_group_memberships.groupId > chats.chatId
 
 Table users_updates {
-  updateId int [pk, increment]
-  userId int
-  key varchar
+  updateId int [pk, increment, not null]
+  userId int [not null]
+  key varchar [not null]
   old_value text
   new_value text
+  date bigint [not null]
 }
 
 Ref: users_updates.userId > users.userId
 
 Table content_types {
-  typeId int [pk]
-  type varchar
+  typeId int [pk, not null]
+  type varchar [not null]
 }
 
 Table messages {
-  messageId int [pk]
-  chatId int
-  userId int
-  content_type int
+  messageId int [pk, not null]
+  chatId int [not null]
+  userId int [not null]
+  content_type int [not null]
   content text
-  date datetime
-  deleted_on datetime [default: null]
-  is_channel_post bool
+  date bigint [not null]
+  deleted_on bigint
+  is_channel_post tinyint [default: 0]
 }
 Ref: messages.chatId > chats.chatId
 Ref: messages.userId > users.userId
 Ref: messages.content_type > content_types.typeId
 
 Table messages_urls {
-  urlId int [pk, increment]
-  messageId int
-  url text
+  urlId int [pk, increment, not null]
+  messageId int [not null]
+  url text [not null]
   domain text
   path text
 }
 Ref: messages_urls.messageId > messages.messageId
 
 Table messages_edits {
-  editId int [pk, increment]
-  messageId int
+  editId int [pk, increment, not null]
+  messageId int [not null]
   old_content text
   new_content text
-  date datetime
+  date bigint [not null]
 }
 Ref: messages_edits.messageId > messages.messageId
