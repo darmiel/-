@@ -1,4 +1,20 @@
 # rest-api
+
+**ToC:**
+- [rest-api](#rest-api)
+  - [/messages](#messages)
+    - [GET /messages?offset=0](#get-messagesoffset0)
+    - [POST /messages](#post-messages)
+    - [GET /messages/:id](#get-messagesid)
+    - [PUT /messages/:id](#put-messagesid)
+  - [/chats](#chats)
+    - [GET /chats](#get-chats)
+    - [POST /chats](#post-chats)
+    - [GET /chats/:id](#get-chatsid)
+    - [PUT /chats/:id](#put-chatsid)
+
+---
+
 ## /messages
 ### GET /messages?offset=0
 Returns last 200, offset messages

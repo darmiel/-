@@ -45,6 +45,7 @@ const main = async () => {
    */
   app.use("/messages", require("./routes/messages"));
   app.use("/chats", require("./routes/chats"));
+  app.use("/users", require("./routes/users"));
 
   /*
    * Other

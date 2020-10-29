@@ -1,6 +1,7 @@
 "use strict";
 
-const pool = require("./databaseController").pool;
+const dbController = require("./databaseController");
+const pool = dbController.pool;
 const Joi = require("Joi");
 
 /*
@@ -22,127 +23,33 @@ const messageSchema = Joi.object({
  */
 // GET /messages
 module.exports.getLastMessages = async (limit = 200, offset = 0) => {
-  const connection = await pool.getConnection();
-  try {
-    const res = await connection.query(
-      "SELECT * FROM messages WHERE 1 LIMIT ? OFFSET ?;",
-      [parseInt(limit), parseInt(offset)]
-    );
-    return res.length == 0 ? [] : res;
-  } catch (exception) {
-    return {
-      error: true,
-      message: exception.code,
-    };
-  } finally {
-    if (connection) {
-      connection.end();
-    }
-  }
+  return dbController.selectPaged("messages", "*", 1, limit, offset);
 };
 
 // GET /messages/:id
 module.exports.getMessage = async (messageId) => {
-  const connection = await pool.getConnection();
-  try {
-    return await connection.query(
-      "SELECT * FROM messages WHERE messageId = ? LIMIT 1;",
-      [parseInt(messageId)]
-    );
-  } catch (exception) {
-    return {
-      error: true,
-      message: exception.code,
-    };
-  } finally {
-    if (connection) {
-      connection.end();
-    }
-  }
+  return dbController.getSingle("messages", "*", "messageId", messageId);
 };
 
 // POST /messages
 module.exports.addMessage = async (message) => {
-  // validate message
-  const { error, value } = messageSchema.validate(message);
-  if (error) {
-    return {
-      error: true,
-      message: error.details[0].message,
-    };
-  }
-
-  const connection = await pool.getConnection();
-  try {
-    return await connection.query(
-      "INSERT INTO messages VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
-      [
-        value.messageId,
-        value.chatId,
-        value.userId,
-        value.content_type,
-        value.content,
-        value.date,
-        value.deleted_on,
-        value.is_channel_post,
-      ]
-    );
-  } catch (exception) {
-    return {
-      error: true,
-      message: exception.code,
-    };
-  } finally {
-    if (connection) {
-      connection.end();
-    }
-  }
+  return dbController.add("messages", messageSchema, message, [
+    "messageId",
+    "chatId",
+    "userId",
+    "content_type",
+    "content",
+    "date",
+    "deleted_on",
+    "is_channel_post",
+  ]);
 };
 
 // PUT /messages/:id
 module.exports.updateMessage = async (id, message) => {
-  const allowedFields = ["content_type", "content", "deleted_on"];
-
-  for (const key in message) {
-    if (!allowedFields.includes(key)) {
-      return {
-        error: true,
-        message: `Illegal field: '${key}'`,
-      };
-    }
-  }
-
-  let affected = 0;
-
-  // update
-  const connection = await pool.getConnection();
-
-  try {
-    for (const key in message) {
-      const value = message[key];
-
-      // update in db
-      const res = await connection.query(
-        `UPDATE messages SET ${key} = ? WHERE messageId = ?;`,
-        [value, parseInt(id)]
-      );
-      affected = res.affectedRows;
-      console.log(res);
-    }
-  } catch (exception) {
-    console.error(exception);
-    return {
-      error: true,
-      message: exception.code,
-    };
-  } finally {
-    if (connection) {
-      connection.end();
-    }
-  }
-
-  return {
-    error: false,
-    affected: affected,
-  };
+  return dbController.update("messages", "messageId", message, id, [
+    "content_type",
+    "content",
+    "deleted_on",
+  ]);
 };
