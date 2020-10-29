@@ -5,14 +5,7 @@ const express = require("express");
 const router = express.Router();
 router.use(express.json());
 
-const controller = require("../controller/databaseController");
-
-// Joi
-const contentType = {
-  text: 1,
-};
-
-
+const controller = require("../controller/messagesController");
 
 /**
  * GET /messages
@@ -43,12 +36,15 @@ router.get("/:id", async (req, res) => {
  */
 router.post("/", async (req, res) => {
   const controllerResult = await controller.addMessage(req.body);
-  res.status(200).json(controllerResult);
+  return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
 });
 
 router.put("/:id", async (req, res) => {
-  const controllerResult = await controller.updateMessage(req.params.id, req.body);
-  res.status(200).json(controllerResult);
+  const controllerResult = await controller.updateMessage(
+    req.params.id,
+    req.body
+  );
+  return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
 });
 
 module.exports = router;
