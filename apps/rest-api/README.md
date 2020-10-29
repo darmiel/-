@@ -2,24 +2,57 @@
 
 **ToC:**
 - [rest-api](#rest-api)
-  - [/messages](#messages)
-    - [GET /messages?offset=0](#get-messagesoffset0)
-    - [POST /messages](#post-messages)
-    - [GET /messages/:id](#get-messagesid)
-    - [PUT /messages/:id](#put-messagesid)
-  - [/chats](#chats)
-    - [GET /chats](#get-chats)
-    - [POST /chats](#post-chats)
-    - [GET /chats/:id](#get-chatsid)
-    - [PUT /chats/:id](#put-chatsid)
+  - [ToDo](#todo)
+  - [Routes](#routes)
+    - [/messages](#messages)
+      - [GET /messages?offset=0](#get-messagesoffset0)
+      - [POST /messages](#post-messages)
+      - [GET /messages/:id](#get-messagesid)
+      - [PUT /messages/:id](#put-messagesid)
+    - [/chats](#chats)
+      - [GET /messages?offset=0](#get-messagesoffset0-1)
+      - [POST /chats](#post-chats)
+      - [GET /chats/:id](#get-chatsid)
+      - [PUT /chats/:id](#put-chatsid)
+    - [/users](#users)
+      - [GET /users?offset=0](#get-usersoffset0)
+      - [POST /users](#post-users)
+      - [GET /user/:id](#get-userid)
+      - [PUT /users/:id](#put-usersid)
 
 ---
 
-## /messages
-### GET /messages?offset=0
+## ToDo
+- [x] Messages Route
+  - [x] GET /messages?offset=0
+  - [x] POST /chats
+  - [x] GET /messages/:id
+  - [x] PUT /messages/:idx
+- [x] Chats Route
+  - [x] GET /chats?offset=0
+  - [x] POST /chats
+  - [x] GET /chats/:id
+  - [x] PUT /chats/:id
+- [x] Users Route
+  - [x] GET /users?offset=0
+  - [x] POST /users
+  - [x] GET /users/:id
+  - [x] PUT /users/:id
+- [x] Deduplicate chats, messages and users controller
+- [ ] Validate every query parameter
+- [ ] GET /contentTypes
+- [ ] Updates Route
+  - [ ] GET /updates/chats/:id
+  - [ ] GET /updates/chats/last
+  - [ ] GET /updates/users/:id
+  - [ ] GET /updates/users/last
+
+## Routes
+### /messages
+#### GET /messages?offset=0
 Returns last 200, offset messages
 
-### POST /messages
+#### POST /messages
 Creates a new message and stores it to the database
 
 **Input:**
@@ -36,7 +69,7 @@ Creates a new message and stores it to the database
 }
 ```
 
-### GET /messages/:id
+#### GET /messages/:id
 Returns the message with the id `:id`
 
 | Code | Description       |
@@ -44,7 +77,7 @@ Returns the message with the id `:id`
 | 200  | Message found     |
 | 404  | Message not found |
 
-### PUT /messages/:id
+#### PUT /messages/:id
 Update a message with the id `:id`
 
 **Input example:**
@@ -59,11 +92,11 @@ Update a message with the id `:id`
 | 200  | Message updated   |
 | 404  | Message not found |
 
-## /chats
-### GET /chats
-Gets all chats
+### /chats
+#### GET /messages?offset=0
+Returns last 200, offset chats
 
-### POST /chats
+#### POST /chats
 Stores a new chat to the database.
 The meta of the chat will be resolved later by an update worker.
 You'll need only `chatId´
@@ -94,7 +127,7 @@ last_updated                 int         NULL
 | 200  | Chat stored         |
 | 400  | Chat already exists |
 
-### GET /chats/:id
+#### GET /chats/:id
 Returns the chat with the id `:id`
 
 | Code | Description    |
@@ -102,7 +135,7 @@ Returns the chat with the id `:id`
 | 200  | Chat found     |
 | 404  | Chat not found |
 
-### PUT /chats/:id
+#### PUT /chats/:id
 Udates a chat with the id `:id`
 
 **Input example:**
@@ -116,3 +149,45 @@ Udates a chat with the id `:id`
 |------|-------------------|
 | 200  | Chat updated      |
 | 404  | Chat not found    |
+
+### /users
+#### GET /users?offset=0
+Returns last 200, offset users
+
+#### POST /users
+Stores a new user to the database.
+
+**Input:**
+```javascript
+{
+    userIdId: "int required"
+}
+```
+
+| Code | Description         |
+|------|---------------------|
+| 200  | User stored         |
+| 400  | User already exists |
+
+#### GET /user/:id
+Returns the user with the id `:id`
+
+| Code | Description    |
+|------|----------------|
+| 200  | User found     |
+| 404  | User not found |
+
+#### PUT /users/:id
+Udates a user with the id `:id`
+
+**Input example:**
+```javascript
+{
+    phone_nr: "+4917634512124"
+}
+```
+
+| Code | Description       |
+|------|-------------------|
+| 200  | User updated      |
+| 404  | User not found    |
