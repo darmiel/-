@@ -21,7 +21,6 @@ const main = async () => {
    */
   const port = process.env.PORT || 3420;
 
-
   // Database Initialization :::
   const dbController = require("./controller/databaseController");
   if (!(await dbController.testConnection())) {
@@ -32,20 +31,13 @@ const main = async () => {
   await dbController.disableForeignKeyChecks();
   // :::
 
-
-  // Some test routes
-  app.get("/", (req, res) => {
-    res.json({
-      message: "It works!",
-    });
-  });
-
   /*
    * Routes
    */
   app.use("/messages", require("./routes/messages"));
   app.use("/chats", require("./routes/chats"));
   app.use("/users", require("./routes/users"));
+  app.use("", require("./routes/default"));
 
   /*
    * Other

@@ -3,12 +3,12 @@ const mariadb = require("mariadb");
 const config = require("../../config/database.json");
 
 const pool = mariadb.createPool({
-  host: config.host,
-  port: config.port,
-  user: config.user,
-  password: config.pass,
-  connectionLimit: config.pool_max_conn,
-  database: config.database,
+  host: config.maria.host,
+  port: config.maria.port,
+  user: config.maria.user,
+  password: config.maria.pass,
+  connectionLimit: config.maria.pool_max_conn,
+  database: config.maria.database,
 });
 
 /*
@@ -165,3 +165,5 @@ module.exports.getSingle = async (table, what, idField, id) => {
     }
   }
 }
+
+module.exports.pool = pool;
