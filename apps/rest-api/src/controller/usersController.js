@@ -47,7 +47,7 @@ module.exports.addUser = async (user) => {
 
 // GET /users/:id
 module.exports.getUser = async (id) => {
-  return dbController.getSingle("users", "*", "userId", id);
+  return dbController.getSingleCached("users", "*", "userId", id);
 };
 
 // PUT /users/:id

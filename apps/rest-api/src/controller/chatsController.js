@@ -47,7 +47,7 @@ module.exports.addChat = async (chat) => {
 
 // GET /chats/:id
 module.exports.getChat = async (id) => {
-  return dbController.getSingle("chats", "*", "chatId", id);
+  return dbController.getSingleCached("chats", "*", "chatId", id);
 };
 
 // PUT /chats/:id

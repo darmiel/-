@@ -11,6 +11,8 @@ const pool = mariadb.createPool({
   database: config.maria.database,
 });
 
+const redis = require("./redisController");
+
 /*
  * Database initialization
  */
@@ -35,12 +37,24 @@ module.exports.disableForeignKeyChecks = async () => {
 
 module.exports.pool = pool;
 
-  // Other functions
-module.exports.selectPaged = async (table, what, where = 1, limit = 200, offset = 0) => {
+// Other functions
+module.exports.selectPaged = async (
+  table,
+  what,
+  where = 1,
+  limit = 200,
+  offset = 0
+) => {
   const connection = await pool.getConnection();
   try {
     const res = await connection.query(
-      "SELECT " + what + " FROM "  + table + " WHERE " + where + " LIMIT ? OFFSET ?;",
+      "SELECT " +
+        what +
+        " FROM " +
+        table +
+        " WHERE " +
+        where +
+        " LIMIT ? OFFSET ?;",
       [parseInt(limit), parseInt(offset)]
     );
     return res.length == 0 ? [] : res;
@@ -124,7 +138,7 @@ module.exports.add = async (table, schema, obj, valueFields) => {
 
     for (let i = 0; i < valueFields.length; i++) {
       const field = valueFields[i];
-      
+
       // console.log(field, value.get(field));
       console.log(field);
       arr.push(value[field]);
@@ -133,7 +147,10 @@ module.exports.add = async (table, schema, obj, valueFields) => {
     values = values.substring(0, values.length - 1);
     console.log(arr, values);
 
-    return await connection.query("INSERT INTO "+ table + " VALUES (" + values + ");", arr);
+    return await connection.query(
+      "INSERT INTO " + table + " VALUES (" + values + ");",
+      arr
+    );
   } catch (exception) {
     return {
       error: true,
@@ -147,10 +164,15 @@ module.exports.add = async (table, schema, obj, valueFields) => {
 };
 
 module.exports.getSingle = async (table, what, idField, id) => {
+  id = parseInt(id);
+
   const connection = await pool.getConnection();
   try {
+    const query = "SELECT " + what + " FROM " + table + " WHERE " + idField + " = ?;";
+    console.log("🦾 " + query);
+
     const res = await connection.query(
-      "SELECT " + what + " FROM " + table + " WHERE " + idField + " = ?;",
+      query,
       [parseInt(id)]
     );
     return res.length == 0 ? [] : res[0];
@@ -164,6 +186,29 @@ module.exports.getSingle = async (table, what, idField, id) => {
       connection.end();
     }
   }
-}
+};
+
+module.exports.getSingleCached = async (table, what, idField, id, expire = 10) => {
+  id = parseInt(id);
+
+  const redisKey = "T" + table + ":W" + what + ":F" + idField + ":I" + id;
+  if (await redis.exists(redisKey)) {
+    return JSON.parse(await redis.get(redisKey));
+  }
+
+  const value = await module.exports.getSingle(table, what, idField, id);
+
+  // do not cache if error
+  if ('error' in value) {
+    return value;
+  }
+
+  // add to redis
+  await redis.set(redisKey, JSON.stringify(value));
+  await redis.expire(redisKey, expire);
+
+  // return value
+  return value;
+};
 
 module.exports.pool = pool;

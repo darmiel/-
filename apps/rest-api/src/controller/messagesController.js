@@ -27,7 +27,7 @@ module.exports.getLastMessages = async (limit = 200, offset = 0) => {
 
 // GET /messages/:id
 module.exports.getMessage = async (messageId) => {
-  return dbController.getSingle("messages", "*", "messageId", messageId);
+  return dbController.getSingleCached("messages", "*", "messageId", messageId);
 };
 
 // POST /messages

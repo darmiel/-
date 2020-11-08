@@ -41,13 +41,10 @@
 - [x] Deduplicate chats, messages and users controller
 - [x] Validate every query parameter
 - [x] GET /contentTypes
-- [ ] Redisfy Routes:
-  - [ ] GET /messages/:id
-  - [ ] GET /chats/:id
-  - [ ] GET /users/:id
-  - [ ] GET /messages?offset=0
-  - [ ] GET /chats?offset=0
-  - [ ] GET /users?offset=0
+- [x] Redisfy Routes:
+  - [x] GET /messages/:id
+  - [x] GET /chats/:id
+  - [x] GET /users/:id
 - [ ] Updates Route
   - [ ] GET /updates/chats/:id
   - [ ] GET /updates/chats/last
