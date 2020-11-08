@@ -1,5 +1,8 @@
 "use strict";
 
+const Joi = require("joi");
+const valid = require("../controller/validationController");
+
 const express = require("express");
 
 const router = express.Router();
@@ -22,8 +25,11 @@ router.get("/", async (req, res) => {
  * Returns the message with the id :id
  */
 router.get("/:id", async (req, res) => {
-  const id = req.params.id;
-  const rows = await controller.getMessage(id);
+  let r = valid.validate(res, Joi.number().min(0), req.params.id);
+  if (r == undefined) {
+    return;
+  }
+  const rows = await controller.getMessage(r);
   if (rows.length == 1) {
     return res.status(200).json(rows);
   }
@@ -40,8 +46,12 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  let r = valid.validate(res, Joi.number().min(0), req.params.id);
+  if (r == undefined) {
+    return;
+  }
   const controllerResult = await controller.updateMessage(
-    req.params.id,
+    r,
     req.body
   );
   return res.status(controllerResult.error ? 400 : 200).json(controllerResult);

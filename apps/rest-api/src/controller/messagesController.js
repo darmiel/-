@@ -1,7 +1,6 @@
 "use strict";
 
 const dbController = require("./databaseController");
-const pool = dbController.pool;
 const Joi = require("Joi");
 
 /*

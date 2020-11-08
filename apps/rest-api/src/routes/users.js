@@ -1,5 +1,8 @@
 "use strict";
 
+const Joi = require("joi");
+const valid = require("../controller/validationController");
+
 const express = require("express");
 
 const router = express.Router();
@@ -31,7 +34,11 @@ router.post("/", async (req, res) => {
  * Returns a specific chat
  */
 router.get("/:id", async (req, res) => {
-  const controllerResult = await controller.getUser(req.params.id);
+  let r = valid.validate(res, Joi.number().min(0), req.params.id);
+  if (r == undefined) {
+    return;
+  }
+  const controllerResult = await controller.getUser(r);
   return res.status(controllerResult.error ? 404 : 200).json(controllerResult);
 });
 
@@ -40,7 +47,11 @@ router.get("/:id", async (req, res) => {
  * Updates a specific chat
  */
 router.put("/:id", async (req, res) => {
-  const controllerResult = await controller.updateUser(req.params.id, req.body);
+  let r = valid.validate(res, Joi.number().min(0), req.params.id);
+  if (r == undefined) {
+    return;
+  }
+  const controllerResult = await controller.updateUser(r, req.body);
   return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
 });
 

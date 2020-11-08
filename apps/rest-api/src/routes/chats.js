@@ -1,5 +1,8 @@
 "use strict";
 
+const Joi = require("joi");
+const valid = require("../controller/validationController");
+
 const express = require("express");
 
 const router = express.Router();
@@ -13,7 +16,14 @@ const controller = require("../controller/chatsController");
  */
 router.get("/", async (req, res) => {
   const offset = req.query.offset || 0;
-  const controllerResult = await controller.getChats(200, offset);
+
+  // validate params
+  let r = valid.validate(res, Joi.number().min(0), offset);
+  if (r == undefined) {
+    return;
+  }
+  
+  const controllerResult = await controller.getChats(200, r);
   return res.status(controllerResult.error ? 500 : 200).json(controllerResult);
 });
 
@@ -31,7 +41,12 @@ router.post("/", async (req, res) => {
  * Returns a specific chat
  */
 router.get("/:id", async (req, res) => {
-  const controllerResult = await controller.getChat(req.params.id);
+  let r = valid.validate(res, Joi.number().min(0), req.params.id);
+  if (r == undefined) {
+    return;
+  }
+
+  const controllerResult = await controller.getChat(require);
   return res.status(controllerResult.error ? 404 : 200).json(controllerResult);
 });
 
@@ -40,7 +55,11 @@ router.get("/:id", async (req, res) => {
  * Updates a specific chat
  */
 router.put("/:id", async (req, res) => {
-  const controllerResult = await controller.updateChat(req.params.id, req.body);
+  let r = valid.validate(res, Joi.number().min(0), req.params.id);
+  if (r == undefined) {
+    return;
+  }
+  const controllerResult = await controller.updateChat(r, req.body);
   return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
 });
 
