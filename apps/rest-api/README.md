@@ -27,7 +27,7 @@
   - [x] GET /messages?offset=0
   - [x] POST /chats
   - [x] GET /messages/:id
-  - [x] PUT /messages/:idx
+  - [x] PUT /messages/:id
 - [x] Chats Route
   - [x] GET /chats?offset=0
   - [x] POST /chats
@@ -50,6 +50,14 @@
   - [X] GET /updates/chats/last
   - [X] GET /updates/users/:id
   - [X] GET /updates/users/last
+  - [ ] GET /updates/messages/:id
+  - [ ] GET /updates/messages/last
+- [ ] Chat messages
+  - [ ] GET /chats/:id/messages?offset=0
+- [ ] Auto add to updates
+  - [ ] PUT /users/:id
+  - [ ] PUT /chats/:id
+  - [ ] PUT /messages/:id
 
 ## Routes
 ### /messages
