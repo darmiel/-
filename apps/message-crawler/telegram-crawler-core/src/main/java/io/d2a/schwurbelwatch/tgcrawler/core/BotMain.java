@@ -8,6 +8,7 @@ package io.d2a.schwurbelwatch.tgcrawler.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.d2a.schwurbelwatch.mods.ModMain;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.ClientRouter;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.ModuleRegistry;
@@ -101,6 +102,7 @@ public class BotMain {
     Logger.info("Creating clients ...");
     clientRouter = new ClientRouter();
     clientRouter.updateConfiguration(true);
+    new ModMain();
 
     // load modules
     Logger.info("Loading modules ...");

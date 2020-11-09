@@ -49,7 +49,8 @@ module.exports.selectPaged = async (
   what,
   where = 1,
   limit = 200,
-  offset = 0
+  offset = 0,
+  orderBy = ""
 ) => {
   const connection = await pool.getConnection();
   try {
@@ -60,6 +61,7 @@ module.exports.selectPaged = async (
         table +
         " WHERE " +
         where +
+        orderBy +
         " LIMIT ? OFFSET ?;",
       [parseInt(limit), parseInt(offset)]
     );
@@ -134,7 +136,6 @@ module.exports.add = async (table, schema, obj, valueFields) => {
   // set to current date
   if (value.last_updated == -1) {
     value.last_updated = Date.now();
-    console.log(Date.now());
   }
 
   const connection = await pool.getConnection();

@@ -75,13 +75,26 @@
       <scope>compile</scope>
       <version>0.9.12</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.squareup.retrofit2</groupId>
+      <artifactId>retrofit</artifactId>
+      <version>2.9.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.retrofit2</groupId>
+      <artifactId>converter-gson</artifactId>
+      <version>2.9.0</version>
+      <scope>compile</scope>
+    </dependency>
+
   </dependencies>
   <groupId>io.d2a.schwurbelwatch</groupId>
   <modelVersion>4.0.0</modelVersion>
 
   <modules>
     <module>telegram-crawler-core</module>
-    <module>module-chatlog</module>
   </modules>
 
   <packaging>pom</packaging>

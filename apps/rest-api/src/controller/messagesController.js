@@ -22,7 +22,14 @@ const messageSchema = Joi.object({
  */
 // GET /messages
 module.exports.getLastMessages = async (limit = 200, offset = 0) => {
-  return dbController.selectPaged("messages", "*", 1, limit, offset);
+  return dbController.selectPaged(
+    "messages",
+    "*",
+    1,
+    limit,
+    offset,
+    " ORDER BY `date` DESC"
+  );
 };
 
 // GET /messages/:id
