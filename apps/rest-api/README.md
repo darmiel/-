@@ -45,11 +45,11 @@
   - [x] GET /messages/:id
   - [x] GET /chats/:id
   - [x] GET /users/:id
-- [ ] Updates Route
-  - [ ] GET /updates/chats/:id
-  - [ ] GET /updates/chats/last
-  - [ ] GET /updates/users/:id
-  - [ ] GET /updates/users/last
+- [X] Updates Route
+  - [X] GET /updates/chats/:id
+  - [X] GET /updates/chats/last
+  - [X] GET /updates/users/:id
+  - [X] GET /updates/users/last
 
 ## Routes
 ### /messages

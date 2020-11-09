@@ -31,15 +31,26 @@ router.get("/contenttypes", async (req, res) => {
 
   // from mysql
   const connection = await maria.pool.getConnection();
-  const types = await connection.query("SELECT * FROM content_types WHERE 1");
-  console.log(types);
+  try {
+    const types = await connection.query("SELECT * FROM content_types WHERE 1");
+    console.log(types);
 
-  // update redis
-  await redis.set(redisKey, JSON.stringify(types));
-  await redis.expire(redisKey, 5);
+    // update redis
+    await redis.set(redisKey, JSON.stringify(types));
+    await redis.expire(redisKey, 5);
 
-  // out
-  return res.status(200).json(types);
+    // out
+    return res.status(200).json(types);
+  } catch (exception) {
+    return {
+      error: true,
+      message: exception.code,
+    };
+  } finally {
+    if (connection) {
+      connection.end();
+    }
+  }
 });
 
 module.exports = router;

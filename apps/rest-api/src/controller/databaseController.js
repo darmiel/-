@@ -21,6 +21,9 @@ module.exports.testConnection = async () => {
     console.log("📂 Testing db connection ...");
     const connection = await pool.getConnection();
     const rows = await connection.query("SELECT 1");
+    if (connection) {
+      connection.end();
+    }
     return rows.length == 1;
   } catch (error) {
     console.error(error);
@@ -32,6 +35,9 @@ module.exports.disableForeignKeyChecks = async () => {
   console.log("📂 Disabling foreign key checks ...");
   const connection = await pool.getConnection();
   await connection.query("SET foreign_key_checks = 0;");
+  if (connection) {
+    connection.end();
+  }
   console.log("📂 Done!");
 };
 
