@@ -38,8 +38,12 @@ router.get("/:id", async (req, res) => {
   if (r == undefined) {
     return;
   }
-  const controllerResult = await controller.getUser(r);
-  return res.status(controllerResult.error ? 404 : 200).json(controllerResult);
+
+  const rows = await controller.getUser(r);
+  if (rows == []) {
+    return res.status(404).json([]);
+  }
+  return res.status(200).json(rows);
 });
 
 /**

@@ -30,10 +30,11 @@ router.get("/:id", async (req, res) => {
     return;
   }
   const rows = await controller.getMessage(r);
-  if (rows.length == 1) {
-    return res.status(200).json(rows);
+  console.log(rows);
+  if (rows == []) {
+    return res.status(404).json([]);
   }
-  return res.status(404).json([]);
+  return res.status(200).json(rows);
 });
 
 /**

@@ -45,8 +45,11 @@ router.get("/:id", async (req, res) => {
     return;
   }
 
-  const controllerResult = await controller.getChat(r);
-  return res.status(controllerResult.error ? 404 : 200).json(controllerResult);
+  const rows = await controller.getChat(r);
+  if (rows == []) {
+    return res.status(404).json([]);
+  }
+  return res.status(200).json(rows);
 });
 
 /**
