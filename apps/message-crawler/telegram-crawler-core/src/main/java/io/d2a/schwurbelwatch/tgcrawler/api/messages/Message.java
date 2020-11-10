@@ -8,7 +8,10 @@ public class Message {
 
   public long messageId;
   public long chatId;
-  public int userId;
+  public long userId;
+
+  @SerializedName("reply_to")
+  public long replyTo;
 
   @SerializedName("content_type")
   public int contentType;

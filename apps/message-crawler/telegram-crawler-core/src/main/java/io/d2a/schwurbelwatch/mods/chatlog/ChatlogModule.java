@@ -86,6 +86,7 @@ public class ChatlogModule extends BotModule {
     msg.userId = message.senderUserId;
 
     msg.contentType = 0;
+    msg.replyTo = message.replyToMessageId;
 
     // content type
     for (final ContentType value : contentTypeMap.values()) {
@@ -100,7 +101,8 @@ public class ChatlogModule extends BotModule {
     }
 
     msg.content = wrap.getTextCaption();
-    msg.date = System.currentTimeMillis() / 1000;
+
+    msg.date = System.currentTimeMillis();
     msg.deletedOn = 0;
     msg.isChannelPost = message.isChannelPost ? 1 : 0;
 
@@ -109,14 +111,11 @@ public class ChatlogModule extends BotModule {
     final Call<DatabaseResult> call = service.addMessage(msg);
     try {
       final Response<DatabaseResult> execute = call.execute();
-      Logger.success("Done:");
-      Logger.success(execute);
+      Logger.debug(execute);
+
       if (execute.code() != 200) {
         Logger.warn("Nope:");
-        Logger.warn(execute.raw());
-        Logger.warn(execute.raw().message());
         final ResponseBody object = execute.errorBody();
-        Logger.warn(object);
         if (object != null) {
           Logger.warn(object.string());
         }
@@ -136,7 +135,7 @@ public class ChatlogModule extends BotModule {
     }
 
     final JsonObject obj = new JsonObject();
-    obj.addProperty("deleted_on", (System.currentTimeMillis() / 1000));
+    obj.addProperty("deleted_on", (System.currentTimeMillis()));
 
     for (final long messageId : event.messageIds) {
       Logger.info("Deleting message " + messageId);
