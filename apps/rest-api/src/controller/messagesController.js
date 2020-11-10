@@ -10,7 +10,7 @@ const messageSchema = Joi.object({
   messageId: Joi.number().required(),
   chatId: Joi.number().required(),
   userId: Joi.number().required(),
-  content_type: Joi.number().min(0).max(5).required(),
+  content_type: Joi.number().min(0).required(),
   content: Joi.string().default(null).optional(),
   date: Joi.number().required(),
   deleted_on: Joi.number().default(null).optional(),

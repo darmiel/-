@@ -24,6 +24,7 @@ public class ApiTest {
     final Response<DatabaseResult> response = call.execute();
     System.out.println(response);
     final DatabaseResult body = response.body();
+
     if (body.isError()) {
       System.out.println(" -> Error! :: " + body.errorMessage);
     }

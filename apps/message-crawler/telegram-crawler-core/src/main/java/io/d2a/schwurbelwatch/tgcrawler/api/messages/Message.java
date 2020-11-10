@@ -6,8 +6,8 @@ import lombok.ToString;
 @ToString
 public class Message {
 
-  public int messageId;
-  public int chatId;
+  public long messageId;
+  public long chatId;
   public int userId;
 
   @SerializedName("content_type")

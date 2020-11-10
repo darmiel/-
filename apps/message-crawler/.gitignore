@@ -152,7 +152,7 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+iml,windows,java,maven
 
-/tglibdata
+/tglibdata23
 
 /tdlib
 tdlib.log

@@ -58,6 +58,7 @@ public class ClientRouter {
     }
 
     // create client
+    Logger.debug("Creating client ...");
     final ClientConfig clientConfig = configuration.get();
     final String databaseDirectory = clientConfig.getDatabaseDirectory();
     final TelegramClient client = TelegramClient.create(
@@ -65,6 +66,7 @@ public class ClientRouter {
         clientConfig.getSystemInfo(),
         databaseDirectory
     );
+    Logger.debug("Client created.");
 
     // cache account for later use
     this.accountMap.put(key, client);

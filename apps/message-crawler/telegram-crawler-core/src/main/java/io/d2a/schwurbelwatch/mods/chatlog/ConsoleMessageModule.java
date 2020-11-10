@@ -75,6 +75,6 @@ public class ConsoleMessageModule extends BotModule {
 
   @Subscribe
   public void any(final TdApi.Object object) {
-    Logger.debug(object);
+    // Logger.debug(object);
   }
 }

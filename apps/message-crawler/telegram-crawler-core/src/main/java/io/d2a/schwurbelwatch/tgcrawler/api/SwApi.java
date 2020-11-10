@@ -3,6 +3,7 @@ package io.d2a.schwurbelwatch.tgcrawler.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.d2a.schwurbelwatch.tgcrawler.api.messages.MessageService;
+import io.d2a.schwurbelwatch.tgcrawler.api.other.BaseService;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -24,5 +25,6 @@ public class SwApi {
       .build();
 
   public static final MessageService MESSAGE_SERVICE = retrofit.create(MessageService.class);
+  public static final BaseService BASE_SERVICE = retrofit.create(BaseService.class);
 
 }
