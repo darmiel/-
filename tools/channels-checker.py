@@ -18,7 +18,7 @@ TYPE_USER: Final = "👨‍"
 This function returns the type of a specified entity.
 [Error, Unknown, Channel, User]
 """
-def get_type(entity: str) -> [str, str]:
+def get_type(entity: str) -> [str, str, str]:
     url: Final = f"https://t.me/{entity}"
     
     # get request
@@ -32,17 +32,23 @@ def get_type(entity: str) -> [str, str]:
 
     txt = res.text
     if 'tgme_username_link' in txt and 'you can contact' in txt and 'right away' in txt:
-        return TYPE_USER, None
+        return TYPE_USER, None, None
 
     if 'members' in txt and 'you can view and join' in txt:
         _idx: int = txt.index('"og:title" content="')+20
         title: str = ""
         if _idx > 20:
             title = txt[_idx:txt.index('">', _idx)].strip()
-        return TYPE_CHANNEL, title
+
+
+        # get member count
+        _mem = txt[:txt.index("members")]
+        _mem = _mem[_mem.rindex(">")+1:]
+
+        return TYPE_CHANNEL, title, _mem.strip()
 
     # not found
-    return TYPE_UNKNOWN, None
+    return TYPE_UNKNOWN, None, None
 
 if __name__ == "__main__":
     # results
@@ -89,10 +95,10 @@ if __name__ == "__main__":
             try:
 
                 # make request to telegram
-                line_type, line_title = get_type(line)
+                line_type, line_title, member_count = get_type(line)
                 checked.append(line.lower())
 
-                print(line_type, line, line_title)
+                print(member_count, ":", line_type, line, line_title)
 
 
                 if line_type == TYPE_CHANNEL:

@@ -3,6 +3,7 @@ package io.d2a.schwurbelwatch.mods.chatlog;
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.api.SwApi;
+import io.d2a.schwurbelwatch.tgcrawler.api.messages.Message;
 import io.d2a.schwurbelwatch.tgcrawler.api.messages.MessageService;
 import io.d2a.schwurbelwatch.tgcrawler.api.other.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
@@ -18,8 +19,13 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
-import org.drinkless.tdlib.TdApi.Message;
+import org.drinkless.tdlib.Client;
+import org.drinkless.tdlib.Client.ResultHandler;
+import org.drinkless.tdlib.TdApi;
+import org.drinkless.tdlib.TdApi.GetMessage;
+import org.drinkless.tdlib.TdApi.Object;
 import org.drinkless.tdlib.TdApi.UpdateDeleteMessages;
+import org.drinkless.tdlib.TdApi.UpdateMessageEdited;
 import org.drinkless.tdlib.TdApi.UpdateNewMessage;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -73,59 +79,23 @@ public class ChatlogModule extends BotModule {
     Logger.info("Updated Content Types: " + contentTypeMap.size() + " types found.");
   }
 
+  private void updateInsertMessage (final TdApi.Message tdMessage) {
+    final Message msg = Message.wrap(tdMessage, contentTypeMap);
+    SwApi.callDatabaseResult(service.addMessage(msg));
+  }
 
   @Subscribe
   public void onMessage(final UpdateNewMessage event) {
-    final Message message = event.message;
-    final DefaultChatMessage wrap = DefaultChatMessage.wrap(message);
-    // Logger.value("-> " + wrap.toString());
+   updateInsertMessage(event.message);
+  }
 
-    final io.d2a.schwurbelwatch.tgcrawler.api.messages.Message msg = new io.d2a.schwurbelwatch.tgcrawler.api.messages.Message();
-    msg.messageId = message.id;
-    msg.chatId = message.chatId;
-    msg.userId = message.senderUserId;
-
-    msg.contentType = 0;
-    msg.replyTo = message.replyToMessageId;
-
-    // content type
-    for (final ContentType value : contentTypeMap.values()) {
-      if (value.type.equalsIgnoreCase(wrap.getType())) {
-        msg.contentType = value.typeId;
-        break;
+  @Subscribe
+  public void onEdit(final UpdateMessageEdited event) {
+    client.getClient().send(new GetMessage(event.chatId, event.messageId), object -> {
+      if (object.getConstructor() == TdApi.Message.CONSTRUCTOR) {
+        updateInsertMessage((TdApi.Message) object);
       }
-    }
-
-    if (msg.contentType == 0) {
-      Logger.warn("No content type found for message. Using default '0' (unknown)");
-    }
-
-    msg.content = wrap.getTextCaption();
-
-    msg.date = System.currentTimeMillis();
-    msg.deletedOn = 0;
-    msg.isChannelPost = message.isChannelPost ? 1 : 0;
-
-    Logger.info("Adding message to database:");
-    Logger.info(msg);
-    final Call<DatabaseResult> call = service.addMessage(msg);
-    try {
-      final Response<DatabaseResult> execute = call.execute();
-      Logger.debug(execute);
-
-      if (execute.code() != 200) {
-        Logger.warn("Nope:");
-        final ResponseBody object = execute.errorBody();
-        if (object != null) {
-          Logger.warn(object.string());
-        }
-      } else {
-        Logger.success("Done!");
-      }
-    } catch (IOException e) {
-      Logger.error("Error:");
-      Logger.error(e);
-    }
+    });
   }
 
   @Subscribe

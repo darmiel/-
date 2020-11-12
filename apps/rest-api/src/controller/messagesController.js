@@ -12,11 +12,13 @@ const messageSchema = Joi.object({
   userId: Joi.number().required(),
   reply_to: Joi.number().default(0).optional(),
   content_type: Joi.number().min(0).required(),
-  content: Joi.string().default(null).allow('').optional(),
+  content: Joi.string().default(null).allow("").allow(null).optional(),
   date: Joi.number().required(),
   deleted_on: Joi.number().default(null).optional(),
   is_channel_post: Joi.number().min(0).max(1).default(0).optional(),
 });
+
+const urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
 /*
  * Query functions
@@ -40,17 +42,106 @@ module.exports.getMessage = async (messageId) => {
 
 // POST /messages
 module.exports.addMessage = async (message) => {
-  return dbController.add("messages", messageSchema, message, [
-    "messageId",
-    "chatId",
-    "userId",
-    "reply_to",
-    "content_type",
-    "content",
-    "date",
-    "deleted_on",
-    "is_channel_post",
-  ]);
+  // validate user schema
+  const { error, value } = messageSchema.validate(message);
+  if (error) {
+    return {
+      error: true,
+      message: error.details[0].message,
+    };
+  }
+
+  const messageId = parseInt(value.messageId);
+  const date = Date.now();
+
+  // get a connection from the pool
+  const connection = await dbController.pool.getConnection();
+
+  // results
+  let content = "";
+  let res = {
+    error: true,
+    message: "unexpected error"
+  };
+
+  try {
+  
+    const rows = await connection.query(
+      "SELECT messageId, content FROM messages WHERE messageId = ? LIMIT 1;",
+      [messageId]
+    );
+
+    // there is a message existing with the id
+    // -> check content and update, if neccesarily
+    if (rows.length == 1) {
+      const oldMessage = rows[0];
+
+      const _old = oldMessage.content;
+      const _new = value.content;
+
+      if (_old == _new) {
+        return {
+          error: true,
+          message: "Message with same content already exists!",
+        };
+      }
+
+      content = _new;
+
+      // add to edits
+      await connection.query(
+        "INSERT INTO messages_edits (`messageId`, `old_content`, `new_content`, `date`) VALUES (?, ?, ?, ?);",
+        [messageId, _old, _new, date]
+      );
+
+      // update in db
+      res = await connection.query(
+        "UPDATE messages SET content = ? WHERE messageId = ?;",
+        [_new, messageId]
+      );
+    } else {
+      content = value.content;
+
+      // normal insert
+      res = await connection.query(
+        "INSERT INTO messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [
+          messageId,
+          value.chatId,
+          value.userId,
+          value.reply_to,
+          value.content_type,
+          value.content,
+          value.date,
+          value.deleted_on,
+          value.is_channel_post,
+        ]
+      );
+    }
+
+    // Add user membership
+    await connection.query(
+      "INSERT IGNORE INTO users_group_memberships VALUES (?, ?)",
+      [messageId, parseInt(message.chatId)]
+    );
+
+    // check content for any links
+    if (content) {
+      const match = urlRegex.exec(content);
+      console.log(match);
+      if (match != null) {
+        console.log(" -> Link gefunden!");
+        const link = match[0];
+      }
+    }
+
+    return res;
+
+  } finally {
+    if (connection) {
+      connection.close();
+    }
+  }
 };
 
 // PUT /messages/:id

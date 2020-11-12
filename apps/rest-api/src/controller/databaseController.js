@@ -145,14 +145,11 @@ module.exports.add = async (table, schema, obj, valueFields) => {
 
     for (let i = 0; i < valueFields.length; i++) {
       const field = valueFields[i];
-
-      // console.log(field, value.get(field));
-      console.log(field);
       arr.push(value[field]);
       values += "?,";
     }
     values = values.substring(0, values.length - 1);
-    console.log(arr, values);
+    console.log(arr);
 
     return await connection.query(
       "INSERT INTO " + table + " VALUES (" + values + ");",
