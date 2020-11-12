@@ -18,8 +18,6 @@ const messageSchema = Joi.object({
   is_channel_post: Joi.number().min(0).max(1).default(0).optional(),
 });
 
-const urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-
 /*
  * Query functions
  */
@@ -61,11 +59,10 @@ module.exports.addMessage = async (message) => {
   let content = "";
   let res = {
     error: true,
-    message: "unexpected error"
+    message: "unexpected error",
   };
 
   try {
-  
     const rows = await connection.query(
       "SELECT messageId, content FROM messages WHERE messageId = ? LIMIT 1;",
       [messageId]
@@ -127,16 +124,38 @@ module.exports.addMessage = async (message) => {
 
     // check content for any links
     if (content) {
-      const match = urlRegex.exec(content);
-      console.log(match);
-      if (match != null) {
-        console.log(" -> Link gefunden!");
-        const link = match[0];
+
+      const urlRegex = /https?:\/\/(www\.)?([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4})\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+      var matches = [], found;
+      while ((found = urlRegex.exec(content))) {
+        matches.push(found);
+        urlRegex.lastIndex -= found[0].split(":")[1].length;
+      }
+      for (let i = 0; i < matches.length; i++) {
+        const match = matches[i];
+
+        const url = String(match[0]);
+        const domain = String(match[2]);
+        const path = String(match[3]);
+
+        console.log(url, domain, path);
+
+        // check if link already exists
+        const linkRows = await connection.query(
+          "SELECT urlId FROM messages_urls WHERE messageId = ? AND url = ?;",
+          [messageId, url]
+        );
+        if (linkRows.length < 1) {
+          // add link
+          await connection.query(
+            "INSERT INTO messages_urls (messageId, url, domain, path) VALUES (?, ?, ?, ?);",
+            [messageId, url, domain, path]
+          );
+        }
       }
     }
 
     return res;
-
   } finally {
     if (connection) {
       connection.close();

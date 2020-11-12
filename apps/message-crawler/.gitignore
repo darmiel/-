@@ -155,9 +155,11 @@ $RECYCLE.BIN/
 /tglibdata23
 
 /tdlib
-tdlib.log
+/tdlib.log
+/tdlib.log.old
 config/telegram.json
 
+/tdlibdata
 /tdlibdata/td.binlog
 /tdlibdata/db.sqlite
 /tdlibdata/db.sqlite-shm
