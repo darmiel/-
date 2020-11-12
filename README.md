@@ -15,3 +15,7 @@ It looks whether a pattern is recognizable, or whether there are similarities be
 
 ### DB
 ![img](https://i.imgur.com/YpmQavy.png)
+
+### ToDo (Database & Co.)
+* [ ] Domain aliases for `messages_url`
+* [ ] Build .so telegram client file to run this on a linux server
