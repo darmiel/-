@@ -1,15 +1,15 @@
 {
   "maria": {
-    "host": "localhost",
-    "port": 3307,
+    "host": "mariadb",
+    "port": 3306,
     "database": "schwurbelwatch",
     "user": "root",
     "pass": "abc",
     "pool_max_conn": 10
   },
   "redis": {
-      "host": "localhost",
-      "port": 6380,
+      "host": "redis",
+      "port": 6379,
       "auth": null,
       "database": 0
   }

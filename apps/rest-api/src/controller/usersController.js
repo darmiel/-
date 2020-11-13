@@ -1,7 +1,7 @@
 "use strict";
 
 const dbController = require("./databaseController");
-const Joi = require("Joi");
+const Joi = require("joi");
 
 /*
  * Schemas
