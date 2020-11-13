@@ -23,6 +23,9 @@
 ---
 
 ## ToDo
+
+-- ToDo locked. See GitHub Projects --
+
 - [x] Messages Route
   - [x] GET /messages?offset=0
   - [x] POST /chats
@@ -50,14 +53,16 @@
   - [X] GET /updates/chats/last
   - [X] GET /updates/users/:id
   - [X] GET /updates/users/last
-  - [ ] GET /updates/messages/:id
-  - [ ] GET /updates/messages/last
-- [ ] Chat messages
-  - [ ] GET /chats/:id/messages?offset=0
-- [ ] Auto add to updates
-  - [ ] PUT /users/:id
-  - [ ] PUT /chats/:id
-  - [ ] PUT /messages/:id
+  - [X] GET /updates/messages/:id
+  - [X] GET /updates/messages/last
+- [X] Chat messages
+  - [X] GET /chats/:id/messages?offset=0
+- [X] Auto add to updates
+  - [X] PUT /users/:id
+  - [X] PUT /chats/:id
+  - [X] PUT /messages/:id
+
+-- ToDo locked. See GitHub Projects --
 
 ## Routes
 ### /messages

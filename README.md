@@ -38,6 +38,11 @@ It looks whether a pattern is recognizable, or whether there are similarities be
 ![img](https://i.imgur.com/YpmQavy.png)
 
 ### ToDo (Database & Co.)
-* [ ] Domain aliases for `messages_url`
-* [ ] Build .so telegram client file to run this on a linux server
-- [ ] Setup CDN for files (& auto download them if <= x MB)
+
+-- ToDo locked. See GitHub Projects --
+
+* [X] Domain aliases for `messages_url`
+* [X] Build .so telegram client file to run this on a linux server
+* [X] Setup CDN for files (& auto download them if <= x MB)
+
+-- ToDo locked. See GitHub Projects --
