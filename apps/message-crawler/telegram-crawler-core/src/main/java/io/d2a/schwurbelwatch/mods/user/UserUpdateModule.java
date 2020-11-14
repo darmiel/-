@@ -16,7 +16,6 @@ import org.drinkless.tdlib.TdApi.UpdateUser;
 
 import retrofit2.Call;
 import retrofit2.Response;
-import sun.lwawt.macosx.CThreading;
 
 @Module(
     name = "User Updates",
