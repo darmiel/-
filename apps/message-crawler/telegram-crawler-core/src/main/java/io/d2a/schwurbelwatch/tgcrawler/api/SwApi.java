@@ -19,7 +19,7 @@ public class SwApi {
   /**
    * Base API URL for Node-API
    */
-  public static final String API_URL = "http://localhost:3420/";
+  public static final String API_URL = "http://127.0.0.1:4200/";
 
   public static final Gson GSON = new GsonBuilder()
       .setPrettyPrinting()

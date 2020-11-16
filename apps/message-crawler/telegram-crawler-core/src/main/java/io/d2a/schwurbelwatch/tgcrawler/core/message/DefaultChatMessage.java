@@ -15,6 +15,9 @@ import org.drinkless.tdlib.TdApi.MessageAudio;
 import org.drinkless.tdlib.TdApi.MessageContent;
 import org.drinkless.tdlib.TdApi.MessagePhoto;
 import org.drinkless.tdlib.TdApi.MessagePoll;
+import org.drinkless.tdlib.TdApi.MessageSender;
+import org.drinkless.tdlib.TdApi.MessageSenderChat;
+import org.drinkless.tdlib.TdApi.MessageSenderUser;
 import org.drinkless.tdlib.TdApi.MessageText;
 import org.drinkless.tdlib.TdApi.MessageVideo;
 
@@ -25,7 +28,7 @@ public class DefaultChatMessage {
   /* Meta */
   private long chatId;
   private long messageId;
-  private int senderId;
+  private long senderId;
   private int sentDate;
   private int editDate;
 
@@ -45,7 +48,17 @@ public class DefaultChatMessage {
     /* Meta */
     res.chatId = message.chatId;
     res.messageId = message.id;
-    res.senderId = message.senderUserId;
+
+    // get id of sender of message
+    final MessageSender sender = message.sender;
+    if (sender instanceof MessageSenderUser) {
+      final MessageSenderUser messageSenderUser = (MessageSenderUser) sender;
+      res.senderId = messageSenderUser.userId;
+    } else if (sender instanceof MessageSenderChat) {
+      final MessageSenderChat messageSenderChat = (MessageSenderChat) sender;
+      res.senderId = messageSenderChat.chatId;
+    }
+
     res.sentDate = message.date;
     res.editDate = message.editDate;
 
@@ -56,6 +69,9 @@ public class DefaultChatMessage {
     String text = null;
     String extra = null;
 
+    // Normal Text
+    // Photo
+    // Audio
     switch (content.getConstructor()) {
 
       // Normal Text

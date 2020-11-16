@@ -1,5 +1,8 @@
 version: "3"
 
+volumes:
+  db_maria:
+
 services:
 
   mariadb:
@@ -10,6 +13,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: abc
       MYSQL_DATABASE: schwurbelwatch
+    volumes:
+      - db_maria:/var/lib/mysql
     
   # mongodb:
   #   image: mongo

@@ -51,7 +51,7 @@ public class Message {
 
     msg.messageId = tdMessage.id;
     msg.chatId = tdMessage.chatId;
-    msg.userId = tdMessage.senderUserId;
+    msg.userId = dcm.getSenderId();
 
     msg.replyTo = tdMessage.replyToMessageId;
 

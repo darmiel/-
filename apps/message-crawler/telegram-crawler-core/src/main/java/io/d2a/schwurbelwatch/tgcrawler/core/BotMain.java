@@ -85,15 +85,9 @@ public class BotMain {
     // Telegram Client Kram
     Logger.info("Initializing TdApi ...");
     {
-      // Set verbosity to 3
+      // disable TDLib log
       Client.execute(new TdApi.SetLogVerbosityLevel(3));
-
-      // Set log file to ./tdlib.log
-      final Object setLogStreamResult = Client.execute(
-          new SetLogStream(new LogStreamFile(LOG_STREAM_FILE, 1 << 27))
-      );
-
-      if (setLogStreamResult instanceof TdApi.Error) {
+      if (Client.execute(new TdApi.SetLogStream(new TdApi.LogStreamFile(LOG_STREAM_FILE, 1 << 27, false))) instanceof TdApi.Error) {
         throw new IOError(new IOException("Write access to the current directory is required"));
       }
     }

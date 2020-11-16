@@ -2,7 +2,6 @@
 
 const dbController = require("./databaseController");
 const Joi = require("joi");
-
 /*
  * Schemas
  */
