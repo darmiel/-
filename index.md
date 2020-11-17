@@ -8,29 +8,29 @@ It looks whether a pattern is recognizable, or whether there are similarities be
 ### Following software/languages will probably be used:
 
 ###### Container
-* <img src="assets/docker.png" height="32px" align="left">Docker (-Compose) 
+* <img src="assets/docker.png" height="32px" align="left" />Docker (-Compose) 
   * (for dockerizing the complete application)
 
 ###### Languages
-* <img src="assets/java.png" height="32px" align="left">Java 
+* <img src="assets/java.png" height="32px" align="left" />Java 
   * (for providing the main telegram api, saving messages, ...)
-* <img src="assets/nodejs.png" height="32px" align="left">NodeJS (Internal / External Api) 
+* <img src="assets/nodejs.png" height="32px" align="left" />NodeJS (Internal / External Api) 
   * (connection between message-crawler / frontend <-> database)
-* <img src="assets/python.png" height="32px" align="left">Python
+* <img src="assets/python.png" height="32px" align="left" />Python
   * (For internal tools and data analysis)
 
 ###### Web
-* <img src="assets/nginx.png" height="32px" align="left">Nginx 
+* <img src="assets/nginx.png" height="32px" align="left" />Nginx 
   * (for load balancing)
-* <img src="assets/angular.png" height="32px" align="left">Angular 
+* <img src="assets/angular.png" height="32px" align="left" />Angular 
   * (Frontend)
 
 ###### Databases
-* <img src="assets/mariadb.png" height="32px" align="left">MariaDB 
+* <img src="assets/mariadb.png" height="32px" align="left" />MariaDB 
   * (as the main database)
-* <img src="assets/redis.png" height="32px" align="left">Redis 
+* <img src="assets/redis.png" height="32px" align="left" />Redis 
   * (caching)
-* <img src="assets/mongodb.png" height="32px" align="left">MongoDB
+* <img src="assets/mongodb.png" height="32px" align="left" />MongoDB
   * (for storing raw messages)
 
 ### DB
