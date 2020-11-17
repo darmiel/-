@@ -1,37 +1,37 @@
-## Welcome to GitHub Pages
+# Schwurbelwatch (school project)
+Due: `31.01.2021`  
+  
+Schwurbelwatch is a telegram channel monitoring system for known german telegram conspiracy theory channels.
+It analyzes the channels in terms of deletion behavior (which messages are deleted when) and on user behavior (different bubbles / bots).  
+It looks whether a pattern is recognizable, or whether there are similarities between the channels (always the same members, how is information scattered etc.).
 
-You can use the [editor on GitHub](https://github.com/darmiel/schwurbelwatch/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+### Following software/languages will probably be used:
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+###### Container
+* <img src="assets/docker.png" height="32px" align="left">Docker (-Compose) 
+  * (for dockerizing the complete application)
 
-### Markdown
+###### Languages
+* <img src="assets/java.png" height="32px" align="left">Java 
+  * (for providing the main telegram api, saving messages, ...)
+* <img src="assets/nodejs.png" height="32px" align="left">NodeJS (Internal / External Api) 
+  * (connection between message-crawler / frontend <-> database)
+* <img src="assets/python.png" height="32px" align="left">Python
+  * (For internal tools and data analysis)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+###### Web
+* <img src="assets/nginx.png" height="32px" align="left">Nginx 
+  * (for load balancing)
+* <img src="assets/angular.png" height="32px" align="left">Angular 
+  * (Frontend)
 
-```markdown
-Syntax highlighted code block
+###### Databases
+* <img src="assets/mariadb.png" height="32px" align="left">MariaDB 
+  * (as the main database)
+* <img src="assets/redis.png" height="32px" align="left">Redis 
+  * (caching)
+* <img src="assets/mongodb.png" height="32px" align="left">MongoDB
+  * (for storing raw messages)
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/darmiel/schwurbelwatch/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### DB
+![img](https://i.imgur.com/YpmQavy.png)
