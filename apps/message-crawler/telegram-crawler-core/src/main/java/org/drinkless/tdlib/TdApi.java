@@ -5111,7 +5111,7 @@ public class TdApi {
          */
         public long chatId;
         /**
-         * If non-zero, the remaining time for which read access is granted to the chat, in seconds.
+         * If non-zero, the amount of time for which read access to the chat will remain available, in seconds.
          */
         public int accessibleFor;
         /**
@@ -5149,7 +5149,7 @@ public class TdApi {
          * Contains information about a chat invite link.
          *
          * @param chatId Chat identifier of the invite link; 0 if the user has no access to the chat before joining.
-         * @param accessibleFor If non-zero, the remaining time for which read access is granted to the chat, in seconds.
+         * @param accessibleFor If non-zero, the amount of time for which read access to the chat will remain available, in seconds.
          * @param type Contains information about the type of the chat.
          * @param title Title of the chat.
          * @param photo Chat photo; may be null.
@@ -6670,51 +6670,51 @@ public class TdApi {
         /**
          * Number of members in the chat.
          */
-        public StatisticsValue memberCount;
+        public StatisticalValue memberCount;
         /**
          * Number of messages sent to the chat.
          */
-        public StatisticsValue messageCount;
+        public StatisticalValue messageCount;
         /**
          * Number of users who viewed messages in the chat.
          */
-        public StatisticsValue viewerCount;
+        public StatisticalValue viewerCount;
         /**
          * Number of users who sent messages to the chat.
          */
-        public StatisticsValue senderCount;
+        public StatisticalValue senderCount;
         /**
          * A graph containing number of members in the chat.
          */
-        public StatisticsGraph memberCountGraph;
+        public StatisticalGraph memberCountGraph;
         /**
          * A graph containing number of members joined and left the chat.
          */
-        public StatisticsGraph joinGraph;
+        public StatisticalGraph joinGraph;
         /**
          * A graph containing number of new member joins per source.
          */
-        public StatisticsGraph joinBySourceGraph;
+        public StatisticalGraph joinBySourceGraph;
         /**
          * A graph containing distribution of active users per language.
          */
-        public StatisticsGraph languageGraph;
+        public StatisticalGraph languageGraph;
         /**
          * A graph containing distribution of sent messages by content type.
          */
-        public StatisticsGraph messageContentGraph;
+        public StatisticalGraph messageContentGraph;
         /**
          * A graph containing number of different actions in the chat.
          */
-        public StatisticsGraph actionGraph;
+        public StatisticalGraph actionGraph;
         /**
          * A graph containing distribution of message views per hour.
          */
-        public StatisticsGraph dayGraph;
+        public StatisticalGraph dayGraph;
         /**
          * A graph containing distribution of message views per day of week.
          */
-        public StatisticsGraph weekGraph;
+        public StatisticalGraph weekGraph;
         /**
          * List of users sent most messages in the last week.
          */
@@ -6754,7 +6754,7 @@ public class TdApi {
          * @param topAdministrators List of most active administrators in the last week.
          * @param topInviters List of most active inviters of new members in the last week.
          */
-        public ChatStatisticsSupergroup(DateRange period, StatisticsValue memberCount, StatisticsValue messageCount, StatisticsValue viewerCount, StatisticsValue senderCount, StatisticsGraph memberCountGraph, StatisticsGraph joinGraph, StatisticsGraph joinBySourceGraph, StatisticsGraph languageGraph, StatisticsGraph messageContentGraph, StatisticsGraph actionGraph, StatisticsGraph dayGraph, StatisticsGraph weekGraph, ChatStatisticsMessageSenderInfo[] topSenders, ChatStatisticsAdministratorActionsInfo[] topAdministrators, ChatStatisticsInviterInfo[] topInviters) {
+        public ChatStatisticsSupergroup(DateRange period, StatisticalValue memberCount, StatisticalValue messageCount, StatisticalValue viewerCount, StatisticalValue senderCount, StatisticalGraph memberCountGraph, StatisticalGraph joinGraph, StatisticalGraph joinBySourceGraph, StatisticalGraph languageGraph, StatisticalGraph messageContentGraph, StatisticalGraph actionGraph, StatisticalGraph dayGraph, StatisticalGraph weekGraph, ChatStatisticsMessageSenderInfo[] topSenders, ChatStatisticsAdministratorActionsInfo[] topAdministrators, ChatStatisticsInviterInfo[] topInviters) {
             this.period = period;
             this.memberCount = memberCount;
             this.messageCount = messageCount;
@@ -6776,7 +6776,7 @@ public class TdApi {
         /**
          * Identifier uniquely determining type of the object.
          */
-        public static final int CONSTRUCTOR = 1234327223;
+        public static final int CONSTRUCTOR = -17244633;
 
         /**
          * @return this.CONSTRUCTOR
@@ -6798,15 +6798,15 @@ public class TdApi {
         /**
          * Number of members in the chat.
          */
-        public StatisticsValue memberCount;
+        public StatisticalValue memberCount;
         /**
          * Mean number of times the recently sent messages was viewed.
          */
-        public StatisticsValue meanViewCount;
+        public StatisticalValue meanViewCount;
         /**
          * Mean number of times the recently sent messages was shared.
          */
-        public StatisticsValue meanShareCount;
+        public StatisticalValue meanShareCount;
         /**
          * A percentage of users with enabled notifications for the chat.
          */
@@ -6814,39 +6814,39 @@ public class TdApi {
         /**
          * A graph containing number of members in the chat.
          */
-        public StatisticsGraph memberCountGraph;
+        public StatisticalGraph memberCountGraph;
         /**
          * A graph containing number of members joined and left the chat.
          */
-        public StatisticsGraph joinGraph;
+        public StatisticalGraph joinGraph;
         /**
          * A graph containing number of members muted and unmuted the chat.
          */
-        public StatisticsGraph muteGraph;
+        public StatisticalGraph muteGraph;
         /**
          * A graph containing number of message views in a given hour in the last two weeks.
          */
-        public StatisticsGraph viewCountByHourGraph;
+        public StatisticalGraph viewCountByHourGraph;
         /**
          * A graph containing number of message views per source.
          */
-        public StatisticsGraph viewCountBySourceGraph;
+        public StatisticalGraph viewCountBySourceGraph;
         /**
          * A graph containing number of new member joins per source.
          */
-        public StatisticsGraph joinBySourceGraph;
+        public StatisticalGraph joinBySourceGraph;
         /**
          * A graph containing number of users viewed chat messages per language.
          */
-        public StatisticsGraph languageGraph;
+        public StatisticalGraph languageGraph;
         /**
          * A graph containing number of chat message views and shares.
          */
-        public StatisticsGraph messageInteractionGraph;
+        public StatisticalGraph messageInteractionGraph;
         /**
          * A graph containing number of views of associated with the chat instant views.
          */
-        public StatisticsGraph instantViewInteractionGraph;
+        public StatisticalGraph instantViewInteractionGraph;
         /**
          * Detailed statistics about number of views and shares of recently sent messages.
          */
@@ -6877,7 +6877,7 @@ public class TdApi {
          * @param instantViewInteractionGraph A graph containing number of views of associated with the chat instant views.
          * @param recentMessageInteractions Detailed statistics about number of views and shares of recently sent messages.
          */
-        public ChatStatisticsChannel(DateRange period, StatisticsValue memberCount, StatisticsValue meanViewCount, StatisticsValue meanShareCount, double enabledNotificationsPercentage, StatisticsGraph memberCountGraph, StatisticsGraph joinGraph, StatisticsGraph muteGraph, StatisticsGraph viewCountByHourGraph, StatisticsGraph viewCountBySourceGraph, StatisticsGraph joinBySourceGraph, StatisticsGraph languageGraph, StatisticsGraph messageInteractionGraph, StatisticsGraph instantViewInteractionGraph, ChatStatisticsMessageInteractionInfo[] recentMessageInteractions) {
+        public ChatStatisticsChannel(DateRange period, StatisticalValue memberCount, StatisticalValue meanViewCount, StatisticalValue meanShareCount, double enabledNotificationsPercentage, StatisticalGraph memberCountGraph, StatisticalGraph joinGraph, StatisticalGraph muteGraph, StatisticalGraph viewCountByHourGraph, StatisticalGraph viewCountBySourceGraph, StatisticalGraph joinBySourceGraph, StatisticalGraph languageGraph, StatisticalGraph messageInteractionGraph, StatisticalGraph instantViewInteractionGraph, ChatStatisticsMessageInteractionInfo[] recentMessageInteractions) {
             this.period = period;
             this.memberCount = memberCount;
             this.meanViewCount = meanViewCount;
@@ -6898,7 +6898,7 @@ public class TdApi {
         /**
          * Identifier uniquely determining type of the object.
          */
-        public static final int CONSTRUCTOR = -326982581;
+        public static final int CONSTRUCTOR = -825434183;
 
         /**
          * @return this.CONSTRUCTOR
@@ -16456,7 +16456,7 @@ public class TdApi {
          */
         public int viaBotUserId;
         /**
-         * For channel posts and anonymous administrator messages, optional author signature.
+         * For channel posts and anonymous group messages, optional author signature.
          */
         public String authorSignature;
         /**
@@ -16510,7 +16510,7 @@ public class TdApi {
          * @param ttl For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires.
          * @param ttlExpiresIn Time left before the message expires, in seconds.
          * @param viaBotUserId If non-zero, the user identifier of the bot through which this message was sent.
-         * @param authorSignature For channel posts and anonymous administrator messages, optional author signature.
+         * @param authorSignature For channel posts and anonymous group messages, optional author signature.
          * @param mediaAlbumId Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums.
          * @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this message must be restricted.
          * @param content Content of the message.
@@ -18803,7 +18803,7 @@ public class TdApi {
     }
 
     /**
-     * Contains information about message replies.
+     * Contains information about replies to a message.
      */
     public static class MessageReplyInfo extends Object {
         /**
@@ -18828,13 +18828,13 @@ public class TdApi {
         public long lastMessageId;
 
         /**
-         * Contains information about message replies.
+         * Contains information about replies to a message.
          */
         public MessageReplyInfo() {
         }
 
         /**
-         * Contains information about message replies.
+         * Contains information about replies to a message.
          *
          * @param replyCount Number of times the message was directly or indirectly replied.
          * @param recentRepliers Recent repliers to the message; available in channels with a discussion supergroup.
@@ -19206,7 +19206,7 @@ public class TdApi {
         /**
          * A graph containing number of message views and shares.
          */
-        public StatisticsGraph messageInteractionGraph;
+        public StatisticalGraph messageInteractionGraph;
 
         /**
          * A detailed statistics about a message.
@@ -19219,14 +19219,14 @@ public class TdApi {
          *
          * @param messageInteractionGraph A graph containing number of message views and shares.
          */
-        public MessageStatistics(StatisticsGraph messageInteractionGraph) {
+        public MessageStatistics(StatisticalGraph messageInteractionGraph) {
             this.messageInteractionGraph = messageInteractionGraph;
         }
 
         /**
          * Identifier uniquely determining type of the object.
          */
-        public static final int CONSTRUCTOR = 1148915634;
+        public static final int CONSTRUCTOR = -1011383888;
 
         /**
          * @return this.CONSTRUCTOR
@@ -27938,15 +27938,15 @@ public class TdApi {
 
     /**
      * This class is an abstract base class.
-     * Describes a statistics graph.
+     * Describes a statistical graph.
      */
-    public abstract static class StatisticsGraph extends Object {
+    public abstract static class StatisticalGraph extends Object {
     }
 
     /**
      * A graph data.
      */
-    public static class StatisticsGraphData extends StatisticsGraph {
+    public static class StatisticalGraphData extends StatisticalGraph {
         /**
          * Graph data in JSON format.
          */
@@ -27959,7 +27959,7 @@ public class TdApi {
         /**
          * A graph data.
          */
-        public StatisticsGraphData() {
+        public StatisticalGraphData() {
         }
 
         /**
@@ -27968,7 +27968,7 @@ public class TdApi {
          * @param jsonData Graph data in JSON format.
          * @param zoomToken If non-empty, a token which can be used to receive a zoomed in graph.
          */
-        public StatisticsGraphData(String jsonData, String zoomToken) {
+        public StatisticalGraphData(String jsonData, String zoomToken) {
             this.jsonData = jsonData;
             this.zoomToken = zoomToken;
         }
@@ -27976,7 +27976,7 @@ public class TdApi {
         /**
          * Identifier uniquely determining type of the object.
          */
-        public static final int CONSTRUCTOR = -1756117226;
+        public static final int CONSTRUCTOR = -1988940244;
 
         /**
          * @return this.CONSTRUCTOR
@@ -27988,33 +27988,33 @@ public class TdApi {
     }
 
     /**
-     * The graph data to be asynchronously loaded through getStatisticsGraph.
+     * The graph data to be asynchronously loaded through getStatisticalGraph.
      */
-    public static class StatisticsGraphAsync extends StatisticsGraph {
+    public static class StatisticalGraphAsync extends StatisticalGraph {
         /**
          * The token to use for data loading.
          */
         public String token;
 
         /**
-         * The graph data to be asynchronously loaded through getStatisticsGraph.
+         * The graph data to be asynchronously loaded through getStatisticalGraph.
          */
-        public StatisticsGraphAsync() {
+        public StatisticalGraphAsync() {
         }
 
         /**
-         * The graph data to be asynchronously loaded through getStatisticsGraph.
+         * The graph data to be asynchronously loaded through getStatisticalGraph.
          *
          * @param token The token to use for data loading.
          */
-        public StatisticsGraphAsync(String token) {
+        public StatisticalGraphAsync(String token) {
             this.token = token;
         }
 
         /**
          * Identifier uniquely determining type of the object.
          */
-        public static final int CONSTRUCTOR = 1064479337;
+        public static final int CONSTRUCTOR = 435891103;
 
         /**
          * @return this.CONSTRUCTOR
@@ -28028,7 +28028,7 @@ public class TdApi {
     /**
      * An error message to be shown to the user instead of the graph.
      */
-    public static class StatisticsGraphError extends StatisticsGraph {
+    public static class StatisticalGraphError extends StatisticalGraph {
         /**
          * The error message.
          */
@@ -28037,7 +28037,7 @@ public class TdApi {
         /**
          * An error message to be shown to the user instead of the graph.
          */
-        public StatisticsGraphError() {
+        public StatisticalGraphError() {
         }
 
         /**
@@ -28045,14 +28045,14 @@ public class TdApi {
          *
          * @param errorMessage The error message.
          */
-        public StatisticsGraphError(String errorMessage) {
+        public StatisticalGraphError(String errorMessage) {
             this.errorMessage = errorMessage;
         }
 
         /**
          * Identifier uniquely determining type of the object.
          */
-        public static final int CONSTRUCTOR = -61804431;
+        public static final int CONSTRUCTOR = -1006788526;
 
         /**
          * @return this.CONSTRUCTOR
@@ -28064,11 +28064,11 @@ public class TdApi {
     }
 
     /**
-     * A statistics value.
+     * A value with information about its recent changes.
      */
-    public static class StatisticsValue extends Object {
+    public static class StatisticalValue extends Object {
         /**
-         * The value.
+         * The current value.
          */
         public double value;
         /**
@@ -28081,19 +28081,19 @@ public class TdApi {
         public double growthRatePercentage;
 
         /**
-         * A statistics value.
+         * A value with information about its recent changes.
          */
-        public StatisticsValue() {
+        public StatisticalValue() {
         }
 
         /**
-         * A statistics value.
+         * A value with information about its recent changes.
          *
-         * @param value The value.
+         * @param value The current value.
          * @param previousValue The value for the previous day.
          * @param growthRatePercentage The growth rate of the value, as a percentage.
          */
-        public StatisticsValue(double value, double previousValue, double growthRatePercentage) {
+        public StatisticalValue(double value, double previousValue, double growthRatePercentage) {
             this.value = value;
             this.previousValue = previousValue;
             this.growthRatePercentage = growthRatePercentage;
@@ -28102,7 +28102,7 @@ public class TdApi {
         /**
          * Identifier uniquely determining type of the object.
          */
-        public static final int CONSTRUCTOR = 1147508964;
+        public static final int CONSTRUCTOR = 1651337846;
 
         /**
          * @return this.CONSTRUCTOR
@@ -42521,7 +42521,7 @@ public class TdApi {
     }
 
     /**
-     * Returns information about a newest pinned chat message.
+     * Returns information about a newest pinned message in the chat.
      *
      * <p> Returns {@link Message Message} </p>
      */
@@ -42532,7 +42532,7 @@ public class TdApi {
         public long chatId;
 
         /**
-         * Default constructor for a function, which returns information about a newest pinned chat message.
+         * Default constructor for a function, which returns information about a newest pinned message in the chat.
          *
          * <p> Returns {@link Message Message} </p>
          */
@@ -42540,7 +42540,7 @@ public class TdApi {
         }
 
         /**
-         * Creates a function, which returns information about a newest pinned chat message.
+         * Creates a function, which returns information about a newest pinned message in the chat.
          *
          * <p> Returns {@link Message Message} </p>
          *
@@ -45975,11 +45975,11 @@ public class TdApi {
     }
 
     /**
-     * Loads asynchronous or zoomed in chat or message statistics graph.
+     * Loads an asynchronous or a zoomed in statistical graph.
      *
-     * <p> Returns {@link StatisticsGraph StatisticsGraph} </p>
+     * <p> Returns {@link StatisticalGraph StatisticalGraph} </p>
      */
-    public static class GetStatisticsGraph extends Function {
+    public static class GetStatisticalGraph extends Function {
         /**
          * Chat identifier.
          */
@@ -45994,23 +45994,23 @@ public class TdApi {
         public long x;
 
         /**
-         * Default constructor for a function, which loads asynchronous or zoomed in chat or message statistics graph.
+         * Default constructor for a function, which loads an asynchronous or a zoomed in statistical graph.
          *
-         * <p> Returns {@link StatisticsGraph StatisticsGraph} </p>
+         * <p> Returns {@link StatisticalGraph StatisticalGraph} </p>
          */
-        public GetStatisticsGraph() {
+        public GetStatisticalGraph() {
         }
 
         /**
-         * Creates a function, which loads asynchronous or zoomed in chat or message statistics graph.
+         * Creates a function, which loads an asynchronous or a zoomed in statistical graph.
          *
-         * <p> Returns {@link StatisticsGraph StatisticsGraph} </p>
+         * <p> Returns {@link StatisticalGraph StatisticalGraph} </p>
          *
          * @param chatId Chat identifier.
          * @param token The token for graph loading.
          * @param x X-value for zoomed in graph or 0 otherwise.
          */
-        public GetStatisticsGraph(long chatId, String token, long x) {
+        public GetStatisticalGraph(long chatId, String token, long x) {
             this.chatId = chatId;
             this.token = token;
             this.x = x;
@@ -46019,7 +46019,7 @@ public class TdApi {
         /**
          * Identifier uniquely determining type of the object.
          */
-        public static final int CONSTRUCTOR = 687537922;
+        public static final int CONSTRUCTOR = 1100975515;
 
         /**
          * @return this.CONSTRUCTOR
@@ -47282,7 +47282,7 @@ public class TdApi {
          */
         public long[] excludeChatIds;
         /**
-         * Pass true if deleted file statistics must be returned instead of the whole storage usage statistics. Affects only returned statistics.
+         * Pass true if statistics about the files that were deleted must be returned instead of the whole storage usage statistics. Affects only returned statistics.
          */
         public boolean returnDeletedFileStatistics;
         /**
@@ -47310,7 +47310,7 @@ public class TdApi {
          * @param fileTypes If not empty, only files with the given type(s) are considered. By default, all types except thumbnails, profile photos, stickers and wallpapers are deleted.
          * @param chatIds If not empty, only files from the given chats are considered. Use 0 as chat identifier to delete files not belonging to any chat (e.g., profile photos).
          * @param excludeChatIds If not empty, files from the given chats are excluded. Use 0 as chat identifier to exclude all files not belonging to any chat (e.g., profile photos).
-         * @param returnDeletedFileStatistics Pass true if deleted file statistics must be returned instead of the whole storage usage statistics. Affects only returned statistics.
+         * @param returnDeletedFileStatistics Pass true if statistics about the files that were deleted must be returned instead of the whole storage usage statistics. Affects only returned statistics.
          * @param chatLimit Same as in getStorageStatistics. Affects only returned statistics.
          */
         public OptimizeStorage(long size, int ttl, int count, int immunityDelay, FileType[] fileTypes, long[] chatIds, long[] excludeChatIds, boolean returnDeletedFileStatistics, int chatLimit) {
@@ -47452,7 +47452,7 @@ public class TdApi {
          */
         public boolean disableNotification;
         /**
-         * True, if the message needs to be pinned only for self; private chats only.
+         * True, if the message needs to be pinned for one side only; private chats only.
          */
         public boolean onlyForSelf;
 
@@ -47472,7 +47472,7 @@ public class TdApi {
          * @param chatId Identifier of the chat.
          * @param messageId Identifier of the new pinned message.
          * @param disableNotification True, if there should be no notification about the pinned message. Notifications are always disabled in channels and private chats.
-         * @param onlyForSelf True, if the message needs to be pinned only for self; private chats only.
+         * @param onlyForSelf True, if the message needs to be pinned for one side only; private chats only.
          */
         public PinChatMessage(long chatId, long messageId, boolean disableNotification, boolean onlyForSelf) {
             this.chatId = chatId;

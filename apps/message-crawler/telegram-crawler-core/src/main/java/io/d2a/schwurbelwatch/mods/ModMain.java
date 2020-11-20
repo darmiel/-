@@ -4,7 +4,6 @@ public class ModMain {
 
   public ModMain() {
     // called after all modules were loaded
-
   }
 
 }

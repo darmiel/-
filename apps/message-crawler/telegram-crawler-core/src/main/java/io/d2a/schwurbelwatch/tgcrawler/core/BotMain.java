@@ -18,9 +18,6 @@ import java.lang.reflect.InvocationTargetException;
 import lombok.Getter;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
-import org.drinkless.tdlib.TdApi.LogStreamFile;
-import org.drinkless.tdlib.TdApi.Object;
-import org.drinkless.tdlib.TdApi.SetLogStream;
 
 public class BotMain {
 
@@ -87,7 +84,8 @@ public class BotMain {
     {
       // disable TDLib log
       Client.execute(new TdApi.SetLogVerbosityLevel(3));
-      if (Client.execute(new TdApi.SetLogStream(new TdApi.LogStreamFile(LOG_STREAM_FILE, 1 << 27, false))) instanceof TdApi.Error) {
+      if (Client.execute(new TdApi.SetLogStream(
+          new TdApi.LogStreamFile(LOG_STREAM_FILE, 1 << 27, false))) instanceof TdApi.Error) {
         throw new IOError(new IOException("Write access to the current directory is required"));
       }
     }

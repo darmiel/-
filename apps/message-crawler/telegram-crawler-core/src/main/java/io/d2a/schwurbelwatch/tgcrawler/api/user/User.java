@@ -7,7 +7,7 @@ import org.drinkless.tdlib.TdApi;
 @ToString
 public class User {
 
-  public int userId;
+  public long userId;
   public String username;
 
   @SerializedName("first_name")

@@ -8,7 +8,19 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <!-- Parent Info -->
   <artifactId>telegram-crawler-parent</artifactId>
+  <groupId>io.d2a.schwurbelwatch</groupId>
+  <version>1.0-SNAPSHOT</version>
+
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+
+  <modules>
+    <!-- Core -->
+    <module>telegram-crawler-core</module>
+  </modules>
 
   <build>
     <plugins>
@@ -43,15 +55,30 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- ## Repositories ## -->
+  <repositories>
+    <repository>
+      <id>maven2</id>
+      <url>https://repo1.maven.org/maven2/</url>
+    </repository>
+  </repositories>
+  <!-- ## End Repositories ## -->
+
+
+  <!-- ## Dependencies ## -->
   <dependencies>
+    <!-- ## Provided Dependencies ## -->
     <dependency>
       <artifactId>lombok</artifactId>
       <groupId>org.projectlombok</groupId>
       <scope>provided</scope>
       <version>1.18.16</version>
     </dependency>
+    <!-- ## End Provided Dependencies ## -->
 
-    <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+
+    <!-- ## Compiled Dependencies ## -->
     <dependency>
       <artifactId>guava</artifactId>
       <groupId>com.google.guava</groupId>
@@ -59,7 +86,6 @@
       <version>29.0-jre</version>
     </dependency>
 
-    <!-- HikariCP -->
     <dependency>
       <artifactId>HikariCP</artifactId>
       <groupId>com.zaxxer</groupId>
@@ -67,7 +93,6 @@
       <version>3.4.5</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
     <dependency>
       <artifactId>gson</artifactId>
       <groupId>com.google.code.gson</groupId>
@@ -82,7 +107,6 @@
       <version>1.6.0</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
     <dependency>
       <artifactId>mysql-connector-java</artifactId>
       <groupId>mysql</groupId>
@@ -91,42 +115,21 @@
     </dependency>
 
     <dependency>
-      <artifactId>reflections</artifactId>
-      <groupId>org.reflections</groupId>
-      <scope>compile</scope>
-      <version>0.9.12</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.squareup.retrofit2</groupId>
       <artifactId>retrofit</artifactId>
       <version>2.9.0</version>
       <scope>compile</scope>
     </dependency>
+
     <dependency>
       <groupId>com.squareup.retrofit2</groupId>
       <artifactId>converter-gson</artifactId>
       <version>2.9.0</version>
       <scope>compile</scope>
     </dependency>
+    <!-- ## End Compiled Dependencies ## -->
 
   </dependencies>
-  <groupId>io.d2a.schwurbelwatch</groupId>
-  <modelVersion>4.0.0</modelVersion>
-
-  <modules>
-    <module>telegram-crawler-core</module>
-  </modules>
-
-  <packaging>pom</packaging>
-
-  <repositories>
-    <repository>
-      <id>maven2</id>
-      <url>https://repo1.maven.org/maven2/</url>
-    </repository>
-  </repositories>
-
-  <version>1.0-SNAPSHOT</version>
+  <!-- End Dependencies -->
 
 </project>
