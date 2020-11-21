@@ -2,6 +2,7 @@ package io.d2a.schwurbelwatch.mods.chatlog;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonObject;
+import io.d2a.schwurbelwatch.mods.Accounts;
 import io.d2a.schwurbelwatch.tgcrawler.api.SwApi;
 import io.d2a.schwurbelwatch.tgcrawler.api.messages.Message;
 import io.d2a.schwurbelwatch.tgcrawler.api.messages.MessageService;
@@ -38,7 +39,6 @@ import retrofit2.Response;
 )
 public class ChatlogModule extends BotModule {
 
-  public static final String CLIENT_NAME = "walterheldcorona";
   private TelegramClient client;
 
   private final MessageService service = SwApi.MESSAGE_SERVICE;
@@ -48,13 +48,13 @@ public class ChatlogModule extends BotModule {
   @Override
   public void onEnable() {
     // Main account for listening for messages: walterheldcorona
-    final Optional<TelegramClient> clientOptional = findTelegramClient(CLIENT_NAME);
+    final Optional<TelegramClient> clientOptional = findTelegramClient(Accounts.WATCHER_1);
     if (clientOptional.isPresent()) {
       this.client = clientOptional.get();
       this.client.registerListeners(this);
       Logger.success("Registered listener for client: " + this.client);
     } else {
-      Logger.warn("Client '" + CLIENT_NAME + "' not found");
+      Logger.warn("Client '" + Accounts.WATCHER_1 + "' not found");
     }
 
     updateContentTypes();

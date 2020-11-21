@@ -8,9 +8,7 @@ package io.d2a.schwurbelwatch.tgcrawler.core.config;
 
 import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.SystemInfo;
-import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
 import java.util.Map;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 

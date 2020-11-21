@@ -1,6 +1,7 @@
 package io.d2a.schwurbelwatch.mods.user;
 
 import com.google.common.eventbus.Subscribe;
+import io.d2a.schwurbelwatch.mods.Accounts;
 import io.d2a.schwurbelwatch.tgcrawler.api.SwApi;
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
 import io.d2a.schwurbelwatch.tgcrawler.api.user.User;
@@ -25,19 +26,18 @@ import retrofit2.Response;
 )
 public class UserUpdateModule extends BotModule {
 
-  public static final String CLIENT_NAME = "walterheldcorona";
   private TelegramClient client;
 
   @Override
   public void onEnable() {
     // Main account for listening for messages: walterheldcorona
-    final Optional<TelegramClient> clientOptional = findTelegramClient(CLIENT_NAME);
+    final Optional<TelegramClient> clientOptional = findTelegramClient(Accounts.WATCHER_1);
     if (clientOptional.isPresent()) {
       this.client = clientOptional.get();
       this.client.registerListeners(this);
       Logger.success("Registered listener for client: " + this.client);
     } else {
-      Logger.warn("Client '" + CLIENT_NAME + "' not found");
+      Logger.warn("Client '" + Accounts.WATCHER_1 + "' not found");
     }
   }
 

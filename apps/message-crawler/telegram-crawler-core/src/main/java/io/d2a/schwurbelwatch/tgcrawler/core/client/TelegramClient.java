@@ -7,49 +7,51 @@
 package io.d2a.schwurbelwatch.tgcrawler.core.client;
 
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.ApiCredentials;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.SystemInfo;
-import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
-import org.drinkless.tdlib.TdApi.AuthorizationState;
 import org.drinkless.tdlib.TdApi.UpdateAuthorizationState;
 
 @ToString
 public class TelegramClient implements Client.ResultHandler {
 
+  //region ## Auth State Update ##
+  /**
+   * Current telegram authorization state
+   */
+  TdApi.AuthorizationState authorizationState = null;
+  volatile boolean haveAuthorization = false;
+
   // Lock
-  private final Lock authorizationLock = new ReentrantLock();
-  private final Condition gotAuthorization = authorizationLock.newCondition();
-  //
+  final Lock authorizationLock = new ReentrantLock();
+  final Condition gotAuthorization = authorizationLock.newCondition();
+
+  /**
+   * is the client currently logged in?
+   */
+  @Getter
+  @Setter
+  private boolean loggedIn = false;
+  //endregion
+
+  //region ## Config ##
+  @Getter
+  private final String identifier;
 
   @Getter
   private final ApiCredentials credentials;
 
   @Getter
   private final SystemInfo systemInfo;
-
-  /**
-   * EventBus for listeners and telegram events
-   */
-  @Getter
-  private final EventBus eventBus;
-
-  /**
-   * Directory to store tdlib database files
-   */
-  private final String databaseDirectory;
 
   /**
    * Should the client try to reconnect if the connection was lost or the authentication failed
@@ -59,10 +61,21 @@ public class TelegramClient implements Client.ResultHandler {
   private boolean reconnectOnError = true;
 
   /**
-   * is the client currently logged in?
+   * Directory to store tdlib database files
+   */
+  final String databaseDirectory;
+  //endregion
+
+  //region ## Handlers ##
+  private final AuthStateUpdateHandler stateUpdateHandler = new AuthStateUpdateHandler(this);
+  //endregion
+
+  /**
+   * EventBus for listeners and telegram events
    */
   @Getter
-  private boolean loggedIn = false;
+  private final EventBus eventBus;
+
 
   /**
    * Telegram client
@@ -70,69 +83,46 @@ public class TelegramClient implements Client.ResultHandler {
   @Getter
   private Client client;
 
-  /**
-   * Current telegram authorization state
-   */
-  private TdApi.AuthorizationState authorizationState = null;
-
   private TelegramClient(
-      final ApiCredentials credentials,
-      final SystemInfo systemInfo,
-      final String databaseDirectory
+      @Nonnull final String identifier,
+      @Nonnull final ApiCredentials credentials,
+      @Nonnull final SystemInfo systemInfo,
+      @Nullable final String databaseDirectory
   ) {
+    this.identifier = identifier;
+
     this.credentials = credentials;
     this.systemInfo = systemInfo;
     this.databaseDirectory = databaseDirectory;
 
-    this.eventBus = new EventBus(String.format("EB/%s", credentials.getPhoneNumber()));
+    this.eventBus = new EventBus(String.format("EB/%s", this.identifier));
     this.eventBus.register(this);
 
     // create client
     recreateClient();
   }
 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
   public static TelegramClient create(
-      final ApiCredentials credentials,
-      final SystemInfo systemInfo,
+      @Nonnull final String identifier,
+      @Nonnull final ApiCredentials credentials,
+      @Nonnull final SystemInfo systemInfo,
       @Nullable String databaseDirectory
   ) {
 
     // Database directory default
     if (databaseDirectory == null) {
-      databaseDirectory = "tglibdata";
+      databaseDirectory = "tglibdata@" + identifier;
     }
 
     return new TelegramClient(
+        identifier,
         credentials,
         systemInfo,
         databaseDirectory
     );
   }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * This function waits for input
-   *
-   * @param prompt The text shown on the prompt
-   * @return The typed text
-   */
-  private static String promptString(String prompt) {
-    System.out.print(prompt);
-
-    final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-    String str = "";
-    try {
-      str = reader.readLine();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    return str;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
 
   /**
    * connects the client
@@ -144,6 +134,8 @@ public class TelegramClient implements Client.ResultHandler {
         null
     );
   }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
 
   /**
    * Registers an listener
@@ -164,137 +156,13 @@ public class TelegramClient implements Client.ResultHandler {
    * @param object Result of query or update of type TdApi.Update about new events.
    */
   @Override
-  public void onResult(final org.drinkless.tdlib.TdApi.Object object) {
+  public void onResult(final TdApi.Object object) {
+    if (object instanceof UpdateAuthorizationState) {
+      stateUpdateHandler.onAuthorizationStateUpdated((UpdateAuthorizationState) object);
+      return; // we do not want to send these types of requests to the eventbus
+    }
+
     this.eventBus.post(object);
-
-    switch (object.getConstructor()) {
-      case TdApi.Error.CONSTRUCTOR:
-        System.err.println("Receive an error:\n" + object);
-
-        // result is already received through UpdateAuthorizationState, nothing to do
-      case TdApi.Ok.CONSTRUCTOR:
-        break;
-
-      default:
-        System.err.println("Receive wrong response from TDLib:\n" + object);
-    }
-  }
-
-  // ######
-
-  /**
-   * Called when the authorization state changes
-   */
-  @Subscribe
-  public void onAuthorizationStateUpdated(final UpdateAuthorizationState state) {
-    final AuthorizationState authorizationState = state.authorizationState;
-
-    // update cached auth state?
-    if (this.authorizationState != null) {
-      this.authorizationState = authorizationState;
-    }
-
-    // Alias for client
-    final Client client = this.getClient();
-
-    switch (authorizationState.getConstructor()) {
-
-      // Send "credentials"
-      case TdApi.AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
-        TdApi.TdlibParameters parameters = new TdApi.TdlibParameters();
-        parameters.databaseDirectory = this.databaseDirectory;
-
-        /* Api Credentials */
-        parameters.apiId = this.credentials.getApiId();
-        parameters.apiHash = this.credentials.getApiHash();
-
-        /* System Info */
-        parameters.systemLanguageCode = this.systemInfo.getSystemLanguageCode();
-        parameters.systemVersion = this.systemInfo.getSystemVersion();
-        parameters.deviceModel = this.systemInfo.getDeviceModel();
-        parameters.applicationVersion = this.systemInfo.getApplicationVersion();
-
-        /* Other Settings */
-        parameters.useMessageDatabase = true;
-        parameters.useSecretChats = true;
-        parameters.enableStorageOptimizer = true;
-
-        Logger.debug("Sending auth request:");
-        Logger.debug(this.credentials);
-        Logger.debug(this.systemInfo);
-
-        client.send(new TdApi.SetTdlibParameters(parameters), this);
-        break;
-
-      // Check Database Encryption Key (by default: changeme1234)
-      case TdApi.AuthorizationStateWaitEncryptionKey.CONSTRUCTOR:
-        client.send(new TdApi.CheckDatabaseEncryptionKey(), this);
-        break;
-
-      // Send phone number
-      case TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR: {
-        client.send(new TdApi.SetAuthenticationPhoneNumber(
-                this.credentials.getPhoneNumber(),
-                null
-            ), this
-        );
-        break;
-      }
-
-      // Login Link
-      case TdApi.AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR: {
-        final String link = ((TdApi.AuthorizationStateWaitOtherDeviceConfirmation) authorizationState).link;
-        Logger.info("Please confirm this login link on another device: " + link);
-        break;
-      }
-
-      // Auth code
-      case TdApi.AuthorizationStateWaitCode.CONSTRUCTOR: {
-        final String code = promptString("Please enter authentication code: ");
-        client.send(new TdApi.CheckAuthenticationCode(code), this);
-        break;
-      }
-
-      case TdApi.AuthorizationStateWaitPassword.CONSTRUCTOR: {
-        final String password = promptString("Please enter password: ");
-        client.send(new TdApi.CheckAuthenticationPassword(password),
-            this);
-        break;
-      }
-
-      // Auth ready
-      case TdApi.AuthorizationStateReady.CONSTRUCTOR:
-        loggedIn = true;
-        authorizationLock.lock();
-        try {
-          gotAuthorization.signal();
-        } finally {
-          authorizationLock.unlock();
-        }
-        break;
-
-      // Log out
-      case TdApi.AuthorizationStateLoggingOut.CONSTRUCTOR:
-        loggedIn = false;
-        Logger.info("Logging out");
-        break;
-
-      // Closing
-      case TdApi.AuthorizationStateClosing.CONSTRUCTOR:
-        loggedIn = false;
-        Logger.info("Closing");
-        break;
-
-      // Auth closed
-      case TdApi.AuthorizationStateClosed.CONSTRUCTOR:
-        Logger.info("Closed");
-        if (this.isReconnectOnError()) {
-          this.recreateClient(); // recreate client after previous has closed
-        }
-        break;
-      default:
-        System.err.println("Unsupported authorization state:\n" + authorizationState);
-    }
   }
 
 }

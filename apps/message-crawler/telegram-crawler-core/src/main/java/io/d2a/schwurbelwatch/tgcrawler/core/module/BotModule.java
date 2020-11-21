@@ -8,7 +8,7 @@ package io.d2a.schwurbelwatch.tgcrawler.core.module;
 
 import io.d2a.schwurbelwatch.tgcrawler.core.BotMain;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
-import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
+import io.d2a.schwurbelwatch.tgcrawler.core.config.ClientConfig;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 

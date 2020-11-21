@@ -9,7 +9,7 @@ package io.d2a.schwurbelwatch.tgcrawler.core.client;
 import static io.d2a.schwurbelwatch.tgcrawler.core.BotMain.GSON;
 
 import com.google.gson.JsonSyntaxException;
-import io.d2a.schwurbelwatch.tgcrawler.core.client.router.ClientConfig;
+import io.d2a.schwurbelwatch.tgcrawler.core.config.ClientConfig;
 import io.d2a.schwurbelwatch.tgcrawler.core.config.TelegramConfig;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.File;
@@ -62,6 +62,7 @@ public class ClientRouter {
     final ClientConfig clientConfig = configuration.get();
     final String databaseDirectory = clientConfig.getDatabaseDirectory();
     final TelegramClient client = TelegramClient.create(
+        key,
         clientConfig.getCredentials(),
         clientConfig.getSystemInfo(),
         databaseDirectory
