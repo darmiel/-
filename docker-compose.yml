@@ -9,7 +9,7 @@ services:
     image: mariadb
     restart: on-failure
     ports:
-      - "3306:3306"
+      - "127.0.0.1:420:3306"
     environment:
       MYSQL_ROOT_PASSWORD: abc
       MYSQL_DATABASE: schwurbelwatch
@@ -25,11 +25,11 @@ services:
   redis:
     image: redis
     restart: on-failure
-    ports:
-      - "6379:6379"
+    # ports:
+    #   - "6379:6379"
 
   rest-api:
     build: apps/rest-api
     restart: always
     ports:
-      - "4200:3420"
+      - "127.0.0.1:4200:3420"
