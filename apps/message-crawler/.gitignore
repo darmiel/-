@@ -164,3 +164,9 @@ config/telegram.json
 /tdlibdata/db.sqlite
 /tdlibdata/db.sqlite-shm
 /tdlibdata/db.sqlite-wal
+
+/data/logs/*.log
+/data/tglibdata@*
+
+jitdump.*
+javacore.*

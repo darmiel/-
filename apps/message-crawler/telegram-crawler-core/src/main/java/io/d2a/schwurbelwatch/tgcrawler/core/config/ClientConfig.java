@@ -33,23 +33,12 @@ public class ClientConfig {
       "1.0"
   );
 
-  @SerializedName("database_directory")
-  private String databaseDirectory;
-
   public boolean accepts(String useCase) {
     if (useCase == null) {
       return true;
     }
     return useCases.stream()
         .anyMatch(useCase::equalsIgnoreCase);
-  }
-
-  @Nonnull
-  public String getDatabaseDirectory() {
-    if (this.databaseDirectory == null) {
-      return "tdlibdata";
-    }
-    return this.databaseDirectory;
   }
 
 }

@@ -18,9 +18,6 @@ public class TelegramConfig {
   @SerializedName("info")
   private SystemInfo systemInfo;
 
-  @SerializedName("database_directory")
-  private String databaseDirectory;
-
   @Setter
   @SerializedName("accounts")
   private Map<String, ClientConfig> clientConfigs;

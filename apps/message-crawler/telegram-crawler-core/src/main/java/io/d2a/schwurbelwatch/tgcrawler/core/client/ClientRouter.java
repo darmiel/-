@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+import org.drinkless.tdlib.TdApi;
 
 public class ClientRouter {
 
@@ -60,12 +61,10 @@ public class ClientRouter {
     // create client
     Logger.debug("Creating client ...");
     final ClientConfig clientConfig = configuration.get();
-    final String databaseDirectory = clientConfig.getDatabaseDirectory();
     final TelegramClient client = TelegramClient.create(
         key,
         clientConfig.getCredentials(),
-        clientConfig.getSystemInfo(),
-        databaseDirectory
+        clientConfig.getSystemInfo()
     );
     Logger.debug("Client created.");
 
@@ -73,6 +72,13 @@ public class ClientRouter {
     this.accountMap.put(key, client);
 
     return Optional.of(client);
+  }
+
+  public void closeClients() {
+    for (final TelegramClient client : this.accountMap.values()) {
+      client.setReconnectOnError(false);
+      client.getClient().send(new TdApi.Close(), null);
+    }
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////
