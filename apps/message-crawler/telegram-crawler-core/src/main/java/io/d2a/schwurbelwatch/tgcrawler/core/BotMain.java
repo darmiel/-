@@ -50,6 +50,8 @@ public class BotMain {
     }
   }
 
+  public static boolean quit = false;
+
   public BotMain() {
     final long stopwatchStart = System.currentTimeMillis();
 
@@ -65,17 +67,27 @@ public class BotMain {
 
     Logger.success("Done! Took " + (System.currentTimeMillis() - stopwatchStart) + " ms.");
 
-    Runtime.getRuntime().addShutdownHook(new Thread(ModuleRegistry::unloadModulesUnsafe));
-    Runtime.getRuntime().addShutdownHook(new Thread(clientRouter::closeClients));
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      // Unload modules
+      ModuleRegistry.unloadModulesUnsafe();
+
+      // Close clients
+      clientRouter.closeClients();
+
+      // Update quit -> true
+      BotMain.quit = true;
+    }));
 
     // Loop
-    while (true) {
-      try {
-        Thread.sleep(100);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+    new Thread(() -> {
+      while (true) {
+        try {
+          Thread.sleep(1);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
-    }
+    }).start();
   }
 
   /**
