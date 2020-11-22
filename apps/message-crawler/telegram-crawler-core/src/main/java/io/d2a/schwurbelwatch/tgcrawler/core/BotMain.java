@@ -15,13 +15,16 @@ import io.d2a.schwurbelwatch.tgcrawler.core.module.ModuleRegistry;
 import java.io.IOError;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.Getter;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
+import org.drinkless.tdlib.TdApi.LogStreamFile;
+import org.drinkless.tdlib.TdApi.Object;
+import org.drinkless.tdlib.TdApi.SetLogStream;
 
 public class BotMain {
-
-  public static final String LOG_STREAM_FILE = "tdlib.log";
 
   /**
    * Gson used for config files, etc.
@@ -47,6 +50,8 @@ public class BotMain {
     }
   }
 
+  public static boolean quit = false;
+
   public BotMain() {
     final long stopwatchStart = System.currentTimeMillis();
 
@@ -61,7 +66,28 @@ public class BotMain {
     }
 
     Logger.success("Done! Took " + (System.currentTimeMillis() - stopwatchStart) + " ms.");
-    Runtime.getRuntime().addShutdownHook(new Thread(ModuleRegistry::unloadModulesUnsafe));
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      // Unload modules
+      ModuleRegistry.unloadModulesUnsafe();
+
+      // Close clients
+      clientRouter.closeClients();
+
+      // Update quit -> true
+      BotMain.quit = true;
+    }));
+
+    // Loop
+    new Thread(() -> {
+      while (true) {
+        try {
+          Thread.sleep(1);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }).start();
   }
 
   /**
@@ -82,10 +108,15 @@ public class BotMain {
     // Telegram Client Kram
     Logger.info("Initializing TdApi ...");
     {
+      final String date = new SimpleDateFormat("yyyy-MM-dd'_tdlib.log'").format(new Date());
       // disable TDLib log
       Client.execute(new TdApi.SetLogVerbosityLevel(3));
-      if (Client.execute(new TdApi.SetLogStream(
-          new TdApi.LogStreamFile(LOG_STREAM_FILE, 1 << 27, false))) instanceof TdApi.Error) {
+
+      final Object execute = Client.execute(new SetLogStream(
+          new LogStreamFile("data/logs/" + date, 1 << 27, false)
+      ));
+
+      if (execute instanceof TdApi.Error) {
         throw new IOError(new IOException("Write access to the current directory is required"));
       }
     }

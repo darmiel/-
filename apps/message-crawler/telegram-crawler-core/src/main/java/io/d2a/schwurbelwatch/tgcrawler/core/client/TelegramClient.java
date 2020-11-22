@@ -107,14 +107,10 @@ public class TelegramClient implements Client.ResultHandler {
   public static TelegramClient create(
       @Nonnull final String identifier,
       @Nonnull final ApiCredentials credentials,
-      @Nonnull final SystemInfo systemInfo,
-      @Nullable String databaseDirectory
+      @Nonnull final SystemInfo systemInfo
   ) {
 
-    // Database directory default
-    if (databaseDirectory == null) {
-      databaseDirectory = "tglibdata@" + identifier;
-    }
+    final String databaseDirectory = "data/tglibdata@" + identifier;
 
     return new TelegramClient(
         identifier,
