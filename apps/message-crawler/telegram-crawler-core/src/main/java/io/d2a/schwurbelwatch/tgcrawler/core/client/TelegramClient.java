@@ -113,7 +113,7 @@ public class TelegramClient implements Client.ResultHandler {
 
     // Database directory default
     if (databaseDirectory == null) {
-      databaseDirectory = "tglibdata@" + identifier;
+      databaseDirectory = "tglibdata_" + identifier;
     }
 
     return new TelegramClient(
