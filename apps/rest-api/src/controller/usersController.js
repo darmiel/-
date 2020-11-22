@@ -113,15 +113,22 @@ module.exports.addUser = async (user) => {
               _new
           );
 
+          update.query +=
+            (update.query.length == 0 ? "" : ", ") + field + " = ?";
+          update.params.push(_new);
+
+          // ignore usernames that were empty before
+          if (_old == null || _old == undefined) {
+            if (field == "username") {
+              continue;
+            }
+          }
+
           // add to updates
           await connection.query(
             "INSERT INTO users_updates (`userId`, `key`, `old_value`, `new_value`, `date`) VALUES (?, ?, ?, ?, ?);",
             [userId, field, _old, _new, date]
           );
-
-          update.query +=
-            (update.query.length == 0 ? "" : ", ") + field + " = ?";
-          update.params.push(_new);
         }
       }
 
@@ -139,7 +146,6 @@ module.exports.addUser = async (user) => {
           "UPDATE users SET " + update.query + " WHERE userId = ?;",
           update.params
         );
-
       } else {
         console.log("[User Update | " + userId + "] No need to update");
       }
@@ -164,7 +170,7 @@ module.exports.addUser = async (user) => {
 
     return {
       error: false,
-      message: "Nothing updated."
+      message: "Nothing updated.",
     };
   } finally {
     if (connection) {
