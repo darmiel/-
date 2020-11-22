@@ -4,17 +4,10 @@ import com.google.common.eventbus.Subscribe;
 import io.d2a.schwurbelwatch.mods.Accounts;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
-import io.d2a.schwurbelwatch.tgcrawler.core.message.DefaultChatMessage;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import org.drinkless.tdlib.TdApi;
-import org.drinkless.tdlib.TdApi.GetUser;
-import org.drinkless.tdlib.TdApi.GetUserFullInfo;
-import org.drinkless.tdlib.TdApi.Message;
-import org.drinkless.tdlib.TdApi.UpdateNewMessage;
 
 @Module(
     name = "Messages 2 Console",
