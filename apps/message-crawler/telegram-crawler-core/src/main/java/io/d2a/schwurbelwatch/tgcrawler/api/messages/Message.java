@@ -2,7 +2,7 @@ package io.d2a.schwurbelwatch.tgcrawler.api.messages;
 
 import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.api.other.ContentType;
-import io.d2a.schwurbelwatch.tgcrawler.core.message.DefaultChatMessage;
+import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
 import java.util.Map;
 import lombok.ToString;
 import org.drinkless.tdlib.TdApi;
@@ -37,7 +37,7 @@ public class Message {
   }
 
   public static Message wrap(final TdApi.Message tdMessage, final Map<Integer, ContentType> contentTypeMap) {
-    final DefaultChatMessage dcm = DefaultChatMessage.wrap(tdMessage);
+    final SimpleChatMessage dcm = SimpleChatMessage.wrap(tdMessage);
 
     final Message msg = new Message();
 
@@ -57,7 +57,7 @@ public class Message {
 
     msg.content = dcm.getTextCaption();
 
-    msg.date = tdMessage.date * 1000;
+    msg.date = tdMessage.date * 1000L;
     msg.isChannelPost = tdMessage.isChannelPost ? 1 : 0;
 
     return msg;
