@@ -23,7 +23,7 @@ import org.drinkless.tdlib.TdApi.MessageVideo;
 
 @Getter
 @ToString
-public class DefaultChatMessage {
+public class SimpleChatMessage {
 
   /* Meta */
   private long chatId;
@@ -42,8 +42,8 @@ public class DefaultChatMessage {
   /* Deleted? */
   private long deletedAt = 0L;
 
-  public static DefaultChatMessage wrap(Message message) {
-    final DefaultChatMessage res = new DefaultChatMessage();
+  public static SimpleChatMessage wrap(Message message) {
+    final SimpleChatMessage res = new SimpleChatMessage();
 
     /* Meta */
     res.chatId = message.chatId;
