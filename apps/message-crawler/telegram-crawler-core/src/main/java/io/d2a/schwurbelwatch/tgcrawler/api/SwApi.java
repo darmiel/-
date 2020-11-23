@@ -6,8 +6,10 @@ import io.d2a.schwurbelwatch.tgcrawler.api.messages.MessageService;
 import io.d2a.schwurbelwatch.tgcrawler.api.other.BaseService;
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
 import io.d2a.schwurbelwatch.tgcrawler.api.user.UserService;
+import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.IOException;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -35,21 +37,33 @@ public class SwApi {
   public static final BaseService BASE_SERVICE = retrofit.create(BaseService.class);
   public static final UserService USER_SERVICE = retrofit.create(UserService.class);
 
-  public static void callDatabaseResult (final Call<DatabaseResult> call) {
-    Logger.debug("");
-
+  public static void callDatabaseResult(final Call<DatabaseResult> call) {
     try {
-      final Response<DatabaseResult> execute = call.execute();
-      Logger.debug(execute);
+      long start = System.currentTimeMillis();
 
-      if (execute.code() != 200) {
-        Logger.warn("Nope:");
-        final ResponseBody object = execute.errorBody();
+      // Print request
+      {
+        final Request request = call.request();
+        Logger.debug("<<< " + request.method() + " " + request.url());
+      }
+
+      final Response<DatabaseResult> response = call.execute();
+
+      // Print response
+      {
+        final String message = ">>> [" + (System.currentTimeMillis() - start) + "ms] " + response;
+        if (response.isSuccessful()) {
+          Logger.success(AnsiColor.ANSI_GREEN + message + AnsiColor.ANSI_RESET);
+        } else {
+          Logger.warn(AnsiColor.ANSI_PURPLE + message + AnsiColor.ANSI_RESET);
+        }
+      }
+
+      if (response.code() != 200) {
+        final ResponseBody object = response.errorBody();
         if (object != null) {
           Logger.warn(object.string());
         }
-      } else {
-        Logger.success("Done!");
       }
     } catch (IOException e) {
       Logger.error("Error:");

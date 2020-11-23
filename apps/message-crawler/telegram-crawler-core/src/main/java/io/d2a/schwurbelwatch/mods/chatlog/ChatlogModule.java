@@ -9,10 +9,10 @@ import io.d2a.schwurbelwatch.tgcrawler.api.messages.MessageService;
 import io.d2a.schwurbelwatch.tgcrawler.api.other.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
+import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,21 +74,36 @@ public class ChatlogModule extends BotModule {
     Logger.info("Updated Content Types: " + contentTypeMap.size() + " types found.");
   }
 
-  private void updateInsertMessage (final TdApi.Message tdMessage) {
+  private void updateInsertMessage(final TdApi.Message tdMessage, boolean edit) {
     final Message msg = Message.wrap(tdMessage, contentTypeMap);
+
+    // Short preview text
+    String shortText = "[empty]";
+    if (msg.content != null) {
+      shortText = msg.content;
+      if (shortText.length() > 54) {
+        shortText = msg.content.substring(0, 53) + "...";
+      }
+       shortText = shortText.replace("\n", "[n]");
+    }
+
+    final String prefix = !edit ? AnsiColor.ANSI_PURPLE + "++ " : AnsiColor.ANSI_RED + "~~ ";
+
+    Logger.info(AnsiColor.ANSI_CYAN + prefix + AnsiColor.ANSI_CYAN + msg.userId + ": " + shortText + AnsiColor.ANSI_RESET);
     SwApi.callDatabaseResult(service.addMessage(msg));
   }
 
   @Subscribe
   public void onMessage(final UpdateNewMessage event) {
-   updateInsertMessage(event.message);
+    final TdApi.Message message = event.message;
+    updateInsertMessage(message, false);
   }
 
   @Subscribe
   public void onEdit(final UpdateMessageEdited event) {
     client.getClient().send(new GetMessage(event.chatId, event.messageId), object -> {
       if (object.getConstructor() == TdApi.Message.CONSTRUCTOR) {
-        updateInsertMessage((TdApi.Message) object);
+        updateInsertMessage((TdApi.Message) object, true);
       }
     });
   }
@@ -103,18 +118,9 @@ public class ChatlogModule extends BotModule {
     obj.addProperty("deleted_on", (System.currentTimeMillis()));
 
     for (final long messageId : event.messageIds) {
-      Logger.info("Deleting message " + messageId);
+      Logger.info("-- " + messageId);
       final Call<DatabaseResult> call = service.updateMessage(messageId, obj);
-      try {
-        final Response<DatabaseResult> execute = call.execute();
-        Logger.success("Done!:");
-        Logger.success(execute);
-        Logger.success(execute.body());
-        Logger.success(execute.errorBody());
-      } catch (IOException e) {
-        Logger.error("Error!:");
-        Logger.error(e);
-      }
+      SwApi.callDatabaseResult(call);
     }
   }
 

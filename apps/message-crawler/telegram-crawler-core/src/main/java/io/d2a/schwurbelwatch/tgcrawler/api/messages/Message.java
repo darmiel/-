@@ -2,6 +2,7 @@ package io.d2a.schwurbelwatch.tgcrawler.api.messages;
 
 import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.api.other.ContentType;
+import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
 import java.util.Map;
 import lombok.ToString;
