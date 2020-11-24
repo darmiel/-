@@ -49,6 +49,7 @@ module.exports.addMessage = async (message) => {
   }
 
   const messageId = parseInt(value.messageId);
+  const userId = parseInt(value.userId);
   const date = Date.now();
 
   // get a connection from the pool
@@ -118,7 +119,7 @@ module.exports.addMessage = async (message) => {
     // Add user membership
     await connection.query(
       "INSERT IGNORE INTO users_group_memberships VALUES (?, ?)",
-      [messageId, parseInt(message.chatId)]
+      [userId, parseInt(message.chatId)]
     );
 
     // check content for any links
