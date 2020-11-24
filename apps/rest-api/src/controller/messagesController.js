@@ -158,7 +158,7 @@ module.exports.addMessage = async (message) => {
     return res;
   } finally {
     if (connection) {
-      connection.close();
+      connection.end();
     }
   }
 };
