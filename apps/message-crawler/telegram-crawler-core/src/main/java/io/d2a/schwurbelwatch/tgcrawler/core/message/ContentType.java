@@ -7,6 +7,7 @@
 package io.d2a.schwurbelwatch.tgcrawler.core.message;
 
 import com.google.gson.JsonObject;
+import io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers.AnimationMessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers.AudioMessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers.ContactMessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers.DocumentMessageTypeWrapper;
@@ -19,6 +20,7 @@ import io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers.VenueMessageTypeWra
 import io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers.VideoMessageTypeWrapper;
 import javax.annotation.Nonnull;
 import org.drinkless.tdlib.TdApi;
+import org.drinkless.tdlib.TdApi.MessageAnimation;
 import org.drinkless.tdlib.TdApi.MessageAudio;
 import org.drinkless.tdlib.TdApi.MessageContact;
 import org.drinkless.tdlib.TdApi.MessageContent;
@@ -42,7 +44,8 @@ public enum ContentType {
   VENUE("venue", new VenueMessageTypeWrapper(), MessageVenue.CONSTRUCTOR),
   STICKER("sticker", new StickerMessageTypeWrapper(), MessageSticker.CONSTRUCTOR),
   DOCUMENT("document", new DocumentMessageTypeWrapper(), MessageDocument.CONSTRUCTOR),
-  CONTACT("contact", new ContactMessageTypeWrapper(), MessageContact.CONSTRUCTOR);
+  CONTACT("contact", new ContactMessageTypeWrapper(), MessageContact.CONSTRUCTOR),
+  ANIMATION("animation", new AnimationMessageTypeWrapper(), MessageAnimation.CONSTRUCTOR);
 
   public final String identifier;
   public final int constructor;
