@@ -20,6 +20,7 @@ import java.util.Optional;
 import lombok.SneakyThrows;
 import org.drinkless.tdlib.TdApi;
 import org.drinkless.tdlib.TdApi.GetMessage;
+import org.drinkless.tdlib.TdApi.MessageSticker;
 import org.drinkless.tdlib.TdApi.UpdateDeleteMessages;
 import org.drinkless.tdlib.TdApi.UpdateMessageEdited;
 import org.drinkless.tdlib.TdApi.UpdateNewMessage;
@@ -96,6 +97,12 @@ public class ChatlogModule extends BotModule {
   @Subscribe
   public void onMessage(final UpdateNewMessage event) {
     final TdApi.Message message = event.message;
+
+    // Ignore stickers
+    if (message.content.getConstructor() == MessageSticker.CONSTRUCTOR) {
+      return;
+    }
+
     updateInsertMessage(message, false);
   }
 
