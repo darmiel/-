@@ -2,7 +2,6 @@ package io.d2a.schwurbelwatch.tgcrawler.api.messages;
 
 import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.api.other.ContentType;
-import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
 import java.util.Map;
 import lombok.ToString;
@@ -39,12 +38,15 @@ public class Message {
 
   public static Message wrap(final TdApi.Message tdMessage, final Map<Integer, ContentType> contentTypeMap) {
     final SimpleChatMessage dcm = SimpleChatMessage.wrap(tdMessage);
+    if (dcm == null) {
+      return null;
+    }
 
     final Message msg = new Message();
 
     // content type
     for (final ContentType value : contentTypeMap.values()) {
-      if (value.type.equalsIgnoreCase(dcm.getType())) {
+      if (value.type.equalsIgnoreCase(dcm.getType().identifier)) {
         msg.contentType = value.typeId;
         break;
       }

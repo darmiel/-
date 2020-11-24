@@ -11,6 +11,7 @@ import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
+import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
 import java.util.HashMap;
@@ -77,6 +78,10 @@ public class ChatlogModule extends BotModule {
 
   private void updateInsertMessage(final TdApi.Message tdMessage, boolean edit) {
     final Message msg = Message.wrap(tdMessage, contentTypeMap);
+    final SimpleChatMessage dcm = SimpleChatMessage.wrap(tdMessage);
+    if (msg == null || dcm == null) {
+      return;
+    }
 
     // Short preview text
     String shortText = "[empty]";
@@ -91,6 +96,8 @@ public class ChatlogModule extends BotModule {
     final String prefix = !edit ? AnsiColor.ANSI_PURPLE + "++ " : AnsiColor.ANSI_RED + "~~ ";
 
     Logger.info(AnsiColor.ANSI_CYAN + prefix + AnsiColor.ANSI_CYAN + msg.userId + ": " + shortText + AnsiColor.ANSI_RESET);
+    Logger.debug(dcm.getExtraG());
+
     SwApi.callDatabaseResult(service.addMessage(msg));
   }
 
