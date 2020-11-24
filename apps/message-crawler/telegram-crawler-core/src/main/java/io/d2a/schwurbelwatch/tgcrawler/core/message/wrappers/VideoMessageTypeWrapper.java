@@ -39,8 +39,8 @@ public class VideoMessageTypeWrapper implements MessageTypeWrapper<MessageVideo>
     videoObject.addProperty("duration", video.duration);
     videoObject.addProperty("width", video.width);
     videoObject.addProperty("height", video.height);
-    videoObject.addProperty("filename", video.fileName);
-    videoObject.addProperty("mime", video.mimeType);
+    videoObject.addProperty("fileName", video.fileName);
+    videoObject.addProperty("mimeType", video.mimeType);
 
     extra.add("video", videoObject);
   }

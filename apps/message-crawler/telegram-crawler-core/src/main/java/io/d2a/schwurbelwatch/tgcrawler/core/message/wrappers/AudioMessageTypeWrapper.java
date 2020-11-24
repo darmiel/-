@@ -33,8 +33,8 @@ public class AudioMessageTypeWrapper implements MessageTypeWrapper<MessageAudio>
     final JsonObject audioObject = new JsonObject();
     audioObject.addProperty("duration", audio.duration);
     audioObject.addProperty("title", audio.title);
-    audioObject.addProperty("filename", audio.fileName);
-    audioObject.addProperty("mime", audio.mimeType);
+    audioObject.addProperty("fileName", audio.fileName);
+    audioObject.addProperty("mimeType", audio.mimeType);
 
     extra.add("audio", audioObject);
 

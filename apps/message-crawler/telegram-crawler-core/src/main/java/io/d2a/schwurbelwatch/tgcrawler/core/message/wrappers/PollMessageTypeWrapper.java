@@ -37,17 +37,17 @@ public class PollMessageTypeWrapper implements MessageTypeWrapper<MessagePoll> {
     for (final PollOption option : poll.options) {
       final JsonObject object = new JsonObject();
       object.addProperty("text", option.text);
-      object.addProperty("votes", option.voterCount);
+      object.addProperty("voterCount", option.voterCount);
       array.add(object);
     }
 
     final JsonObject object = new JsonObject();
     object.addProperty("id", poll.id);
-    object.addProperty("totalvotes", poll.totalVoterCount);
-    object.addProperty("anonymous", poll.isAnonymous);
-    object.addProperty("closed", poll.isClosed);
-    object.addProperty("closedate", poll.closeDate);
-    object.addProperty("period", poll.openPeriod);
+    object.addProperty("totalVoterCount", poll.totalVoterCount);
+    object.addProperty("isAnonymous", poll.isAnonymous);
+    object.addProperty("isClosed", poll.isClosed);
+    object.addProperty("closeDate", poll.closeDate);
+    object.addProperty("openPeriod", poll.openPeriod);
     object.addProperty("type",
         poll.type.getConstructor() == PollTypeRegular.CONSTRUCTOR ? "REGULAR" : "QUIZ");
 

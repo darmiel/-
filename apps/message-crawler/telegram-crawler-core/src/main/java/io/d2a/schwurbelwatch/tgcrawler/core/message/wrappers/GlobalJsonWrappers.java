@@ -8,9 +8,9 @@ public class GlobalJsonWrappers {
   public static JsonObject wrapLocation(final TdApi.Location location, final Integer expiresIn) {
     final JsonObject object = new JsonObject();
     object.addProperty("latitude", location.latitude);
-    object.addProperty("longitude", location.longitude);
+    object.addProperty("latitude", location.longitude);
     if (expiresIn != null) {
-      object.addProperty("expires", expiresIn);
+      object.addProperty("expiresIn", expiresIn);
     }
     return object;
   }

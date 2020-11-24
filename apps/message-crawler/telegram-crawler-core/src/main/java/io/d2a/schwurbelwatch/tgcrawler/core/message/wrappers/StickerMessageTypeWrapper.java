@@ -36,7 +36,7 @@ public class StickerMessageTypeWrapper implements MessageTypeWrapper<MessageStic
     object.addProperty("setId", sticker.setId);
     object.addProperty("width", sticker.width);
     object.addProperty("height", sticker.height);
-    object.addProperty("animated", sticker.isAnimated);
+    object.addProperty("isAnimated", sticker.isAnimated);
 
     extra.add("sticker", object);
 

@@ -32,11 +32,11 @@ public class ContactMessageTypeWrapper implements MessageTypeWrapper<MessageCont
 
     final Contact contact = content.contact;
     final JsonObject object = new JsonObject();
-    object.addProperty("phonenr", contact.phoneNumber);
-    object.addProperty("firstname", contact.firstName);
-    object.addProperty("lastname", contact.lastName);
+    object.addProperty("phoneNumber", contact.phoneNumber);
+    object.addProperty("firstName", contact.firstName);
+    object.addProperty("lastName", contact.lastName);
     object.addProperty("vcard", contact.vcard);
-    object.addProperty("userid", contact.userId);
+    object.addProperty("userId", contact.userId);
 
     extra.add("contact", object);
   }

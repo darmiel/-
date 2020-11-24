@@ -33,8 +33,8 @@ public class DocumentMessageTypeWrapper implements MessageTypeWrapper<MessageDoc
     // extra
     final Document document = content.document;
     final JsonObject object = new JsonObject();
-    object.addProperty("filename", document.fileName);
-    object.addProperty("mime", document.mimeType);
+    object.addProperty("fileName", document.fileName);
+    object.addProperty("mimeType", document.mimeType);
 
     extra.add("document", object);
 

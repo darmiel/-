@@ -37,9 +37,9 @@ public class AnimationMessageTypeWrapper implements MessageTypeWrapper<MessageAn
     animationObject.addProperty("duration", animation.duration);
     animationObject.addProperty("width", animation.width);
     animationObject.addProperty("height", animation.height);
-    animationObject.addProperty("filename", animation.fileName);
-    animationObject.addProperty("mime", animation.mimeType);
-    animationObject.addProperty("stickers", animation.hasStickers);
+    animationObject.addProperty("fileName", animation.fileName);
+    animationObject.addProperty("mimeType", animation.mimeType);
+    animationObject.addProperty("hasStickers", animation.hasStickers);
 
     extra.add("animation", animationObject);
   }
