@@ -12,6 +12,7 @@ import org.drinkless.tdlib.TdApi.MessageContent;
 import org.drinkless.tdlib.TdApi.MessageLocation;
 import org.drinkless.tdlib.TdApi.MessagePhoto;
 import org.drinkless.tdlib.TdApi.MessagePoll;
+import org.drinkless.tdlib.TdApi.MessageSticker;
 import org.drinkless.tdlib.TdApi.MessageText;
 import org.drinkless.tdlib.TdApi.MessageVenue;
 import org.drinkless.tdlib.TdApi.MessageVideo;
@@ -25,6 +26,7 @@ public enum ContentType {
   POLL("poll", MessagePoll.CONSTRUCTOR),
   LOCATION("location", MessageLocation.CONSTRUCTOR),
   VENUE("venue", MessageVenue.CONSTRUCTOR),
+  STICKER("sticker", MessageSticker.CONSTRUCTOR),
   CONTACT("contact", MessageContact.CONSTRUCTOR);
 
   String identifier;

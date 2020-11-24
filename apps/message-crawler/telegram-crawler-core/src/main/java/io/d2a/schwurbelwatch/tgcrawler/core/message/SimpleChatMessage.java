@@ -18,8 +18,10 @@ import org.drinkless.tdlib.TdApi.MessagePoll;
 import org.drinkless.tdlib.TdApi.MessageSender;
 import org.drinkless.tdlib.TdApi.MessageSenderChat;
 import org.drinkless.tdlib.TdApi.MessageSenderUser;
+import org.drinkless.tdlib.TdApi.MessageSticker;
 import org.drinkless.tdlib.TdApi.MessageText;
 import org.drinkless.tdlib.TdApi.MessageVideo;
+import org.drinkless.tdlib.TdApi.Sticker;
 
 @Getter
 @ToString
@@ -114,6 +116,11 @@ public class SimpleChatMessage {
         type = ContentType.VIDEO;
 
         extra = messageVideo.video.fileName;
+        break;
+      case MessageSticker.CONSTRUCTOR:
+        final Sticker sticker = ((MessageSticker) content).sticker;
+        text = "[Sticker: " + sticker.emoji + ", " + sticker.width + "x" + sticker.height +  "]";
+        type = ContentType.STICKER;
         break;
     }
 

@@ -97,12 +97,6 @@ public class ChatlogModule extends BotModule {
   @Subscribe
   public void onMessage(final UpdateNewMessage event) {
     final TdApi.Message message = event.message;
-
-    // Ignore stickers
-    if (message.content.getConstructor() == MessageSticker.CONSTRUCTOR) {
-      return;
-    }
-
     updateInsertMessage(message, false);
   }
 
