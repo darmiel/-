@@ -166,6 +166,7 @@ config/telegram.json
 /tdlibdata/db.sqlite-wal
 
 /data/logs/*.log
+/data/files/*
 /data/tglibdata@*
 
 jitdump.*
