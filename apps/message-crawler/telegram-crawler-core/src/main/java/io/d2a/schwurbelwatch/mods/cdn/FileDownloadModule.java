@@ -71,7 +71,7 @@ public class FileDownloadModule extends BotModule {
         AnsiColor.ANSI_GREEN + file.id + AnsiColor.ANSI_RESET);
 
     this.client.getClient().send(new DownloadFile(
-            file.id, ++priority, 0, 0, true
+            file.id, priority++, 0, 0, true
         ),
         new DownloadFileResult()
     );
