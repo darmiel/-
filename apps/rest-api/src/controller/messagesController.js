@@ -15,6 +15,7 @@ const messageSchema = Joi.object({
   date: Joi.number().required(),
   deleted_on: Joi.number().default(null).optional(),
   is_channel_post: Joi.number().min(0).max(1).default(0).optional(),
+  extra: Joi.string().default(null).allow('').allow(null).optional()
 });
 
 /*
@@ -77,6 +78,9 @@ module.exports.addMessage = async (message) => {
       const _new = value.content;
 
       if (_old == _new) {
+        console.log(_old);
+        console.log(_new);
+
         return {
           error: true,
           message: "Message with same content already exists!",
@@ -101,7 +105,7 @@ module.exports.addMessage = async (message) => {
 
       // normal insert
       res = await connection.query(
-        "INSERT INTO messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO messages VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           messageId,
           value.chatId,
@@ -112,6 +116,7 @@ module.exports.addMessage = async (message) => {
           value.date,
           value.deleted_on,
           value.is_channel_post,
+          value.extra
         ]
       );
     }
@@ -169,5 +174,6 @@ module.exports.updateMessage = async (id, message) => {
     "content_type",
     "content",
     "deleted_on",
+    "extra"
   ]);
 };

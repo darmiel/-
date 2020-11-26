@@ -1,5 +1,6 @@
 package io.d2a.schwurbelwatch.tgcrawler.api.messages;
 
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.api.other.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
@@ -28,6 +29,9 @@ public class Message {
 
   @SerializedName("is_channel_post")
   public int isChannelPost;
+
+  @SerializedName("extra")
+  public String extra;
 
   public boolean isDeleted() {
     return this.deletedOn > 0;
@@ -62,6 +66,10 @@ public class Message {
 
     msg.date = tdMessage.date * 1000L;
     msg.isChannelPost = tdMessage.isChannelPost ? 1 : 0;
+
+    if (dcm.getExtraG() != null) {
+      msg.extra = dcm.getExtraG().toString();
+    }
 
     return msg;
   }
