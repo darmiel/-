@@ -2,13 +2,12 @@ package io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers;
 
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
-import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
+import io.d2a.schwurbelwatch.tgcrawler.core.message.FileMessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import java.util.Collections;
 import org.drinkless.tdlib.TdApi.Animation;
 import org.drinkless.tdlib.TdApi.MessageAnimation;
 
-public class AnimationMessageTypeWrapper implements MessageTypeWrapper<MessageAnimation> {
+public class AnimationMessageTypeWrapper implements FileMessageTypeWrapper<MessageAnimation> {
 
   @Override
   public int getConstructor() {
@@ -43,4 +42,10 @@ public class AnimationMessageTypeWrapper implements MessageTypeWrapper<MessageAn
 
     extra.add("animation", animationObject);
   }
+
+  @Override
+  public boolean downloadFile() {
+    return true;
+  }
+
 }

@@ -2,15 +2,12 @@ package io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers;
 
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
-import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
+import io.d2a.schwurbelwatch.tgcrawler.core.message.FileMessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import java.util.Collections;
 import org.drinkless.tdlib.TdApi.MessageSticker;
-import org.drinkless.tdlib.TdApi.MessageVenue;
 import org.drinkless.tdlib.TdApi.Sticker;
-import org.drinkless.tdlib.TdApi.Venue;
 
-public class StickerMessageTypeWrapper implements MessageTypeWrapper<MessageSticker> {
+public class StickerMessageTypeWrapper implements FileMessageTypeWrapper<MessageSticker> {
 
   @Override
   public int getConstructor() {
@@ -42,5 +39,10 @@ public class StickerMessageTypeWrapper implements MessageTypeWrapper<MessageStic
 
     // files
     builder.file(sticker.sticker);
+  }
+
+  @Override
+  public boolean downloadFile() {
+    return false;
   }
 }

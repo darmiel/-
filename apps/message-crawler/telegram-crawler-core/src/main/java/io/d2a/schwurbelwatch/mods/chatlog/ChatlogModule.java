@@ -21,7 +21,6 @@ import java.util.Optional;
 import lombok.SneakyThrows;
 import org.drinkless.tdlib.TdApi;
 import org.drinkless.tdlib.TdApi.GetMessage;
-import org.drinkless.tdlib.TdApi.MessageSticker;
 import org.drinkless.tdlib.TdApi.UpdateDeleteMessages;
 import org.drinkless.tdlib.TdApi.UpdateMessageEdited;
 import org.drinkless.tdlib.TdApi.UpdateNewMessage;
@@ -90,14 +89,22 @@ public class ChatlogModule extends BotModule {
       if (shortText.length() > 54) {
         shortText = msg.content.substring(0, 53) + "...";
       }
-       shortText = shortText.replace("\n", "[n]");
+      shortText = shortText.replace("\n", "[n]");
     }
 
     final String prefix = !edit ? AnsiColor.ANSI_PURPLE + "++ " : AnsiColor.ANSI_RED + "~~ ";
 
-    Logger.info(AnsiColor.ANSI_CYAN + prefix + AnsiColor.ANSI_CYAN + msg.userId + ": " + shortText + AnsiColor.ANSI_RESET);
+    Logger.info(AnsiColor.ANSI_CYAN + prefix + AnsiColor.ANSI_CYAN + msg.userId + ": " +
+        shortText + AnsiColor.ANSI_RESET +
+        " | T = " + dcm.getType() + " | HF = " + dcm.hasFiles() + " | FV = " + dcm.isFileValid());
+
     Logger.debug(dcm.getExtraG());
 
+    // Skip messages with option save = False
+    if (dcm.getType() != null && !dcm.getType().save) {
+      Logger.info("Skipping message");
+      return;
+    }
     SwApi.callDatabaseResult(service.addMessage(msg));
   }
 

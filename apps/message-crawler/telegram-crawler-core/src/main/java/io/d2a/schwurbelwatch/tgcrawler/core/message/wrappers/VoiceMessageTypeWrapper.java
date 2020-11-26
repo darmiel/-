@@ -4,23 +4,23 @@ import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.FileMessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import org.drinkless.tdlib.TdApi.Document;
-import org.drinkless.tdlib.TdApi.MessageDocument;
+import org.drinkless.tdlib.TdApi.MessageVoiceNote;
+import org.drinkless.tdlib.TdApi.VoiceNote;
 
-public class DocumentMessageTypeWrapper implements FileMessageTypeWrapper<MessageDocument> {
+public class VoiceMessageTypeWrapper implements FileMessageTypeWrapper<MessageVoiceNote> {
 
   @Override
   public int getConstructor() {
-    return MessageDocument.CONSTRUCTOR;
+    return MessageVoiceNote.CONSTRUCTOR;
   }
 
   @Override
   public ContentType getContentType() {
-    return ContentType.DOCUMENT;
+    return ContentType.VOICE;
   }
 
   @Override
-  public void execute(final MessageDocument content,
+  public void execute(final MessageVoiceNote content,
       final SimpleChatMessageBuilder builder,
       final JsonObject extra) {
 
@@ -28,15 +28,15 @@ public class DocumentMessageTypeWrapper implements FileMessageTypeWrapper<Messag
     builder.textCaption(content.caption.text);
 
     // extra
-    final Document document = content.document;
-    final JsonObject object = new JsonObject();
-    object.addProperty("fileName", document.fileName);
-    object.addProperty("mimeType", document.mimeType);
+    final VoiceNote voiceNote = content.voiceNote;
+    final JsonObject voiceObject = new JsonObject();
+    voiceObject.addProperty("duration", voiceNote.duration);
+    voiceObject.addProperty("mimeType", voiceNote.mimeType);
 
-    extra.add("document", object);
+    extra.add("audio", voiceObject);
 
-    // files
-    builder.file(document.document);
+    // file
+    builder.file(voiceNote.voice);
   }
 
   @Override

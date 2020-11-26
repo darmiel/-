@@ -4,10 +4,9 @@ import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import org.drinkless.tdlib.TdApi;
 import org.drinkless.tdlib.TdApi.MessageText;
 
-public class TextMessageTypeWrapper implements MessageTypeWrapper<TdApi.MessageText> {
+public class TextMessageTypeWrapper implements MessageTypeWrapper<MessageText> {
 
   @Override
   public int getConstructor() {

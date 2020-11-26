@@ -2,13 +2,12 @@ package io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers;
 
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
-import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
+import io.d2a.schwurbelwatch.tgcrawler.core.message.FileMessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import java.util.Collections;
 import org.drinkless.tdlib.TdApi.Audio;
 import org.drinkless.tdlib.TdApi.MessageAudio;
 
-public class AudioMessageTypeWrapper implements MessageTypeWrapper<MessageAudio> {
+public class AudioMessageTypeWrapper implements FileMessageTypeWrapper<MessageAudio> {
 
   @Override
   public int getConstructor() {
@@ -41,4 +40,10 @@ public class AudioMessageTypeWrapper implements MessageTypeWrapper<MessageAudio>
     // file
     builder.file(audio.audio);
   }
+
+  @Override
+  public boolean downloadFile() {
+    return true;
+  }
+
 }

@@ -6,11 +6,8 @@
 
 package io.d2a.schwurbelwatch.tgcrawler.core.message;
 
-import static io.d2a.schwurbelwatch.tgcrawler.core.BotMain.GSON;
-
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
-import java.util.Set;
 import javax.annotation.Nonnull;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,8 +46,20 @@ public class SimpleChatMessage {
     return this.file != null;
   }
 
-  public static SimpleChatMessage wrap(@Nonnull Message message) {
+  public boolean isFileValid() {
+    if (!hasFiles() || type == null) {
+      return false;
+    }
 
+    if (type.wrapper instanceof FileMessageTypeWrapper) {
+      final FileMessageTypeWrapper<?> wrapper = (FileMessageTypeWrapper<?>) type.wrapper;
+      return wrapper.downloadFile() && wrapper.maxDownloadSize() >= this.file.expectedSize;
+    }
+
+    return false;
+  }
+
+  public static SimpleChatMessage wrap(@Nonnull Message message) {
     // get content type
     final ContentType type = ContentType.getType(message.content);
     if (type == null) {
