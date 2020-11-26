@@ -49,6 +49,6 @@ public class VideoMessageTypeWrapper implements FileMessageTypeWrapper<MessageVi
 
   @Override
   public int maxDownloadSize() {
-    return 75_000_000; // 75 MB
+    return 35_000_000; // 35 MB
   }
 }

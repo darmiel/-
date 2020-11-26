@@ -10,7 +10,6 @@ import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -21,7 +20,6 @@ import org.drinkless.tdlib.TdApi.Error;
 import org.drinkless.tdlib.TdApi.LocalFile;
 import org.drinkless.tdlib.TdApi.Message;
 import org.drinkless.tdlib.TdApi.Object;
-import org.drinkless.tdlib.TdApi.Ok;
 import org.drinkless.tdlib.TdApi.UpdateNewMessage;
 
 @Module(
@@ -65,7 +63,8 @@ public class FileDownloadModule extends BotModule {
     }
 
     // reset priority
-    if (this.priority > 1000) {
+    // range [1;32]
+    if (this.priority > 32) {
       this.priority = 1;
     }
 
@@ -90,10 +89,10 @@ public class FileDownloadModule extends BotModule {
     @Override
     public void onResult(final Object object) {
       if (object.getConstructor() == Error.CONSTRUCTOR) {
-        Logger.error("Error downloading file: " + object);
+        Logger.error(AnsiColor.ANSI_RED + "Error downloading file: " +
+            ((Error) object).message + AnsiColor.ANSI_BLACK +
+            " [#" + ((Error) object).code + "]");
         return;
-      } else if (object.getConstructor() == Ok.CONSTRUCTOR) {
-        Logger.success("Done");
       }
 
       // retrieved file?
@@ -103,21 +102,6 @@ public class FileDownloadModule extends BotModule {
 
       // cast to file
       final TdApi.File tdFile = (TdApi.File) object;
-
-      final int fileId = tdFile.id;
-      long messageId = -1;
-      for (final Iterator<Entry<Long, Integer>> it = messageFiles.entrySet().iterator();
-          it.hasNext(); ) {
-        final Entry<Long, Integer> next = it.next();
-        if (next.getValue() == fileId) {
-          messageId = next.getKey();
-          it.remove();
-        }
-      }
-
-      Logger.debug("Message " + AnsiColor.ANSI_RED + messageId + AnsiColor.ANSI_RESET +
-          " belongs to file " + AnsiColor.ANSI_BLUE + fileId);
-
       final LocalFile localFile = tdFile.local;
 
       if (!localFile.isDownloadingCompleted) {
@@ -130,6 +114,23 @@ public class FileDownloadModule extends BotModule {
       final File file = new File(localFile.path);
       if (!file.exists()) {
         Logger.warn("File exists but well no");
+        return;
+      }
+
+      final int fileId = tdFile.id;
+      long messageId = -1;
+      for (final Entry<Long, Integer> next : messageFiles.entrySet()) {
+        if (next.getValue() == fileId) {
+          messageId = next.getKey();
+        }
+      }
+      Logger.debug("Message " + AnsiColor.ANSI_RED + messageId + AnsiColor.ANSI_RESET +
+          " belongs to file " + AnsiColor.ANSI_BLUE + fileId);
+
+      // if no message was found, delete file
+      if (messageId == -1) {
+        Logger.warn("Deleting file, because no message was found: " +
+            AnsiColor.ANSI_CYAN + file.delete());
         return;
       }
 
