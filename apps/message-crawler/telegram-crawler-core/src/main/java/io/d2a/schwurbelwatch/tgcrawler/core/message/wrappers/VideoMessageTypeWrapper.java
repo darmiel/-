@@ -29,7 +29,7 @@ public class VideoMessageTypeWrapper implements FileMessageTypeWrapper<MessageVi
 
     // file
     final Video video = content.video;
-    builder.file(video.video);
+    builder.file(video.thumbnail.file); // only download thumbnail for now
 
     // extra info
     final JsonObject videoObject = new JsonObject();
