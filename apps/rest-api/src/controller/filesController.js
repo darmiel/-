@@ -87,7 +87,7 @@ module.exports.addFile = async (file) => {
     );
   } finally {
     if (connection) {
-      connection.close();
+      connection.end();
     }
   }
 };
