@@ -41,6 +41,6 @@ public class StickerMessageTypeWrapper implements MessageTypeWrapper<MessageStic
     extra.add("sticker", object);
 
     // files
-    builder.files(Collections.singleton(sticker.sticker));
+    builder.file(sticker.sticker);
   }
 }

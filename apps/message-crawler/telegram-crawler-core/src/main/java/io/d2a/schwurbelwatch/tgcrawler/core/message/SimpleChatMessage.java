@@ -40,13 +40,13 @@ public class SimpleChatMessage {
   private final String textCaption;
 
   /* File */
-  private final transient Set<TdApi.File> files;
+  private final transient TdApi.File file;
 
   /* Extra Info */
   private final JsonObject extraG;
 
   public boolean hasFiles() {
-    return this.files.size() > 0;
+    return this.file != null;
   }
 
   public static SimpleChatMessage wrap(@Nonnull Message message) {

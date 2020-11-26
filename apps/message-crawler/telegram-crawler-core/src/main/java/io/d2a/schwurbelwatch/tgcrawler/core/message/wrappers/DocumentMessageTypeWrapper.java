@@ -39,6 +39,6 @@ public class DocumentMessageTypeWrapper implements MessageTypeWrapper<MessageDoc
     extra.add("document", object);
 
     // files
-    builder.files(Collections.singleton(document.document));
+    builder.file(document.document);
   }
 }

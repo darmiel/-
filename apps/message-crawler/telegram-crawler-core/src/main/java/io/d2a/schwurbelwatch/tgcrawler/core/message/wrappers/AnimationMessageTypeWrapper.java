@@ -30,7 +30,7 @@ public class AnimationMessageTypeWrapper implements MessageTypeWrapper<MessageAn
 
     // file
     final Animation animation = content.animation;
-    builder.files(Collections.singleton(animation.animation));
+    builder.file(animation.animation);
 
     // extra info
     final JsonObject animationObject = new JsonObject();

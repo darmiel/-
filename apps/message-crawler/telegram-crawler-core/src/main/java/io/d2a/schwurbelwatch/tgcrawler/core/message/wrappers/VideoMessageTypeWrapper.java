@@ -32,7 +32,7 @@ public class VideoMessageTypeWrapper implements MessageTypeWrapper<MessageVideo>
 
     // file
     final Video video = content.video;
-    builder.files(Collections.singleton(video.video));
+    builder.file(video.video);
 
     // extra info
     final JsonObject videoObject = new JsonObject();

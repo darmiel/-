@@ -39,6 +39,6 @@ public class AudioMessageTypeWrapper implements MessageTypeWrapper<MessageAudio>
     extra.add("audio", audioObject);
 
     // file
-    builder.files(Collections.singleton(audio.audio));
+    builder.file(audio.audio);
   }
 }

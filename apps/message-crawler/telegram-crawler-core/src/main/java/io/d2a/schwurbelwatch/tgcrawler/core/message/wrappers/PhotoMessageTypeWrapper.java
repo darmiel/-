@@ -5,17 +5,16 @@ import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.drinkless.tdlib.TdApi;
-import org.drinkless.tdlib.TdApi.Audio;
-import org.drinkless.tdlib.TdApi.MessageAudio;
 import org.drinkless.tdlib.TdApi.MessagePhoto;
 import org.drinkless.tdlib.TdApi.Photo;
 import org.drinkless.tdlib.TdApi.PhotoSize;
 
 public class PhotoMessageTypeWrapper implements MessageTypeWrapper<MessagePhoto> {
+
+  public static final int MAX_SIZE_IN_BYTES = 50_000_000;
 
   @Override
   public int getConstructor() {
@@ -38,18 +37,25 @@ public class PhotoMessageTypeWrapper implements MessageTypeWrapper<MessagePhoto>
     // file
     final Photo photo = content.photo;
     final Set<TdApi.File> files = new LinkedHashSet<>();
-    final JsonArray array = new JsonArray();
+
+    PhotoSize biggest = null;
     for (final PhotoSize size : photo.sizes) {
-      files.add(size.photo);
+      if (biggest == null
+          || size.width > biggest.width
+          || size.height > biggest.height) {
+        biggest = size;
+      }
+    }
+
+    if (biggest != null) {
+      builder.file(biggest.photo);
 
       final JsonObject object = new JsonObject();
-      object.addProperty("type", size.type);
-      object.addProperty("width", size.width);
-      object.addProperty("height", size.height);
-      array.add(object);
-    }
-    builder.files(files);
+      object.addProperty("type", biggest.type);
+      object.addProperty("width", biggest.width);
+      object.addProperty("height", biggest.height);
 
-    extra.add("photo", array);
+      extra.add("photo", object);
+    }
   }
 }
