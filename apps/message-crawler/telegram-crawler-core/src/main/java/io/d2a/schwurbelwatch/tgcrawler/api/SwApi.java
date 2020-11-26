@@ -2,6 +2,7 @@ package io.d2a.schwurbelwatch.tgcrawler.api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.d2a.schwurbelwatch.tgcrawler.api.files.FileService;
 import io.d2a.schwurbelwatch.tgcrawler.api.messages.MessageService;
 import io.d2a.schwurbelwatch.tgcrawler.api.other.BaseService;
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
@@ -36,6 +37,7 @@ public class SwApi {
   public static final MessageService MESSAGE_SERVICE = retrofit.create(MessageService.class);
   public static final BaseService BASE_SERVICE = retrofit.create(BaseService.class);
   public static final UserService USER_SERVICE = retrofit.create(UserService.class);
+  public static final FileService FILE_SERVICE = retrofit.create(FileService.class);
 
   public static void callDatabaseResult(final Call<DatabaseResult> call) {
     try {

@@ -32,40 +32,6 @@ public class ConsoleMessageModule extends BotModule {
     }
   }
 
-  /*
-  @Subscribe
-  public void onMessage(final UpdateNewMessage event) {
-    final Message message = event.message;
-    final DefaultChatMessage wrap = DefaultChatMessage.wrap(message);
-    // Logger.value("-> " + wrap.toString());
-  }
-
-  private final Set<Integer> requestedUsers = new HashSet<>();
-
-  @Subscribe
-  public void onMessage2(final UpdateNewMessage updateNewMessage) {
-    final Message message = updateNewMessage.message;
-    final int senderUserId = message.senderUserId;
-
-    if (requestedUsers.contains(senderUserId)) {
-      Logger.value("Already requested!");
-      return;
-    }
-    requestedUsers.add(senderUserId);
-
-    Logger.debug("Requesting normal-info for user...");
-    this.client.getClient().send(
-        new GetUser(senderUserId),
-        Logger::value
-    );
-    Logger.debug("Requesting full-info for user ...");
-    this.client.getClient().send(
-        new GetUserFullInfo(senderUserId),
-        Logger::value
-    );
-  }
-  */
-
   @Subscribe
   public void any(final TdApi.Object object) {
     // Logger.debug(object);

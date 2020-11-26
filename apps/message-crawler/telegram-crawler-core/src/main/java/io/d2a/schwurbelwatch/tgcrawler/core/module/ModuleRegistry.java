@@ -6,6 +6,7 @@
 
 package io.d2a.schwurbelwatch.tgcrawler.core.module;
 
+import io.d2a.schwurbelwatch.mods.ModMain;
 import io.d2a.schwurbelwatch.mods.chatlog.ChatlogModule;
 import io.d2a.schwurbelwatch.mods.chatlog.ConsoleMessageModule;
 import io.d2a.schwurbelwatch.mods.user.UserUpdateModule;
@@ -33,12 +34,6 @@ public class ModuleRegistry {
   /**
    * Add your modules here
    */
-  public static final Set<Class<? extends BotModule>> BOT_MODULES = new LinkedHashSet<>(
-      Arrays.asList(
-          ChatlogModule.class,
-          ConsoleMessageModule.class,
-          UserUpdateModule.class
-      ));
 
   public static Set<BotModule> findModules() throws IllegalAccessException,
       InstantiationException,
@@ -50,7 +45,7 @@ public class ModuleRegistry {
 
     final Set<BotModule> modules = new HashSet<>(); // result
 
-    for (final Class<? extends BotModule> clazz : BOT_MODULES) {
+    for (final Class<? extends BotModule> clazz : ModMain.MODULES) {
       final String name = clazz.getName();
 
       if (!BotModule.class.isAssignableFrom(clazz)) {

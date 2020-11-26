@@ -38,6 +38,7 @@ const main = async () => {
   app.use("/chats", require("./routes/chats"));
   app.use("/users", require("./routes/users"));
   app.use("/updates", require("./routes/updates"));
+  app.use("/files", require("./routes/files"));
   app.use("", require("./routes/default"));
 
   /*
