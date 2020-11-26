@@ -8,18 +8,12 @@ import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import org.drinkless.tdlib.Client.ResultHandler;
 import org.drinkless.tdlib.TdApi;
 import org.drinkless.tdlib.TdApi.DownloadFile;
-import org.drinkless.tdlib.TdApi.Error;
-import org.drinkless.tdlib.TdApi.LocalFile;
 import org.drinkless.tdlib.TdApi.Message;
-import org.drinkless.tdlib.TdApi.Object;
 import org.drinkless.tdlib.TdApi.UpdateNewMessage;
 
 @Module(
@@ -32,9 +26,8 @@ public class FileDownloadModule extends BotModule {
 
   private TelegramClient client;
 
-  private static final Map<Long, Integer> messageFiles = new HashMap<>();
+  public static final Map<Integer, Long> messageFiles = new HashMap<>();
   private int priority = 1;
-
 
   @Override
   public void onEnable() {
@@ -69,7 +62,9 @@ public class FileDownloadModule extends BotModule {
     }
 
     final TdApi.File file = scm.getFile();
-    messageFiles.put(scm.getMessageId(), file.id);
+
+    // cache file id
+    messageFiles.put(file.id, scm.getMessageId());
 
     Logger.debug(AnsiColor.ANSI_BLUE + "^^ " +
         AnsiColor.ANSI_YELLOW + "Downloading file: " +
@@ -81,82 +76,5 @@ public class FileDownloadModule extends BotModule {
         new DownloadFileResult()
     );
   }
-
-  private static final class DownloadFileResult implements ResultHandler {
-
-    public static final File FILES_DIRECTORY = new File("data", "files");
-
-    @Override
-    public void onResult(final Object object) {
-      if (object.getConstructor() == Error.CONSTRUCTOR) {
-        Logger.error(AnsiColor.ANSI_RED + "Error downloading file: " +
-            ((Error) object).message + AnsiColor.ANSI_BLACK +
-            " [#" + ((Error) object).code + "]");
-        return;
-      }
-
-      // retrieved file?
-      if (object.getConstructor() != TdApi.File.CONSTRUCTOR) {
-        return;
-      }
-
-      // cast to file
-      final TdApi.File tdFile = (TdApi.File) object;
-      final LocalFile localFile = tdFile.local;
-
-      if (!localFile.isDownloadingCompleted) {
-        Logger.warn("Oops! Download not (yet) comleted!");
-        return;
-      }
-
-      final String fileUid = tdFile.remote.id;
-
-      final File file = new File(localFile.path);
-      if (!file.exists()) {
-        Logger.warn("File exists but well no");
-        return;
-      }
-
-      final int fileId = tdFile.id;
-      long messageId = -1;
-      for (final Entry<Long, Integer> next : messageFiles.entrySet()) {
-        if (next.getValue() == fileId) {
-          messageId = next.getKey();
-        }
-      }
-      Logger.debug("Message " + AnsiColor.ANSI_RED + messageId + AnsiColor.ANSI_RESET +
-          " belongs to file " + AnsiColor.ANSI_BLUE + fileId);
-
-      // if no message was found, delete file
-      if (messageId == -1) {
-        Logger.warn("Deleting file, because no message was found: " +
-            AnsiColor.ANSI_CYAN + file.delete());
-        return;
-      }
-
-      final String oldFileName = file.getName();
-
-      // get extension
-      final String extension = oldFileName.contains(".")
-          ? oldFileName.substring(oldFileName.lastIndexOf(".")).trim()
-          : oldFileName;
-
-      final String newFileName = fileUid + extension;
-
-      // move file
-      final File destFile = new File(FILES_DIRECTORY, newFileName);
-      if (destFile.exists()) {
-        Logger.warn("Destination file already exists!");
-        return;
-      }
-
-      if (file.renameTo(destFile)) {
-        Logger.success("Done!");
-      } else {
-        Logger.warn("Done! But not quite yet. Dunno why.");
-      }
-    }
-  }
-
 
 }
