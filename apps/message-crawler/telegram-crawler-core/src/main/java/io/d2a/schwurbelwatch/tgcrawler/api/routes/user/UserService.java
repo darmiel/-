@@ -1,4 +1,4 @@
-package io.d2a.schwurbelwatch.tgcrawler.api.user;
+package io.d2a.schwurbelwatch.tgcrawler.api.routes.user;
 
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
 import retrofit2.Call;

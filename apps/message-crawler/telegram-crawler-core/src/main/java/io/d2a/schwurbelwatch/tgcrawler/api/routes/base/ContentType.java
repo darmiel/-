@@ -1,4 +1,4 @@
-package io.d2a.schwurbelwatch.tgcrawler.api.other;
+package io.d2a.schwurbelwatch.tgcrawler.api.routes.base;
 
 import lombok.ToString;
 

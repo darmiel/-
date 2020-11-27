@@ -1,4 +1,4 @@
-package io.d2a.schwurbelwatch.tgcrawler.api.messages;
+package io.d2a.schwurbelwatch.tgcrawler.api.routes.messages;
 
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
@@ -14,13 +14,13 @@ import retrofit2.http.Query;
 public interface MessageService {
 
   @GET("messages")
-  Call<List<Message>> getMessages(@Query("offset") int offset);
+  Call<List<ApiMessage>> getMessages(@Query("offset") int offset);
 
   @GET("messages/{id}")
-  Call<Message> getMessage(@Path("id") long id);
+  Call<ApiMessage> getMessage(@Path("id") long id);
 
   @POST("messages")
-  Call<DatabaseResult> addMessage(@Body Message message);
+  Call<DatabaseResult> addMessage(@Body ApiMessage apiMessage);
 
   @PUT("messages/{id}")
   Call<DatabaseResult> updateMessage(@Path("id") long messageId, @Body JsonObject object);

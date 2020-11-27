@@ -1,4 +1,4 @@
-package io.d2a.schwurbelwatch.tgcrawler.api.user;
+package io.d2a.schwurbelwatch.tgcrawler.api.routes.user;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.ToString;

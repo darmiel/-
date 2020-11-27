@@ -2,11 +2,12 @@ package io.d2a.schwurbelwatch.tgcrawler.api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.d2a.schwurbelwatch.tgcrawler.api.files.FileService;
-import io.d2a.schwurbelwatch.tgcrawler.api.messages.MessageService;
-import io.d2a.schwurbelwatch.tgcrawler.api.other.BaseService;
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
-import io.d2a.schwurbelwatch.tgcrawler.api.user.UserService;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.base.BaseService;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.chats.ChatService;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.files.FileService;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.messages.MessageService;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.user.UserService;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class SwApi {
   public static final BaseService BASE_SERVICE = retrofit.create(BaseService.class);
   public static final UserService USER_SERVICE = retrofit.create(UserService.class);
   public static final FileService FILE_SERVICE = retrofit.create(FileService.class);
+  public static final ChatService CHAT_SERVICE = retrofit.create(ChatService.class);
 
   public static void callDatabaseResult(final Call<DatabaseResult> call) {
     try {

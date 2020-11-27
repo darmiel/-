@@ -1,22 +1,15 @@
-package io.d2a.schwurbelwatch.mods.user;
+package io.d2a.schwurbelwatch.mods.updaters;
 
 import com.google.common.eventbus.Subscribe;
 import io.d2a.schwurbelwatch.mods.Accounts;
 import io.d2a.schwurbelwatch.tgcrawler.api.SwApi;
-import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
-import io.d2a.schwurbelwatch.tgcrawler.api.user.User;
-import io.d2a.schwurbelwatch.tgcrawler.api.user.UserService;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.user.User;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
-import java.io.IOException;
 import java.util.Optional;
-import okhttp3.ResponseBody;
 import org.drinkless.tdlib.TdApi.UpdateUser;
-
-import retrofit2.Call;
-import retrofit2.Response;
 
 @Module(
     name = "User Updates",
