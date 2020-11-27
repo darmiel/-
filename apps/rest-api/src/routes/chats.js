@@ -36,6 +36,15 @@ router.post("/", async (req, res) => {
 });
 
 /**
+ * POST /chats/:id/count/:count
+ * Updates the online member count
+ */
+router.post("/:id/count/:count", async (req, res) => {
+  const controllerResult = await controller.updateMemberCount(req.params.id, req.params.count);
+  return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
+});
+
+/**
  * GET /chats/:id
  * Returns a specific chat
  */
