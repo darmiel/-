@@ -78,8 +78,8 @@ module.exports.addMessage = async (message) => {
       const _new = value.content;
 
       if (_old == _new) {
-        console.log(oldMessage);
-        console.log(value);
+        // TODO: Uncomment | console.log(oldMessage);
+        // TODO: Uncomment | console.log(value);
 
         return {
           error: true,

@@ -7,17 +7,15 @@ const Joi = require("joi");
  * Schemas
  */
 const chatSchema = Joi.object({
-  chatId: Joi.number().required(),
+  chatId: Joi.number().default(0).allow("").allow(null).optional(),
+  groupId: Joi.number().default(0).allow("").allow(null).optional(),
+
   username: Joi.string().default(null).allow("").allow(null).optional(),
   date: Joi.number().default(0).allow("").allow(null).optional(),
   title: Joi.string().default(null).allow("").allow(null).optional(),
   description: Joi.string().default(null).allow("").allow(null).optional(),
   member_count: Joi.number().min(0).default(0).allow("").allow(null).optional(),
-  type: Joi.string()
-    .default("unknown")
-    .allow("")
-    .allow(null)
-    .optional(),
+  type: Joi.string().default("unknown").allow("").allow(null).optional(),
   is_verified: Joi.number()
     .min(0)
     .max(1)
@@ -61,8 +59,16 @@ module.exports.addChat = async (chat) => {
     };
   }
 
+  if (value.chatId == null && value.groupId == null) {
+    return {
+      error: true,
+      message: "chatId or groupId missing.",
+    };
+  }
+
   // get chat id and check
-  const chatId = parseInt(value.chatId);
+  const chatId = value.chatId;
+  const groupId = value.groupId;
 
   // current date in milliseconds
   const date = Date.now();
@@ -72,14 +78,23 @@ module.exports.addChat = async (chat) => {
 
   try {
     // get existing chats if any exists
-    const rows = await connection.query(
-      "SELECT * FROM chats WHERE chatId = ? LIMIT 1;",
-      [chatId]
-    );
+    let rows = [];
+    if (value.chatId != null) {
+      rows = await connection.query(
+        "SELECT * FROM chats WHERE chatId = ? LIMIT 1;",
+        [parseInt(chatId)]
+      );
+    } else if (value.groupId != null) {
+      rows = await connection.query(
+        "SELECT * FROM chats WHERE groupId = ? LIMIT 1;",
+        [groupId]
+      );
+    }
 
     // there is an chat existing with the same chatId
     if (rows.length >= 1) {
       const oldChat = rows[0];
+      console.log(oldChat);
 
       // check if we monitor this channel, if not, return with an error
       if (oldChat.monitor == 0) {
@@ -91,6 +106,7 @@ module.exports.addChat = async (chat) => {
 
       // we'll compare the following mysql & object keys
       const fields = [
+        "groupId",
         "username",
         "date",
         "title",
@@ -102,7 +118,7 @@ module.exports.addChat = async (chat) => {
         "last_updated",
       ];
 
-      let update = {
+      const update = {
         query: "",
         params: [],
       };
@@ -117,21 +133,22 @@ module.exports.addChat = async (chat) => {
         const _old = oldChat[field];
         const _new = value[field];
 
-        if (_old != _new) {
+        if (_new == null) {
+          continue;
+        }
+
+        if (_old !== _new) {
           console.log(
-            "[Chat Update | " +
-              chatId +
-              "] Updating field " +
-              field +
-              " from " +
-              _old +
-              " to " +
-              _new
+            `[Chat Update | ${chatId}] Updating field ${field} from ${_old} to ${_new}`
           );
 
           update.query +=
             (update.query.length == 0 ? "" : ", ") + field + " = ?";
           update.params.push(_new);
+
+          if (field == "last_updated") {
+            continue;
+          }
 
           // add to updates
           await connection.query(
@@ -143,27 +160,55 @@ module.exports.addChat = async (chat) => {
 
       // update ?!
       if (update.query.length > 0) {
-        update.query += ", last_updated = ?";
-        update.params.push(date);
+        console.log(value);
 
-        update.params.push(chatId); // this is used for the where clause and should be here.
+        if (!update.query.includes("last_updated")) {
+          update.query += ", last_updated = ?";
+          update.params.push(date);
+        } else if (update.query.length == 1) {
+          return {
+            error: true,
+            message: "Only updating last_updated.",
+          };
+        }
 
-        console.log("[Chat Update | " + chatId + "] Updated chat");
+        console.log(
+          "[Chat Update | " +
+            chatId +
+            "] Update chat " +
+            chatId +
+            " | " +
+            groupId
+        );
 
         // update chat
-        return await connection.query(
-          "UPDATE chats SET " + update.query + " WHERE chatId = ?;",
-          update.params
-        );
+        if (value.chatId != null) {
+          console.log("by chat id");
+          console.log(update);
+          update.params.push(chatId); // this is used for the where clause and should be here.
+          return await connection.query(
+            "UPDATE chats SET " + update.query + " WHERE chatId = ?;",
+            update.params
+          );
+        } else if (value.groupId != null) {
+          console.log("by group id");
+          console.log(update);
+          update.params.push(groupId); // this is used for the where clause and should be here.
+          return await connection.query(
+            "UPDATE chats SET " + update.query + " WHERE groupId = ?;",
+            update.params
+          );
+        }
       } else {
         console.log("[Chat Update | " + chatId + "] No need to update");
       }
     } else {
       // insert new chat
       return await connection.query(
-        "INSERT INTO chats VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO chats VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           value.chatId,
+          value.groupId,
           value.username,
           value.date,
           value.title,

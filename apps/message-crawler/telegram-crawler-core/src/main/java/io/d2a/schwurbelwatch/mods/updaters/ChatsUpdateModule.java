@@ -19,6 +19,8 @@ import org.drinkless.tdlib.Client.ResultHandler;
 import org.drinkless.tdlib.TdApi;
 import org.drinkless.tdlib.TdApi.BasicGroup;
 import org.drinkless.tdlib.TdApi.Chat;
+import org.drinkless.tdlib.TdApi.ChatTypeBasicGroup;
+import org.drinkless.tdlib.TdApi.ChatTypeSupergroup;
 import org.drinkless.tdlib.TdApi.Error;
 import org.drinkless.tdlib.TdApi.GetBasicGroup;
 import org.drinkless.tdlib.TdApi.GetSupergroup;
@@ -54,9 +56,9 @@ public class ChatsUpdateModule extends BotModule {
 
   private void addOrUpdateChat(@Nullable final Chat chat, @Nullable final ApiChat apiChat) {
     if (chat != null) {
-      Logger.debug(chat);
+      // Logger.debug(chat);
     }
-    Logger.debug(apiChat);
+    //Logger.debug(apiChat);
 
     SwApi.callDatabaseResult(SwApi.CHAT_SERVICE.addChat(apiChat));
   }
@@ -99,6 +101,7 @@ public class ChatsUpdateModule extends BotModule {
     if (System.currentTimeMillis() - lastUpdated <= 300_000) {
       return;
     }
+    this.chatInfoCache.put(chatId, System.currentTimeMillis());
 
     Logger.info("Updating chat " + chatId);
     this.client.getClient().send(
@@ -123,18 +126,26 @@ public class ChatsUpdateModule extends BotModule {
       if (object.getConstructor() == Chat.CONSTRUCTOR) {
         final Chat chat = (Chat) object;
         final long chatId = chat.id;
+        int groupId = 0;
 
         switch (ChatType.getType(chat.type)) {
           case BASIC:
-            this.client.send(new GetBasicGroup((int) chatId), this);
+            final ChatTypeBasicGroup chatTypeBasicGroup = (ChatTypeBasicGroup) chat.type;
+            groupId = chatTypeBasicGroup.basicGroupId;
+
+            this.client.send(new GetBasicGroup(groupId), this);
             break;
           case SUPER:
-            this.client.send(new GetSupergroup((int) chatId), this);
+            final ChatTypeSupergroup chatTypeSupergroup = (ChatTypeSupergroup) chat.type;
+            groupId = chatTypeSupergroup.supergroupId;
+
+            this.client.send(new GetSupergroup(groupId), this);
             break;
         }
 
         final ApiChat build = ApiChat.builder()
             .chatId(chat.id)
+            .groupId(groupId)
             .title(chat.title)
             .type(ChatType.getType(chat.type))
             .lastUpdated(System.currentTimeMillis())
@@ -151,16 +162,19 @@ public class ChatsUpdateModule extends BotModule {
         Logger.debug("Retrieved a basic group");
 
         final BasicGroup group = (BasicGroup) object;
+        System.out.println(group);
         apiChat = ApiChat.builder()
-            .chatId(group.id)
+            .groupId(group.id)
             .memberCount(group.memberCount)
             .build();
       } else if (object.getConstructor() == Supergroup.CONSTRUCTOR) {
         Logger.debug("Retrieved a super group");
 
         final Supergroup group = (Supergroup) object;
+        System.out.println(group);
+
         apiChat = ApiChat.builder()
-            .chatId(group.id)
+            .groupId(group.id)
             .username(group.username)
             .date(group.date)
             .memberCount(group.memberCount)

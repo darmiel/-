@@ -8,7 +8,9 @@ import lombok.ToString;
 @ToString
 public class ApiChat {
 
-  public final long chatId;
+  public final Long chatId;
+  public final Integer groupId;
+
   public final String username;
   public final Integer date;
   public final String title;
