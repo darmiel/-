@@ -15,7 +15,7 @@ const chatSchema = Joi.object({
   title: Joi.string().default(null).allow("").allow(null).optional(),
   description: Joi.string().default(null).allow("").allow(null).optional(),
   member_count: Joi.number().min(0).default(0).allow("").allow(null).optional(),
-  type: Joi.string().default("unknown").allow("").allow(null).optional(),
+  type: Joi.string().default(null).allow("").allow(null).optional(),
   is_verified: Joi.number()
     .min(0)
     .max(1)
@@ -30,7 +30,6 @@ const chatSchema = Joi.object({
     .allow("")
     .allow(null)
     .optional(),
-  last_updated: Joi.number().default(-1).allow("").allow(null).optional(), // -1 = current time
   monitor: Joi.number()
     .min(0)
     .max(1)
@@ -48,9 +47,8 @@ module.exports.getChats = async (limit = 200, offset = 0) => {
   return dbController.selectPaged("chats", "*", 1, limit, offset);
 };
 
-// POST /chats
-module.exports.addChat = async (chat) => {
-  // validate user schema
+// Template
+async function updateChatByX(idField, chat, additionalFields) {
   const { error, value } = chatSchema.validate(chat);
   if (error) {
     return {
@@ -59,153 +57,41 @@ module.exports.addChat = async (chat) => {
     };
   }
 
-  if (value.chatId == null && value.groupId == null) {
+  if (chat[idField] == null) {
     return {
       error: true,
-      message: "chatId or groupId missing.",
+      message: idField + " required.",
     };
   }
 
-  // get chat id and check
-  const chatId = value.chatId;
-  const groupId = value.groupId;
+  const fields = [
+    "username",
+    "date",
+    "title",
+    "description",
+    "member_count",
+    "type",
+    "is_verified",
+    "is_scam",
+  ];
+  // add additional fields
+  for (const idx in additionalFields) {
+    fields.push(additionalFields[idx]);
+  }
 
-  // current date in milliseconds
   const date = Date.now();
-
-  // get a connection from the database
   const connection = await dbController.pool.getConnection();
 
   try {
-    // get existing chats if any exists
-    let rows = [];
-    if (value.chatId != null) {
-      rows = await connection.query(
-        "SELECT * FROM chats WHERE chatId = ? LIMIT 1;",
-        [parseInt(chatId)]
-      );
-    } else if (value.groupId != null) {
-      rows = await connection.query(
-        "SELECT * FROM chats WHERE groupId = ? LIMIT 1;",
-        [groupId]
-      );
-    }
+    const rows = await connection.query(
+      `SELECT * FROM chats WHERE \`${idField}\` = ? LIMIT 1;`,
+      [parseInt(value[idField])]
+    );
 
-    // there is an chat existing with the same chatId
-    if (rows.length >= 1) {
-      const oldChat = rows[0];
-      console.log(oldChat);
-
-      // check if we monitor this channel, if not, return with an error
-      if (oldChat.monitor == 0) {
-        return {
-          error: true,
-          message: "Not monitoring",
-        };
-      }
-
-      // we'll compare the following mysql & object keys
-      const fields = [
-        "groupId",
-        "username",
-        "date",
-        "title",
-        "description",
-        "member_count",
-        "type",
-        "is_verified",
-        "is_scam",
-        "last_updated",
-      ];
-
-      const update = {
-        query: "",
-        params: [],
-      };
-
-      for (let i = 0; i < fields.length; i++) {
-        const field = fields[i];
-
-        if (!(field in chat)) {
-          continue;
-        }
-
-        const _old = oldChat[field];
-        const _new = value[field];
-
-        if (_new == null) {
-          continue;
-        }
-
-        if (_old !== _new) {
-          console.log(
-            `[Chat Update | ${chatId}] Updating field ${field} from ${_old} to ${_new}`
-          );
-
-          update.query +=
-            (update.query.length == 0 ? "" : ", ") + field + " = ?";
-          update.params.push(_new);
-
-          if (field == "last_updated") {
-            continue;
-          }
-
-          // add to updates
-          await connection.query(
-            "INSERT INTO chats_updates (`chatId`, `key`, `old_value`, `new_value`, `date`) VALUES (?, ?, ?, ?, ?);",
-            [chatId, field, _old, _new, date]
-          );
-        }
-      }
-
-      // update ?!
-      if (update.query.length > 0) {
-        console.log(value);
-
-        if (!update.query.includes("last_updated")) {
-          update.query += ", last_updated = ?";
-          update.params.push(date);
-        } else if (update.query.length == 1) {
-          return {
-            error: true,
-            message: "Only updating last_updated.",
-          };
-        }
-
-        console.log(
-          "[Chat Update | " +
-            chatId +
-            "] Update chat " +
-            chatId +
-            " | " +
-            groupId
-        );
-
-        // update chat
-        if (value.chatId != null) {
-          console.log("by chat id");
-          console.log(update);
-          update.params.push(chatId); // this is used for the where clause and should be here.
-          return await connection.query(
-            "UPDATE chats SET " + update.query + " WHERE chatId = ?;",
-            update.params
-          );
-        } else if (value.groupId != null) {
-          console.log("by group id");
-          console.log(update);
-          update.params.push(groupId); // this is used for the where clause and should be here.
-          return await connection.query(
-            "UPDATE chats SET " + update.query + " WHERE groupId = ?;",
-            update.params
-          );
-        }
-      } else {
-        console.log("[Chat Update | " + chatId + "] No need to update");
-      }
-    } else {
-      // insert new chat
+    // no old chat found -> insert
+    if (rows.length !== 1) {
       return await connection.query(
-        "INSERT INTO chats VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO chats VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
         [
           value.chatId,
           value.groupId,
@@ -217,16 +103,78 @@ module.exports.addChat = async (chat) => {
           value.type,
           value.is_verified,
           value.is_scam,
-          value.last_updated,
+          date,
           1,
         ]
       );
-    }
+      // old chat found -> update
+    } else {
+      const old = rows[0];
+      const update = {
+        // default: last_updated
+        last_updated: {
+          param: date, // new value
+          store: false, // save to update table
+          old: null, // old value
+        },
+      };
 
-    return {
-      error: false,
-      message: "Nothing updated.",
-    };
+      for (const indx in fields) {
+        const field = fields[indx];
+        if (!(field in old) || !(field in value)) {
+          continue;
+        }
+        // check for null values
+        const val = value[field];
+        if (val == null || val == undefined) {
+          continue;
+        }
+        // check for equal values
+        const oldval = old[field];
+        if (oldval === val) {
+          continue;
+        }
+        // mark field as updated
+        update[field] = {
+          param: val,
+          old: oldval,
+          store: oldval != null
+        };
+      }
+
+      // check if something was updated
+      if (Object.keys(update).length === 1) {
+        return {
+          error: false,
+          message: "Nothing updated.",
+        };
+      }
+
+      console.log(update);
+
+      let result = {};
+
+      for (const key in update) {
+        const param = update[key]["param"];
+        const store = update[key]["store"];
+        const oldParam = update[key]["old"];
+
+        result = await connection.query(
+          `UPDATE chats SET \`${key}\` = ? WHERE \`${idField}\` = ?;`,
+          [param, value[idField]]
+        );
+
+        if (store) {
+          // add to updates
+          await connection.query(
+            "INSERT INTO chats_updates (`" + idField + "`, `key`, `old_value`, `new_value`, `date`) VALUES (?, ?, ?, ?, ?);",
+            [parseInt(value[idField]), key, oldParam, param, date]
+          );
+        }
+      }
+
+      return result;
+    }
   } catch (exception) {
     return {
       error: true,
@@ -237,6 +185,14 @@ module.exports.addChat = async (chat) => {
       connection.end();
     }
   }
+}
+
+module.exports.addChatChatId = async (chat) => {
+  return updateChatByX("chatId", chat, ["groupId"]);
+};
+
+module.exports.addChatGroupId = async (chat) => {
+  return updateChatByX("groupId", chat, []);
 };
 
 // GET /chats/:id

@@ -30,8 +30,13 @@ router.get("/", async (req, res) => {
  * POST /chats
  * Stores a new chat
  */
-router.post("/", async (req, res) => {
-  const controllerResult = await controller.addChat(req.body);
+router.post("/chatId", async (req, res) => {
+  const controllerResult = await controller.addChatChatId(req.body);
+  return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
+});
+
+router.post("/groupId", async (req, res) => {
+  const controllerResult = await controller.addChatGroupId(req.body);
   return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
 });
 

@@ -29,7 +29,7 @@ public class ApiChat {
   public final Byte isScam;
 
   @SerializedName("last_updated")
-  public final long lastUpdated;
+  public final Long lastUpdated;
 
   public final Byte monitor;
 

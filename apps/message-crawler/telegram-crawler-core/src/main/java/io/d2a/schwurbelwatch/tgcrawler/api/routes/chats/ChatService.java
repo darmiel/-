@@ -15,8 +15,11 @@ public interface ChatService {
   @GET("chats")
   Call<List<ApiChat>> getChats(@Query("offset") long offset);
 
-  @POST("chats")
-  Call<DatabaseResult> addChat(@Body ApiChat chat);
+  @POST("chats/chatId")
+  Call<DatabaseResult> addChatByChatId(@Body ApiChat chat);
+
+  @POST("chats/groupId")
+  Call<DatabaseResult> addChatByGroupId(@Body ApiChat chat);
 
   @GET("chats/:id")
   Call<ApiChat> getChat(@Path("id") long chatId);
@@ -26,5 +29,15 @@ public interface ChatService {
 
   @POST("chats/:id/count/:count")
   Call<DatabaseResult> updateMemberCount(@Path("id") long chatId, @Path("count") int count);
+
+  default Call<DatabaseResult> addChat(ApiChat chat) {
+    if (chat.chatId != null) {
+      return addChatByChatId(chat);
+    } else if (chat.groupId != null) {
+      return addChatByGroupId(chat);
+    } else {
+      return null;
+    }
+  }
 
 }

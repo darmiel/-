@@ -54,15 +54,6 @@ public class ChatsUpdateModule extends BotModule {
     }
   }
 
-  private void addOrUpdateChat(@Nullable final Chat chat, @Nullable final ApiChat apiChat) {
-    if (chat != null) {
-      // Logger.debug(chat);
-    }
-    //Logger.debug(apiChat);
-
-    SwApi.callDatabaseResult(SwApi.CHAT_SERVICE.addChat(apiChat));
-  }
-
   @Subscribe
   public void onUpdateNewChat(final TdApi.UpdateNewChat event) {
     final Chat chat = event.chat;
@@ -70,9 +61,11 @@ public class ChatsUpdateModule extends BotModule {
         .chatId(chat.id)
         .title(chat.title)
         .type(ChatType.getType(chat.type))
-        .lastUpdated(System.currentTimeMillis())
         .build();
-    addOrUpdateChat(chat, build);
+
+    // uppdate new chat
+    // -> chatId
+    SwApi.callDatabaseResult(SwApi.CHAT_SERVICE.addChat(build));
   }
 
   @Subscribe
@@ -81,7 +74,10 @@ public class ChatsUpdateModule extends BotModule {
         .chatId(event.chatId)
         .title(event.title)
         .build();
-    addOrUpdateChat(null, build);
+
+    // uppdate chat title
+    // -> chatId
+    SwApi.callDatabaseResult(SwApi.CHAT_SERVICE.addChat(build));
   }
 
   @Subscribe
@@ -111,7 +107,7 @@ public class ChatsUpdateModule extends BotModule {
   }
 
   @RequiredArgsConstructor
-  public class ChatInfoResultHandler implements ResultHandler {
+  public static class ChatInfoResultHandler implements ResultHandler {
 
     private final Client client;
 
@@ -148,10 +144,11 @@ public class ChatsUpdateModule extends BotModule {
             .groupId(groupId)
             .title(chat.title)
             .type(ChatType.getType(chat.type))
-            .lastUpdated(System.currentTimeMillis())
             .build();
 
-        addOrUpdateChat(null, build);
+        // uppdate chat title
+        // -> chatId
+        SwApi.callDatabaseResult(SwApi.CHAT_SERVICE.addChat(build));
         return;
       }
 
@@ -184,7 +181,9 @@ public class ChatsUpdateModule extends BotModule {
       }
 
       if (apiChat != null) {
-        addOrUpdateChat(null, apiChat);
+        // uppdate chat title
+        // -> chatId
+        SwApi.callDatabaseResult(SwApi.CHAT_SERVICE.addChat(apiChat));
       }
     }
   }

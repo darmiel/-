@@ -27,7 +27,7 @@ public class SwApi {
 
   public static final Gson GSON = new GsonBuilder()
       .setPrettyPrinting()
-      .serializeNulls()
+      // .serializeNulls()
       .create();
 
   private static final Retrofit retrofit = new Retrofit.Builder()
