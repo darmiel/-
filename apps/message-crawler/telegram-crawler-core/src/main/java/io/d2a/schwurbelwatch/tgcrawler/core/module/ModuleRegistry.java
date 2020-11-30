@@ -7,16 +7,11 @@
 package io.d2a.schwurbelwatch.tgcrawler.core.module;
 
 import io.d2a.schwurbelwatch.mods.ModMain;
-import io.d2a.schwurbelwatch.mods.chatlog.ChatlogModule;
-import io.d2a.schwurbelwatch.mods.chatlog.ConsoleMessageModule;
-import io.d2a.schwurbelwatch.mods.user.UserUpdateModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Getter;
 

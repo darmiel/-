@@ -1,10 +1,10 @@
-package io.d2a.schwurbelwatch.tgcrawler.api.files;
+package io.d2a.schwurbelwatch.tgcrawler.api.routes.files;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class File {
+public class ApiFile {
 
   private final String fileUid;
   private final long messageId;

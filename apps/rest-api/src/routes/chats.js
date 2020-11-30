@@ -30,8 +30,22 @@ router.get("/", async (req, res) => {
  * POST /chats
  * Stores a new chat
  */
-router.post("/", async (req, res) => {
-  const controllerResult = await controller.addChat(req.body);
+router.post("/chatId", async (req, res) => {
+  const controllerResult = await controller.addChatChatId(req.body);
+  return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
+});
+
+router.post("/groupId", async (req, res) => {
+  const controllerResult = await controller.addChatGroupId(req.body);
+  return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
+});
+
+/**
+ * POST /chats/:id/count/:count
+ * Updates the online member count
+ */
+router.post("/:id/count/:count", async (req, res) => {
+  const controllerResult = await controller.updateMemberCount(req.params.id, req.params.count);
   return res.status(controllerResult.error ? 400 : 200).json(controllerResult);
 });
 

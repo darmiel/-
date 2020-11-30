@@ -1,15 +1,14 @@
-package io.d2a.schwurbelwatch.tgcrawler.api.messages;
+package io.d2a.schwurbelwatch.tgcrawler.api.routes.messages;
 
-import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import io.d2a.schwurbelwatch.tgcrawler.api.other.ContentType;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.base.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
 import java.util.Map;
 import lombok.ToString;
 import org.drinkless.tdlib.TdApi;
 
 @ToString
-public class Message {
+public class ApiMessage {
 
   public long messageId;
   public long chatId;
@@ -40,13 +39,14 @@ public class Message {
     return this.isChannelPost == 1;
   }
 
-  public static Message wrap(final TdApi.Message tdMessage, final Map<Integer, ContentType> contentTypeMap) {
+  public static ApiMessage wrap(final TdApi.Message tdMessage,
+      final Map<Integer, ContentType> contentTypeMap) {
     final SimpleChatMessage dcm = SimpleChatMessage.wrap(tdMessage);
     if (dcm == null) {
       return null;
     }
 
-    final Message msg = new Message();
+    final ApiMessage msg = new ApiMessage();
 
     // content type
     for (final ContentType value : contentTypeMap.values()) {

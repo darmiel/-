@@ -1,6 +1,7 @@
 package io.d2a.schwurbelwatch.mods.cdn;
 
 import io.d2a.schwurbelwatch.tgcrawler.api.SwApi;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.files.ApiFile;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.File;
@@ -84,7 +85,7 @@ public class DownloadFileResult implements ResultHandler {
     if (file.renameTo(destFile)) {
       Logger.success("Done!");
 
-      SwApi.callDatabaseResult(SwApi.FILE_SERVICE.addFile(new io.d2a.schwurbelwatch.tgcrawler.api.files.File(
+      SwApi.callDatabaseResult(SwApi.FILE_SERVICE.addFile(new ApiFile(
           fileUid,
           messageId,
           newFileName,

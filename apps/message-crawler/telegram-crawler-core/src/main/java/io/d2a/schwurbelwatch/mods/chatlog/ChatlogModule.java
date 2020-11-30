@@ -4,10 +4,10 @@ import com.google.common.eventbus.Subscribe;
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.mods.Accounts;
 import io.d2a.schwurbelwatch.tgcrawler.api.SwApi;
-import io.d2a.schwurbelwatch.tgcrawler.api.messages.Message;
-import io.d2a.schwurbelwatch.tgcrawler.api.messages.MessageService;
-import io.d2a.schwurbelwatch.tgcrawler.api.other.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.base.ContentType;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.messages.ApiMessage;
+import io.d2a.schwurbelwatch.tgcrawler.api.routes.messages.MessageService;
 import io.d2a.schwurbelwatch.tgcrawler.core.client.TelegramClient;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
@@ -76,7 +76,7 @@ public class ChatlogModule extends BotModule {
   }
 
   private void updateInsertMessage(final TdApi.Message tdMessage, boolean edit) {
-    final Message msg = Message.wrap(tdMessage, contentTypeMap);
+    final ApiMessage msg = ApiMessage.wrap(tdMessage, contentTypeMap);
     final SimpleChatMessage dcm = SimpleChatMessage.wrap(tdMessage);
     if (msg == null || dcm == null) {
       return;

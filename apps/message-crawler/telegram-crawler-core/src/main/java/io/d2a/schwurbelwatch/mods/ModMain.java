@@ -3,7 +3,8 @@ package io.d2a.schwurbelwatch.mods;
 import io.d2a.schwurbelwatch.mods.cdn.FileDownloadModule;
 import io.d2a.schwurbelwatch.mods.chatlog.ChatlogModule;
 import io.d2a.schwurbelwatch.mods.chatlog.ConsoleMessageModule;
-import io.d2a.schwurbelwatch.mods.user.UserUpdateModule;
+import io.d2a.schwurbelwatch.mods.updaters.ChatsUpdateModule;
+import io.d2a.schwurbelwatch.mods.updaters.UserUpdateModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -15,8 +16,11 @@ public class ModMain {
       Arrays.asList(
           ChatlogModule.class,
           ConsoleMessageModule.class,
+          FileDownloadModule.class,
+
+          // updates
           UserUpdateModule.class,
-          FileDownloadModule.class
+          ChatsUpdateModule.class
       ));
 
   public ModMain() {

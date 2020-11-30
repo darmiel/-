@@ -78,8 +78,8 @@ module.exports.addMessage = async (message) => {
       const _new = value.content;
 
       if (_old == _new) {
-        console.log(_old);
-        console.log(_new);
+        // TODO: Uncomment | console.log(oldMessage);
+        // TODO: Uncomment | console.log(value);
 
         return {
           error: true,
@@ -161,6 +161,11 @@ module.exports.addMessage = async (message) => {
     }
 
     return res;
+  } catch (exception) {
+    return {
+      error: true,
+      message: exception.code,
+    };
   } finally {
     if (connection) {
       connection.end();
