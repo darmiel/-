@@ -131,7 +131,7 @@ public class BotMain {
     Logger.info("Loading modules ...");
     ModuleRegistry.loadModules();
 
-    if (ModuleRegistry.getEnablabledModules().size() == 0) {
+    if (ModuleRegistry.getEnabledModules().size() == 0) {
       Logger.warn("No modules enabled.");
     }
   }

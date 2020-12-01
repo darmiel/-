@@ -10,6 +10,11 @@ import org.drinkless.tdlib.TdApi.MessageAudio;
 public class AudioMessageTypeWrapper implements FileMessageTypeWrapper<MessageAudio> {
 
   @Override
+  public Class<MessageAudio> getTypeClass() {
+    return MessageAudio.class;
+  }
+
+  @Override
   public int getConstructor() {
     return MessageAudio.CONSTRUCTOR;
   }

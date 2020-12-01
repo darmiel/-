@@ -14,11 +14,12 @@ import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.BotModule;
 import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import lombok.SneakyThrows;
+import javax.annotation.Nonnull;
 import org.drinkless.tdlib.TdApi;
 import org.drinkless.tdlib.TdApi.GetMessage;
 import org.drinkless.tdlib.TdApi.UpdateDeleteMessages;
@@ -56,10 +57,18 @@ public class ChatlogModule extends BotModule {
     updateContentTypes();
   }
 
-  @SneakyThrows
   private void updateContentTypes() {
     // Update content types
-    final Response<List<ContentType>> execute = SwApi.BASE_SERVICE.getContentTypes().execute();
+    final Response<List<ContentType>> execute;
+
+    try {
+      execute = SwApi.BASE_SERVICE.getContentTypes().execute();
+    } catch (IOException e) {
+      e.printStackTrace();
+      Logger.error(e);
+      return;
+    }
+
     final List<ContentType> body = execute.body();
     if (body == null) {
       Logger.error("Failed to update content type. Response:");
@@ -75,7 +84,7 @@ public class ChatlogModule extends BotModule {
     Logger.info("Updated Content Types: " + contentTypeMap.size() + " types found.");
   }
 
-  private void updateInsertMessage(final TdApi.Message tdMessage, boolean edit) {
+  private void updateInsertMessage(@Nonnull final TdApi.Message tdMessage, boolean edit) {
     final ApiMessage msg = ApiMessage.wrap(tdMessage, contentTypeMap);
     final SimpleChatMessage dcm = SimpleChatMessage.wrap(tdMessage);
     if (msg == null || dcm == null) {

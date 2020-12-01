@@ -35,15 +35,18 @@ public class ClientRouter {
    * @param clientName Input string
    * @return Lower-Case + Stripped
    */
+  @Nonnull
   private String formatClientName(@Nonnull final String clientName) {
     return clientName.toLowerCase().trim();
   }
 
+  @Nonnull
   public Optional<ClientConfig> findConfiguration(@Nonnull final String clientName) {
     final String key = formatClientName(clientName);
     return Optional.ofNullable(this.clientConfigMap.get(key));
   }
 
+  @Nonnull
   public Optional<TelegramClient> findTelegramClient(@Nonnull final String clientName) {
     final String key = formatClientName(clientName);
 

@@ -10,6 +10,11 @@ import org.drinkless.tdlib.TdApi.Sticker;
 public class StickerMessageTypeWrapper implements FileMessageTypeWrapper<MessageSticker> {
 
   @Override
+  public Class<MessageSticker> getTypeClass() {
+    return MessageSticker.class;
+  }
+
+  @Override
   public int getConstructor() {
     return MessageSticker.CONSTRUCTOR;
   }

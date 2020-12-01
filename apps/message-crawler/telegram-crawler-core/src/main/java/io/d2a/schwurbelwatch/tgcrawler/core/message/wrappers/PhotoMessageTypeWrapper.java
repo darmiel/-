@@ -16,6 +16,11 @@ public class PhotoMessageTypeWrapper implements FileMessageTypeWrapper<MessagePh
   public static final int MAX_SIZE_IN_BYTES = 50_000_000;
 
   @Override
+  public Class<MessagePhoto> getTypeClass() {
+    return MessagePhoto.class;
+  }
+
+  @Override
   public int getConstructor() {
     return MessagePhoto.CONSTRUCTOR;
   }

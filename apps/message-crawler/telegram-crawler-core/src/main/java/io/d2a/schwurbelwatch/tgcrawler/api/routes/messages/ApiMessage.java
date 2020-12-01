@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.api.routes.base.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage;
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import lombok.ToString;
 import org.drinkless.tdlib.TdApi;
 
@@ -35,12 +37,16 @@ public class ApiMessage {
   public boolean isDeleted() {
     return this.deletedOn > 0;
   }
+
   public boolean isChannelPost() {
     return this.isChannelPost == 1;
   }
 
-  public static ApiMessage wrap(final TdApi.Message tdMessage,
-      final Map<Integer, ContentType> contentTypeMap) {
+  @Nullable
+  public static ApiMessage wrap(
+      @Nonnull final TdApi.Message tdMessage,
+      @Nonnull Map<Integer, ContentType> contentTypeMap) {
+
     final SimpleChatMessage dcm = SimpleChatMessage.wrap(tdMessage);
     if (dcm == null) {
       return null;

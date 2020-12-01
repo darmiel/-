@@ -10,6 +10,11 @@ import org.drinkless.tdlib.TdApi.Video;
 public class VideoMessageTypeWrapper implements FileMessageTypeWrapper<MessageVideo> {
 
   @Override
+  public Class<MessageVideo> getTypeClass() {
+    return MessageVideo.class;
+  }
+
+  @Override
   public int getConstructor() {
     return MessageVideo.CONSTRUCTOR;
   }

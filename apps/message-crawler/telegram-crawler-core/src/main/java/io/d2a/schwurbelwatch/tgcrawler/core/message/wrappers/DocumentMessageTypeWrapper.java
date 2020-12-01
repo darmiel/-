@@ -10,6 +10,11 @@ import org.drinkless.tdlib.TdApi.MessageDocument;
 public class DocumentMessageTypeWrapper implements FileMessageTypeWrapper<MessageDocument> {
 
   @Override
+  public Class<MessageDocument> getTypeClass() {
+    return MessageDocument.class;
+  }
+
+  @Override
   public int getConstructor() {
     return MessageDocument.CONSTRUCTOR;
   }

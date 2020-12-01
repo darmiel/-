@@ -4,12 +4,15 @@ import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import org.drinkless.tdlib.TdApi.Location;
-import org.drinkless.tdlib.TdApi.MessageLocation;
 import org.drinkless.tdlib.TdApi.MessageVenue;
 import org.drinkless.tdlib.TdApi.Venue;
 
 public class VenueMessageTypeWrapper implements MessageTypeWrapper<MessageVenue> {
+
+  @Override
+  public Class<MessageVenue> getTypeClass() {
+    return MessageVenue.class;
+  }
 
   @Override
   public int getConstructor() {

@@ -5,14 +5,17 @@ import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import java.util.Collections;
 import org.drinkless.tdlib.TdApi.MessagePoll;
 import org.drinkless.tdlib.TdApi.Poll;
 import org.drinkless.tdlib.TdApi.PollOption;
 import org.drinkless.tdlib.TdApi.PollTypeRegular;
-import org.drinkless.tdlib.TdApi.Video;
 
 public class PollMessageTypeWrapper implements MessageTypeWrapper<MessagePoll> {
+
+  @Override
+  public Class<MessagePoll> getTypeClass() {
+    return MessagePoll.class;
+  }
 
   @Override
   public int getConstructor() {

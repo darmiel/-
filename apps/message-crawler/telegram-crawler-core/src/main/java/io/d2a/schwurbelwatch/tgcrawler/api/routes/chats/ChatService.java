@@ -2,6 +2,8 @@ package io.d2a.schwurbelwatch.tgcrawler.api.routes.chats;
 
 import io.d2a.schwurbelwatch.tgcrawler.api.response.DatabaseResult;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -30,7 +32,8 @@ public interface ChatService {
   @POST("chats/:id/count/:count")
   Call<DatabaseResult> updateMemberCount(@Path("id") long chatId, @Path("count") int count);
 
-  default Call<DatabaseResult> addChat(ApiChat chat) {
+  @Nullable
+  default Call<DatabaseResult> addChat(@Nonnull final ApiChat chat) {
     if (chat.chatId != null) {
       return addChatByChatId(chat);
     } else if (chat.groupId != null) {

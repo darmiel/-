@@ -9,6 +9,11 @@ import org.drinkless.tdlib.TdApi.MessageText;
 public class TextMessageTypeWrapper implements MessageTypeWrapper<MessageText> {
 
   @Override
+  public Class<MessageText> getTypeClass() {
+    return MessageText.class;
+  }
+
+  @Override
   public int getConstructor() {
     return MessageText.CONSTRUCTOR;
   }

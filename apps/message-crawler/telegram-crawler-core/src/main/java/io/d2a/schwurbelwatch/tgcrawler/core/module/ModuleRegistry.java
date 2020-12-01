@@ -13,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import lombok.Getter;
 
 public class ModuleRegistry {
@@ -20,7 +21,7 @@ public class ModuleRegistry {
   private static final String packagePrefix = "";
 
   @Getter
-  private static final Set<BotModule> enablabledModules = new HashSet<>();
+  private static final Set<BotModule> enabledModules = new HashSet<>();
 
   public static final String CONSOLE_PREFIX = AnsiColor.ANSI_CYAN_BACKGROUND +
       AnsiColor.ANSI_WHITE + "(MOD)" +
@@ -30,6 +31,7 @@ public class ModuleRegistry {
    * Add your modules here
    */
 
+  @Nonnull
   public static Set<BotModule> findModules() throws IllegalAccessException,
       InstantiationException,
       NoSuchMethodException,
@@ -62,7 +64,7 @@ public class ModuleRegistry {
     return modules;
   }
 
-  public static void loadModule(BotModule module) {
+  public static void loadModule(@Nonnull BotModule module) {
     // get info
     if (!module.getClass().isAnnotationPresent(Module.class)) {
       Logger.warn(CONSOLE_PREFIX + "Annotation not present.");
@@ -88,14 +90,14 @@ public class ModuleRegistry {
       Logger.success(CONSOLE_PREFIX + "Took " + (System.currentTimeMillis() - timerStart) + " ms");
 
       // successfully enabled
-      enablabledModules.add(module);
+      enabledModules.add(module);
     } catch (Throwable throwable) {
       Logger.error(CONSOLE_PREFIX + "Took " + (System.currentTimeMillis() - timerStart) + " ms)");
       Logger.error(throwable);
     }
   }
 
-  public static void unloadModule(BotModule module) {
+  public static void unloadModule(@Nonnull BotModule module) {
     // get info
     if (!module.getClass().isAnnotationPresent(Module.class)) {
       Logger.error(CONSOLE_PREFIX + "Invalid module while registering.");

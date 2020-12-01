@@ -12,7 +12,6 @@ import io.d2a.schwurbelwatch.tgcrawler.core.module.Module;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.Client.ResultHandler;

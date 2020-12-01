@@ -9,6 +9,7 @@ package io.d2a.schwurbelwatch.tgcrawler.core.message;
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -59,6 +60,7 @@ public class SimpleChatMessage {
     return false;
   }
 
+  @Nullable
   public static SimpleChatMessage wrap(@Nonnull Message message) {
     // get content type
     final ContentType type = ContentType.getType(message.content);

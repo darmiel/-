@@ -10,6 +10,11 @@ import org.drinkless.tdlib.TdApi.MessageAnimation;
 public class AnimationMessageTypeWrapper implements FileMessageTypeWrapper<MessageAnimation> {
 
   @Override
+  public Class<MessageAnimation> getTypeClass() {
+    return MessageAnimation.class;
+  }
+
+  @Override
   public int getConstructor() {
     return MessageAnimation.CONSTRUCTOR;
   }

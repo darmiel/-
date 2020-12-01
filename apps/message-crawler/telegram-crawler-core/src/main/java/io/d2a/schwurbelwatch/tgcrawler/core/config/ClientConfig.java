@@ -11,29 +11,31 @@ import com.google.gson.annotations.SerializedName;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.ApiCredentials;
 import io.d2a.schwurbelwatch.tgcrawler.core.auth.SystemInfo;
 import java.util.Set;
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
+@RequiredArgsConstructor
 public class ClientConfig {
 
   @SerializedName("use_cases")
-  private Set<String> useCases = Sets.newHashSet();
+  private final Set<String> useCases = Sets.newHashSet();
 
   @SerializedName("credentials")
-  private ApiCredentials credentials;
+  private final ApiCredentials credentials;
 
   @SerializedName("info")
-  private SystemInfo systemInfo = new SystemInfo(
+  private final SystemInfo systemInfo = new SystemInfo(
       "en",
       "Unknown",
       "Desktop",
       "1.0"
   );
 
-  public boolean accepts(String useCase) {
+  public boolean accepts(@Nullable String useCase) {
     if (useCase == null) {
       return true;
     }

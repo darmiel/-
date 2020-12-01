@@ -1,5 +1,7 @@
 package io.d2a.schwurbelwatch.tgcrawler.core.logging;
 
+import javax.annotation.Nullable;
+
 public class Logger {
 
   public static final LoggerProvider[] PROVIDERS = {
@@ -12,11 +14,11 @@ public class Logger {
     }
   }
 
-  public static void log(final String message) {
+  public static void log(@Nullable final String message) {
     broadcast(LogLevel.INFO, message);
   }
 
-  public static void log(final Object object) {
+  public static void log(@Nullable final Object object) {
     if (object != null) {
       log(object.toString());
     } else {
@@ -24,11 +26,11 @@ public class Logger {
     }
   }
 
-  public static void debug(final String message) {
+  public static void debug(@Nullable final String message) {
     broadcast(LogLevel.DEBUG, message);
   }
 
-  public static void debug(final Object object) {
+  public static void debug(@Nullable final Object object) {
     if (object != null) {
       debug(object.toString());
     } else {
@@ -36,11 +38,11 @@ public class Logger {
     }
   }
 
-  public static void info(final String message) {
+  public static void info(@Nullable final String message) {
     log(message);
   }
 
-  public static void info(final Object object) {
+  public static void info(@Nullable final Object object) {
     if (object != null) {
       info(object.toString());
     } else {
@@ -48,11 +50,11 @@ public class Logger {
     }
   }
 
-  public static void warn(final String message) {
+  public static void warn(@Nullable final String message) {
     broadcast(LogLevel.WARN, message);
   }
 
-  public static void warn(final Object object) {
+  public static void warn(@Nullable final Object object) {
     if (object != null) {
       if (object instanceof Throwable) {
         final Throwable throwable = (Throwable) object;

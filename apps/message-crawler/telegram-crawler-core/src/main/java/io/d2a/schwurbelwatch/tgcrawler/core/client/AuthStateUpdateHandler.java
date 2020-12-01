@@ -4,6 +4,7 @@ import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import javax.annotation.Nonnull;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.Client.ResultHandler;
 import org.drinkless.tdlib.TdApi;
@@ -24,7 +25,8 @@ public class AuthStateUpdateHandler {
    * @param prompt The text shown on the prompt
    * @return The typed text
    */
-  private static String promptString(String prompt) {
+  @Nonnull
+  private static String promptString(@Nonnull String prompt) {
     System.out.print(prompt);
 
     final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -47,7 +49,7 @@ public class AuthStateUpdateHandler {
     return new AuthStateResultHandler(this.client);
   }
 
-  public void onAuthorizationStateUpdated(final UpdateAuthorizationState state) {
+  public void onAuthorizationStateUpdated(@Nonnull final UpdateAuthorizationState state) {
     Logger.debug("");
     Logger.debug("Auth State Updated:");
     Logger.debug(state);

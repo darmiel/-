@@ -104,6 +104,7 @@ public class TelegramClient implements Client.ResultHandler {
 
   /////////////////////////////////////////////////////////////////////////////////////////////
 
+  @Nonnull
   public static TelegramClient create(
       @Nonnull final String identifier,
       @Nonnull final ApiCredentials credentials,

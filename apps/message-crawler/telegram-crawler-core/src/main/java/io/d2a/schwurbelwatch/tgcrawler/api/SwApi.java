@@ -11,6 +11,7 @@ import io.d2a.schwurbelwatch.tgcrawler.api.routes.user.UserService;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.AnsiColor;
 import io.d2a.schwurbelwatch.tgcrawler.core.logging.Logger;
 import java.io.IOException;
+import javax.annotation.Nullable;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -41,7 +42,12 @@ public class SwApi {
   public static final FileService FILE_SERVICE = retrofit.create(FileService.class);
   public static final ChatService CHAT_SERVICE = retrofit.create(ChatService.class);
 
-  public static void callDatabaseResult(final Call<DatabaseResult> call) {
+  public static void callDatabaseResult(@Nullable final Call<DatabaseResult> call) {
+    if (call == null) {
+      Logger.warn("Tried to call a null Call<?>");
+      return;
+    }
+
     try {
       long start = System.currentTimeMillis();
 

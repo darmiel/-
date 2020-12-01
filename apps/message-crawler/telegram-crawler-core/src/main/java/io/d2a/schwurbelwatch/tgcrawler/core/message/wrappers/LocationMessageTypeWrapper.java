@@ -1,18 +1,18 @@
 package io.d2a.schwurbelwatch.tgcrawler.core.message.wrappers;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
 import org.drinkless.tdlib.TdApi.Location;
 import org.drinkless.tdlib.TdApi.MessageLocation;
-import org.drinkless.tdlib.TdApi.MessagePoll;
-import org.drinkless.tdlib.TdApi.Poll;
-import org.drinkless.tdlib.TdApi.PollOption;
-import org.drinkless.tdlib.TdApi.PollTypeRegular;
 
 public class LocationMessageTypeWrapper implements MessageTypeWrapper<MessageLocation> {
+
+  @Override
+  public Class<MessageLocation> getTypeClass() {
+    return MessageLocation.class;
+  }
 
   @Override
   public int getConstructor() {

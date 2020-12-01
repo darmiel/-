@@ -23,7 +23,7 @@ public enum ChatType {
   }
 
   @Nonnull
-  public static ChatType getType(final TdApi.ChatType type) {
+  public static ChatType getType(@Nonnull final TdApi.ChatType type) {
     for (final ChatType value : values()) {
       if (value.constructor == type.getConstructor()) {
         return value;

@@ -10,6 +10,11 @@ import org.drinkless.tdlib.TdApi.VoiceNote;
 public class VoiceMessageTypeWrapper implements FileMessageTypeWrapper<MessageVoiceNote> {
 
   @Override
+  public Class<MessageVoiceNote> getTypeClass() {
+    return MessageVoiceNote.class;
+  }
+
+  @Override
   public int getConstructor() {
     return MessageVoiceNote.CONSTRUCTOR;
   }

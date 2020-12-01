@@ -4,13 +4,15 @@ import com.google.gson.JsonObject;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.ContentType;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.MessageTypeWrapper;
 import io.d2a.schwurbelwatch.tgcrawler.core.message.SimpleChatMessage.SimpleChatMessageBuilder;
-import java.util.Collections;
 import org.drinkless.tdlib.TdApi.Contact;
-import org.drinkless.tdlib.TdApi.Document;
 import org.drinkless.tdlib.TdApi.MessageContact;
-import org.drinkless.tdlib.TdApi.MessageDocument;
 
 public class ContactMessageTypeWrapper implements MessageTypeWrapper<MessageContact> {
+
+  @Override
+  public Class<MessageContact> getTypeClass() {
+    return MessageContact.class;
+  }
 
   @Override
   public int getConstructor() {

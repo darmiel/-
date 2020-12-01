@@ -1,6 +1,7 @@
 package io.d2a.schwurbelwatch.tgcrawler.api.routes.user;
 
 import com.google.gson.annotations.SerializedName;
+import javax.annotation.Nonnull;
 import lombok.ToString;
 import org.drinkless.tdlib.TdApi;
 
@@ -28,7 +29,8 @@ public class User {
   @SerializedName("is_scam")
   public int isScam;
 
-  public static User wrap (final TdApi.User tdUser) {
+  @Nonnull
+  public static User wrap(@Nonnull final TdApi.User tdUser) {
     final User res = new User();
     res.userId = tdUser.id;
     res.username = tdUser.username;
